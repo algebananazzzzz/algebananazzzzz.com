@@ -37,13 +37,7 @@ jobs:
           node-version: "20"
           cache: ${{ steps.detect-pm.outputs.manager }}
 
-      - name: 4. ⚙️ Configure GitHub Pages
-        id: pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: gatsby
-
-      - name: 5. ⬇️ Restore Gatsby Cache
+      - name: 4. ⬇️ Restore Gatsby Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -53,10 +47,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gatsby-
 
-      - name: 6. 📦 Install Dependencies
+      - name: 5. 📦 Install Dependencies
         run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.command }}
 
-      - name: 7. ⚙️ Build with Gatsby
+      - name: 6. ⚙️ Build with Gatsby
         env:
           PREFIX_PATHS: "true"
         run: ${{ steps.detect-pm.outputs.manager }} run build
