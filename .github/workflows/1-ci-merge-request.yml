@@ -19,60 +19,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 1. 📄 Checkout Repository (with submodules)
+      - name: 1. Checkout repository (without submodules)
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
+          fetch-depth: 0
 
-      - name: 2. 🧪 List Submodules to Verify Checkout
+      - name: 2. Initialize and update submodules
         run: |
-          echo "✅ .gitmodules content:"
-          cat .gitmodules || echo "No .gitmodules found"
+          git submodule sync --recursive
+          git submodule update --init --recursive --depth=1
 
-          echo -e "\n✅ Submodule directories:"
-          git submodule status || echo "No submodules found"
+      - name: 3. List submodule directory
+        run: |
+          echo "Submodule folder:"
+          ls -al infra/modules || echo "❌ Submodule 'infra/modules' not found"
 
-          echo -e "\n✅ Submodule folders:"
-          find . -type d -name '.git' -o -type d -mindepth 2 -maxdepth 2
-
-          ls infra/
-          ls infra/modules || true
-
-
-      # - name: 2. ⚙️ Detect Package Manager
-      #   id: detect-pm
-      #   run: |
-      #     if [ -f "yarn.lock" ]; then
-      #       echo "manager=yarn" >> $GITHUB_OUTPUT
-      #       echo "command=install" >> $GITHUB_OUTPUT
-      #     elif [ -f "package.json" ]; then
-      #       echo "manager=npm" >> $GITHUB_OUTPUT
-      #       echo "command=ci" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "Unable to detect package manager"
-      #       exit 1
-      #     fi
-
-      # - name: 3. ⚙️ Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: "20"
-      #     cache: ${{ steps.detect-pm.outputs.manager }}
-
-      # - name: 4. ⬇️ Restore Gatsby Cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       public
-      #       .cache
-      #     key: ${{ runner.os }}-gatsby-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gatsby-
-
-      # - name: 5. 📦 Install Dependencies
-      #   run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.command }}
-
-      # - name: 6. ⚙️ Build with Gatsby
-      #   env:
-      #     PREFIX_PATHS: "true"
-      #   run: ${{ steps.detect-pm.outputs.manager }} run build
+      - name: 4. Show .gitmodules
+        run: |
+          echo "Contents of .gitmodules:"
+          cat .gitmodules || echo "No .gitmodules file"
