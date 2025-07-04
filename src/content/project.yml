@@ -1,0 +1,87 @@
+description:
+  - "Discover my projects where I demonstrate creativity and problem-solving skills."
+projects:
+  - Project Name:
+      description: "A succinct description of the project's purpose and functionality"
+      additional_description: "A detailed description on the project's architecture, key components, and any unique selling points. This description should be more comprehensive than the short description."
+      date: "Apr 2024"
+      svgIcons:
+        - gatsby
+        - aws
+        - terraform
+        - tailwindcss
+      actions:
+        - text: Repo
+          link: https://github.com/algebananazzzzz/NocturnalProject
+        - text: Demo
+          color: purple
+          video: demo.mp4
+  - Project Name:
+      description: "A succinct description of the project's purpose and functionality"
+      additional_description: "A detailed description on the project's architecture, key components, and any unique selling points. This description should be more comprehensive than the short description."
+      date: "Apr 2024"
+      svgIcons:
+        - gatsby
+        - aws
+        - terraform
+        - tailwindcss
+      actions:
+        - text: Repo
+          link: https://github.com/algebananazzzzz/NocturnalProject
+        - text: Demo
+          color: purple
+          video: demo.mp4
+  - Project Name:
+      description: "A succinct description of the project's purpose and functionality"
+      additional_description: "A detailed description on the project's architecture, key components, and any unique selling points. This description should be more comprehensive than the short description."
+      date: "Apr 2024"
+      svgIcons:
+        - gatsby
+        - aws
+        - terraform
+        - tailwindcss
+      actions:
+        - text: Repo
+          link: https://github.com/algebananazzzzz/NocturnalProject
+        - text: Demo
+          color: purple
+          video: demo.mp4
+other_sections:
+  "Upcoming Projects":
+    - Project Name:
+        date: "Apr 2024"
+        description: "A succinct description of the project's purpose and functionality"
+    - Project Name:
+        date: "Apr 2024"
+        description: "A succinct description of the project's purpose and functionality"
+    - Project Name:
+        date: "Apr 2024"
+        description: "A succinct description of the project's purpose and functionality"
+  "Archived Projects":
+    - Project Name:
+        description: "A succinct description of the project's purpose and functionality"
+        date: "Apr 2024"
+        actions:
+          - text: Repo
+            link: https://github.com/algebananazzzzz/NocturnalProject
+          - text: Demo
+            color: purple
+            video: demo.mp4
+    - Project Name:
+        description: "A succinct description of the project's purpose and functionality"
+        date: "Apr 2024"
+        actions:
+          - text: Repo
+            link: https://github.com/algebananazzzzz/NocturnalProject
+          - text: Demo
+            color: purple
+            video: demo.mp4
+    - Project Name:
+        description: "A succinct description of the project's purpose and functionality"
+        date: "Apr 2024"
+        actions:
+          - text: Repo
+            link: https://github.com/algebananazzzzz/NocturnalProject
+          - text: Demo
+            color: purple
+            video: demo.mp4
