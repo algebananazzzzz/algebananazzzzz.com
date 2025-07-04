@@ -1,0 +1,114 @@
+# .github/workflows/preprod-release.yml
+name: Pre-production Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+-rc' # Matches tags like v1.2.3-rc
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "preprod-release"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-static-assets:
+    name: ⚙️ Build Gatsby Static Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. 📄 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. ⚙️ Detect Package Manager
+        id: detect-pm
+        run: |
+          if [ -f "yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+          elif [ -f "package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=ci" >> $GITHUB_OUTPUT
+          else
+            echo "Unable to detect package manager"
+            exit 1
+          fi
+
+      - name: 3. ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: ${{ steps.detect-pm.outputs.manager }}
+
+      - name: 4. ⚙️ Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: gatsby
+
+      - name: 5. ⬇️ Restore Gatsby Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            public
+            .cache
+          key: ${{ runner.os }}-gatsby-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-gatsby-
+
+      - name: 6. 📦 Install Dependencies
+        run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.command }}
+
+      - name: 7. ⚙️ Build with Gatsby
+        env:
+          PREFIX_PATHS: "true"
+        run: ${{ steps.detect-pm.outputs.manager }} run build
+
+      - name: 8. 📤 Upload Build Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy-to-gh-pages:
+    name: 🚀 Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build-static-assets
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: 1. 🚀 Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+
+  promote-tag-to-production:
+    name: 🏷️ Promote RC Tag to Production
+    runs-on: ubuntu-latest
+    needs: deploy-to-gh-pages
+    if: success()
+    permissions:
+      contents: write
+
+    steps:
+      - name: 1. 🏷️ Create Production Tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const rcTag = context.ref.replace('refs/tags/', '');
+            const prodTag = rcTag.replace(/-rc$/, '');
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${prodTag}`,
+              sha: context.sha,
+            });
