@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 1. 📄 Checkout Repository
+      - name: 1. 📄 Checkout Repository (with submodules)
         uses: actions/checkout@v4
 
       - name: 2. ⚙️ Detect Package Manager
