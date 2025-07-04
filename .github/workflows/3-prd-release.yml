@@ -56,8 +56,6 @@ jobs:
         run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.command }}
 
       - name: 7. ⚙️ Build with Gatsby
-        env:
-          PREFIX_PATHS: "true"
         run: ${{ steps.detect-pm.outputs.manager }} run build
 
       - name: 8. 📤 Upload Build Artifacts
