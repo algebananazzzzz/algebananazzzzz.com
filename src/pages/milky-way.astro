@@ -4,6 +4,10 @@ import MilkyWay from '@/components/island/MilkyWay';
 import MilkyWayStreak from '@/components/island/MilkyWayStreak';
 import manifest from '@/content/wiki-manifest.json';
 import type { WikiManifest, WikiPage } from '@/types/wiki';
+import { features } from '@/config/features';
+
+// Feature not ready: keep the route unreachable until PUBLIC_FEATURE_MILKY_WAY is set.
+if (!features.milkyWay) return Astro.redirect('/');
 
 const wiki = manifest as WikiManifest;
 const { pages, topics, meta } = wiki;

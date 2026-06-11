@@ -1,4 +1,6 @@
 ---
+import { features } from '@/config/features';
+
 const { pathname } = Astro.url;
 const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
@@ -30,27 +32,32 @@ const links = [
           </a>
         ))
       }
-      <a
-        href="/milky-way"
-        class="milky-pill"
-        aria-current={isActive('/milky-way') ? 'page' : undefined}
-        aria-label="enter the milky way"
-      >
-        <span class="star" aria-hidden="true"></span>
-        <span>Milky Way</span>
-        <svg
-          class="arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
-        </svg>
-      </a>
+      {
+        features.milkyWay && (
+          <a
+            href="/milky-way"
+            class="milky-pill"
+            aria-current={isActive('/milky-way') ? 'page' : undefined}
+            aria-label="enter the milky way"
+          >
+            <span class="star" aria-hidden="true" />
+            <span>Milky Way</span>
+            <svg
+              class="arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+        )
+      }
     </nav>
 
     <div class="topnav-tools">

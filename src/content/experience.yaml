@@ -1,36 +1,42 @@
 - id: bytedance-intern
-  date: '2025-02 — present'
+  date: '2026-02 — present'
   role: 'Backend SWE Intern'
   org: 'ByteDance'
-  summary: 'Backend engineer on the data infrastructure team.'
-  tags: [golang, infrastructure]
-  star: blackhole
+  summary: 'Foundational Technology — Orchestration & Scheduling for the container platform.'
+  bullets:
+    - 'Engineered Golang controllers across 30+ production K8s clusters to preempt lower-priority pods over-consuming the shared resource pool, suppressing the sync controller reverting evictions at low QPS'
+    - 'Contributed to a GPU scheduler with hard network-protocol filters (RDMA/VPC), weighted scoring across shared topology/network affinity, and anti-concentration spread across data centers'
+    - 'Built LLM tooling abstracting 5+ core repos via deterministic AST walks to build relation graphs between CRDs and controllers, with a self-improving causal graph layer cutting manual RCA diagnosis by 60%+ for on-call SREs across the control plane'
+    - 'Built an LLM wiki distilling org-wide incident reports into reusable playbooks and procedures, preempting 30+ potential incidents'
+  tags: [golang, kubernetes, llm]
+  star: bgiant
 
 - id: govtech-intern
   date: '2023-11 — 2024-08'
   role: 'DevOps Intern'
   org: 'GovTech'
-  summary: 'Architected cloud solutions and automation across government infrastructure.'
+  summary: 'GDS, Whole-of-Government Application Analytics (WOGAA).'
   bullets:
-    - 'Orchestrated 20+ AWS services and refactored GitLab CI/CD pipelines across 15+ projects, reducing pipeline execution time by ~40%'
-    - 'Built a centralized Terraform module repository, cutting code duplication by ~40% across 10+ projects'
-    - 'Developed a Golang ChatOps platform automating critical operational tasks, cutting ~20 man-hours per week'
-    - 'Designed a multi-region, fault-tolerant synthetic monitoring system tracking uptime across 5,000+ government websites'
-    - 'Led adoption of AWS Security Hub and Prowler, boosting CIS security scores by 20%+ across 3 environments'
-    - 'Implemented an EKS platform with Prometheus, Linkerd, OpenFaaS, and ArgoCD + Crossplane GitOps pipelines'
-  tags: [aws, golang, terraform, kubernetes]
+    - 'Architected cloud solutions across 20+ AWS services and refactored GitLab CI/CD pipelines across 15+ projects, cutting pipeline execution time by 40%'
+    - 'Built a centralized Terraform module repository shared across 10+ projects, onboarding 50+ unmanaged microservice resources'
+    - 'Developed a Golang ChatOps platform automating 4 operational workflows and provisioning ephemeral CI environments, plus 7 event-driven automations saving ~20 man-hours per week'
+    - 'Designed a multi-region, fault-tolerant synthetic monitoring system in Golang tracking uptime across 5,000+ government websites'
+    - 'Built a pipeline integrating Security Hub and Prowler findings with remediations across 3 environments, raising CIS scores by 20%+'
+    - 'Engineered layered network defenses (Network Firewall, WAF) blocking ~100 malicious IPs'
+  tags: [aws, golang, terraform, kubernetes, gitlab]
   star: giant
 
 - id: sheares-web
   date: '2025-05 — present'
   role: 'Chairperson'
   org: 'Sheares Web'
-  summary: 'Leading development and operations for 500 active hall residents.'
+  summary: 'NUS Sheares Hall Residents Committee — dev and ops for 500 active residents.'
   bullets:
-    - 'Engineered a Liquibase + Golang pipeline to declaratively process 1,000+ rows of data, cutting change failure rate from 75% to 5%'
-    - 'Migrated legacy monolithic systems to AWS microservices, cutting costs by ~86%'
-    - 'Architected a scalable PostgreSQL schema with indexes, materialized views, triggers and procedures'
-    - 'Built an automated Gale-Shapley CCA allocation system, saving ~50 man-hours per semester'
-    - 'Led development of the Sheares App with React Native and Expo, used by 500 residents monthly'
-  tags: [golang, react-native, aws, postgres]
+    - 'Built a Liquibase + Golang pipeline to declaratively process 2,000+ rows of CSV data, saving ~15 man-hours per onboarding cycle, cutting change failure rate by 70% and MTTR to 5 min'
+    - 'Migrated legacy monolithic systems to AWS microservices, reducing costs by 86% ($893 to $120/year)'
+    - 'Architected a PostgreSQL schema optimized with indexes and materialized views to cut query time by 65%, enforcing business logic with procedures and triggers'
+    - 'Introduced an automated Gale-Shapley CCA allocation system in Golang, eliminating ~50 man-hours of manual work per semester'
+    - 'Led development of the Sheares App (React Native, Expo, Figma), used monthly by 500 active residents and boosting hall event participation by 20%'
+    - 'Built an internal AI platform automating routines and auditing fairness in hall points allocation, backed by a saturated non-linear GAP formulation'
+  tags: [golang, react-native, aws, postgres, github actions]
   star: subgiant

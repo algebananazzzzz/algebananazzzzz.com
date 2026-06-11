@@ -1,95 +1,142 @@
-- id: sheares-app
-  title: 'Sheares App v3'
-  tagline: 'A real-time community app for 500+ hall residents.'
-  tech: [aws, react, tailwindcss]
+- id: nubenube
+  title: 'NubeNube'
+  tagline: 'A desktop focus companion for Claude Code.'
+  tech: [tauri, rust, react]
   summary: |
-    A hall-wide noticeboard, room-booking, and event app I've maintained since freshman year. v3 swapped the old polling backend for a serverless WebSocket fan-out on AWS and cut p95 notification latency from 9s to 280ms.
+    A local-first desktop pet that keeps you in the loop with your Claude Code sessions. When Claude works, your cloud creature grows; when it hands the turn back and you drift to a distraction app, the Nube droops until you return. No accounts, no servers, no telemetry — it reads local ~/.claude data and watches the foreground app.
   bullets:
-    - 'WebSocket fan-out via API Gateway + Lambda + DynamoDB streams.'
-    - 'Replaced WhatsApp announcements; spam down ~70%, notice retention up ~3×.'
-    - 'Deploys in one terraform apply; CI/CD via GitHub Actions + OIDC.'
-  role: 'Solo build · 2024 → ongoing'
-  impact: '500+ daily actives · 14 blocks'
-  cluster: cloud
-  accent: cosmic
-  href: 'https://github.com/algebananazzzzz'
-
-- id: brewlog
-  title: 'Brewlog'
-  tagline: 'A home-brewing journal that nags me at the right times.'
-  tech: [react, docker]
-  summary: |
-    What started as a Notion replacement became a self-hosted brewing log with gravity readings, pitching-rate math, and tasting flights. 12 batches tracked across saisons, IPAs, stouts.
-  bullets:
-    - 'Astro frontend, SQLite backend, runs on a Raspberry Pi in my closet.'
-    - 'Custom pitching-rate calculator that finally agrees with my fermenter.'
-    - 'Tasting flights with rotating peer reviewers (my hall-mates).'
-  role: 'Side project · 2025'
-  impact: '12 batches · 0 infections'
-  cluster: brewery
-  accent: sunset
-  href: 'https://github.com/algebananazzzzz'
-
-- id: prompt-atlas
-  title: 'Prompt-Atlas'
-  tagline: 'A library of meta-prompt skeletons, each with eval cases attached.'
-  tech: [react, terraform]
-  summary: |
-    An open-source catalogue of meta-prompt skeletons. Every template ships with eval cases — assertions you can actually run, not vibes you can argue with. 47 templates and counting.
-  bullets:
-    - '47 templates across planning, debate, summarisation, evaluation patterns.'
-    - 'Each template carries 8–20 eval cases. Templates that regress get red-flagged in CI.'
-    - 'Used by ~6 small teams I know of; PRs from 14 contributors.'
-  role: 'Open source · 2025 → ongoing'
-  impact: '47 templates · 14 contributors'
-  cluster: llm
-  accent: aurora
-  href: 'https://github.com/algebananazzzzz'
-
-- id: constellate
-  title: 'Constellate'
-  tagline: 'This site. A digital garden that looks like the sky it lives under.'
-  tech: [react, gatsby]
-  summary: |
-    A custom Quartz-style digital garden built on Astro + MDX. Notes are stars; wiki-links are constellations; bigger stars mean more backlinks. Self-referential by design.
-  bullets:
-    - 'Hand-rolled D3 force layout for the global graph view.'
-    - 'Bidirectional [[wiki-links]] resolved at build time; backlinks generated automatically.'
-    - "Every page typeset in the same design system you're looking at."
+    - 'Tauri (Rust core + React UI) shipping builds for macOS, Windows, and Linux.'
+    - 'Claude Code hooks fire the exact moment the turn returns; token throughput drives Nube health.'
+    - 'Idle ≠ drifting — health freezes when you step away, resets daily, banks up to 130% on focus.'
   role: 'Solo · 2026'
-  impact: '47 notes · 113 links'
+  impact: 'Cross-platform · local-only'
+  cluster: llm
+  accent: nebula
+  href: 'https://github.com/algebananazzzzz/nubenube'
+
+- id: odyssey
+  title: 'Odyssey'
+  tagline: 'A CLI that scaffolds AWS projects with IaC best practices baked in.'
+  tech: [go, terraform, aws]
+  summary: |
+    A Go CLI for the Odyssey Framework. It bootstraps new API or website projects with a single command — wiring up Terraform backend state, AWS region, and CI/CD so best practices are enforced from the first commit instead of bolted on later.
+  bullets:
+    - 'One-command project creation with Terraform backend + region pre-configured.'
+    - 'Ships cross-platform release binaries (Linux i386/arm64/x86_64, macOS, Windows).'
+    - 'Encodes an opinionated AWS + IaC + CI/CD layout so teams start consistent.'
+  role: 'Open source · 2024'
+  impact: 'Cross-platform binary'
+  cluster: cloud
+  accent: aurora
+  href: 'https://github.com/algebananazzzzz/odyssey'
+
+- id: planear
+  title: 'Planear'
+  tagline: 'Reconcile a CSV desired state against a live remote — in two Go functions.'
+  tech: [go]
+  summary: |
+    A Go library that reconciles a CSV-defined desired state with a remote actual state. You write OnAdd, OnUpdate, OnDelete; Planear handles the diff, the plan file, parallel dispatch, and retries. No providers, no plugins, no state-file format to learn.
+  bullets:
+    - 'Terraform-style plan/apply ergonomics without the provider machinery.'
+    - 'Generic over your record type; you supply three callbacks.'
+    - 'Parallel dispatch with retries; published on pkg.go.dev with a release pipeline.'
+  role: 'Open source · 2026'
+  impact: 'Two functions, full reconcile'
+  cluster: cloud
+  accent: aurora
+  href: 'https://github.com/algebananazzzzz/planear'
+
+- id: attendance-bot
+  title: 'Attendance Bot'
+  tagline: 'A Telegram attendance bot backed entirely by Google Sheets.'
+  tech: [python]
+  summary: |
+    A Telegram bot that runs training attendance off a Google Sheet — no database. Members register via poll, trainings become date columns, and poll answers write straight into attendance cells. A /chase command pings whoever hasn't responded that week.
+  bullets:
+    - 'Google Sheets as the only datastore — Attendance, Trainings, Polls, Admins tabs.'
+    - 'Poll votes update attendance cells directly; /add_training spawns date columns.'
+    - '/chase auto-pings non-responders across every poll that week.'
+  role: 'Side project · 2026'
+  impact: 'Zero-DB attendance tracking'
   cluster: general
   accent: nebula
-  href: 'https://github.com/algebananazzzzz'
+  href: 'https://github.com/algebananazzzzz/attendance-bot'
 
-- id: pourover
-  title: 'Pour-over Timer'
-  tagline: 'A tiny iOS app for pour-over coffee.'
-  tech: [react, docker]
+- id: sheares-app
+  title: 'Sheares App'
+  tagline: 'The resident-facing app for 500 hall members.'
+  tech: [react-native, expo, aws]
   summary: |
-    Multi-stage pour profiles with haptic-tap pacing. Built in a weekend after burning my fifth Ethiopian Yirgacheffe. Now lives quietly on my home-screen with ~40 friends using it.
+    The mobile app for NUS Sheares Hall — noticeboard, bookings, and events for residents. Built with React Native and Expo on top of a PostgreSQL backend.
   bullets:
-    - 'Profiles for 4-6, V60 02, Kalita Wave, with custom bloom/pour ratios.'
-    - "Haptic pacing so you don't need to stare at a phone mid-pour."
-    - 'Distributed via TestFlight; ~40 active testers.'
-  role: 'Side project · 2025'
-  impact: '40 active testers'
+    - 'React Native + Expo client, used monthly by 500 active residents.'
+    - 'Boosted hall event participation by ~20%.'
+  role: 'Chairperson · 2024 → ongoing'
+  impact: '500 monthly residents · +20% participation'
   cluster: general
-  accent: sunset
-  href: 'https://github.com/algebananazzzzz'
+  accent: cosmic
+  href: 'https://github.com/ShearesWeb/sheares-app'
 
 - id: nocturnal
   title: 'NocturnalProject'
-  tagline: 'The Gatsby + Tailwind portfolio template this site forks from.'
+  tagline: 'A Gatsby + Tailwind portfolio template I open-sourced.'
   tech: [gatsby, tailwindcss]
   summary: |
-    A free, opinionated portfolio template I open-sourced after building mine. 200+ forks; opinionated about content separation, theme tokens, and a wine-red illustration palette.
+    A free, opinionated portfolio template built with Gatsby-React and TailwindCSS, open-sourced after building my first site. Opinionated about content separation, theme tokens, and a wine-red illustration palette.
   bullets:
     - 'YAML-driven content. Add a project by editing a file, not a component.'
     - 'Light / dark theme baked into the design tokens, not bolted on.'
-    - '200+ forks, 30+ stars; PRs from 6 contributors.'
+    - 'Open-sourced after my first portfolio; 21 forks to date.'
   role: 'Open source · 2024'
-  impact: '200+ forks'
+  impact: '21 forks'
   cluster: general
   accent: aurora
   href: 'https://github.com/algebananazzzzz/NocturnalProject'
+
+- id: algebananazzzzz-com
+  title: 'algebananazzzzz.com'
+  tagline: 'This site — a portfolio you navigate by star.'
+  tech: [astro, react, tailwindcss, terraform]
+  summary: |
+    The portfolio you're reading. An Astro 5 static site with React islands, where experience and projects render as a drifting starfield — brighter stars mean bigger impact. Ships on Cloudflare Pages behind a Terraform-managed pipeline with preprod and prod environments.
+  bullets:
+    - 'Astro islands hydrated on visibility; cosmos backdrop driven by a load-bearing CSS var contract.'
+    - 'Content collections (Zod-typed YAML) drive every project, role, and star.'
+    - 'Terraform-managed Cloudflare Pages with R2 state; auto-tagged beta → prod deploys via GitHub Actions.'
+  role: 'Solo · 2026'
+  impact: '5 pages · 0 type errors'
+  cluster: general
+  accent: cosmic
+  href: 'https://www.algebananazzzzz.com'
+
+- id: nybble
+  title: 'nybble'
+  tagline: 'Auto-books your canteen lunch from a polished terminal UI.'
+  tech: [go, charm]
+  summary: |
+    A Go terminal app (built on Charm) that books your weekly canteen lunch automatically. You rank vendors and dishes in the TUI; when next week's slots open it logs in, matches your preferences day by day, and books the whole week in one shot.
+  bullets:
+    - 'Charm-based TUI for ranking favourite dishes and vendors.'
+    - 'Ranking walks favourites → vendor order → least-available-wins, so something always books.'
+    - 'Installs via curl with checksum verification, or `go install`.'
+  role: 'Side project · 2026'
+  impact: 'Whole week booked in one shot'
+  cluster: general
+  accent: sunset
+  href: 'https://github.com/algebananazzzzz/nybble'
+
+- id: quiz-bot
+  title: 'Telegram Quiz Bot'
+  tagline: 'A serverless Telegram quiz bot you deploy with one terraform apply.'
+  tech: [go, terraform, aws]
+  summary: |
+    A Golang Telegram quiz bot provisioned as serverless AWS infrastructure via Terraform. Ships application code plus IaC — you configure environment variables and quiz data, then deploy. The bot logic lives in src; the rest is infrastructure handled for you.
+  bullets:
+    - 'Go bot handler running serverless on AWS behind a webhook.'
+    - 'Whole stack provisioned with Terraform — VPC, functions, and wiring.'
+    - 'Bring your own quiz data and env config; deploy without touching infra code.'
+  role: 'Side project · 2024'
+  impact: 'One terraform apply to ship'
+  cluster: cloud
+  accent: cosmic
+  href: 'https://github.com/algebananazzzzz/Go-Terraform-Telegram-Quiz-Bot'

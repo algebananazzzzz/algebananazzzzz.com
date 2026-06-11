@@ -13,6 +13,7 @@ import CareerList from '@/components/island/CareerList';
 import MilkyWay from '@/components/island/MilkyWay';
 import MottoRotator from '@/components/static/MottoRotator.astro';
 import { getCareerEntries } from '@/lib/getCareerEntries';
+import { features } from '@/config/features';
 
 const wiki = manifest as WikiManifest;
 
@@ -54,39 +55,51 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
 
       <div class="hero-ctas">
         <a href="/about" class="cta-secondary">About Me</a>
-        <a href="/milky-way" class="cta-milky" aria-label="enter the milky way">
-          <span class="cta-star"></span>
-          <span class="cta-label">Enter the Milky Way</span>
-          <svg
-            class="cta-arrow"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
-          </svg>
-        </a>
+        {
+          features.milkyWay && (
+            <a href="/milky-way" class="cta-milky" aria-label="enter the milky way">
+              <span class="cta-star" />
+              <span class="cta-label">Enter the Milky Way</span>
+              <svg
+                class="cta-arrow"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+          )
+        }
       </div>
 
       <div class="orbiting">
         <span class="label">currently orbiting</span>
         {
-          orbitingTopics.map((t) => (
-            <a
-              href={`/milky-way?cluster=${t.id}`}
-              class="orbiting-chip"
-              title={`Notes in the ${t.label} cluster`}
-            >
-              <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
-              {t.label}
-            </a>
-          ))
+          orbitingTopics.map((t) =>
+            features.milkyWay ? (
+              <a
+                href={`/milky-way?cluster=${t.id}`}
+                class="orbiting-chip"
+                title={`Notes in the ${t.label} cluster`}
+              >
+                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
+                {t.label}
+              </a>
+            ) : (
+              <span class="orbiting-chip" title={`${t.label} cluster`}>
+                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
+                {t.label}
+              </span>
+            ),
+          )
         }
       </div>
     </div>
@@ -133,15 +146,28 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
     <CareerList client:visible entries={careerEntries} />
   </section>
 
-  <!-- Milky Way preview -->
-  <section class="section" data-screen-label="06 Milky Way" data-accent="cosmic">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">my digital garden</div>
-        <h2 class="section-title"><em>The milky way</em></h2>
-      </div>
-      <a href="/milky-way" class="section-link">enter the milky way →</a>
-    </div>
-    <MilkyWay client:visible pages={wiki.pages} topics={wiki.topics} baseUrl={wiki.meta.baseUrl} />
-  </section>
+  {
+    /* Milky Way preview */
+    features.milkyWay && (
+      <section class="section" data-screen-label="06 Milky Way" data-accent="cosmic">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">my digital garden</div>
+            <h2 class="section-title">
+              <em>The milky way</em>
+            </h2>
+          </div>
+          <a href="/milky-way" class="section-link">
+            enter the milky way →
+          </a>
+        </div>
+        <MilkyWay
+          client:visible
+          pages={wiki.pages}
+          topics={wiki.topics}
+          baseUrl={wiki.meta.baseUrl}
+        />
+      </section>
+    )
+  }
 </Base>

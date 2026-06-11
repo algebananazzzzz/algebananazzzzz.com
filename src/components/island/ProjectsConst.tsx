@@ -43,13 +43,20 @@ interface Star {
   spectralClass: string;
 }
 
+// Ordered by priority: higher-priority projects get more mass (bigger star +
+// wider gravity halo) and a more vibrant colour. Lower-priority ones fade toward
+// muted, then slate-grey. Spectral classes track the same scale — luminous
+// supergiants (O/B) at the top, dim dwarfs (K/M) at the bottom.
 const VISUAL_BY_ID: Record<string, VisualConfig> = {
-  'sheares-app': { mass: 4.2, color: '#fbbf24', spectralClass: 'B7 IV' },
-  brewlog: { mass: 2.4, color: '#f472b6', spectralClass: 'K2 V' },
-  'prompt-atlas': { mass: 3.6, color: '#a78bfa', spectralClass: 'A1 V' },
-  constellate: { mass: 1.7, color: '#7dd3fc', spectralClass: 'M5 V' },
-  pourover: { mass: 2.7, color: '#fda4af', spectralClass: 'G2 V' },
-  nocturnal: { mass: 2.0, color: '#fde047', spectralClass: 'F8 V' },
+  nubenube: { mass: 4.2, color: '#22d3ee', spectralClass: 'O5 Ia' },
+  odyssey: { mass: 3.7, color: '#fb923c', spectralClass: 'B0 Ia' },
+  planear: { mass: 3.2, color: '#a78bfa', spectralClass: 'B3 II' },
+  'attendance-bot': { mass: 2.8, color: '#34d399', spectralClass: 'A0 III' },
+  'sheares-app': { mass: 2.4, color: '#fbbf24', spectralClass: 'A5 IV' },
+  nocturnal: { mass: 2.1, color: '#facc15', spectralClass: 'F2 V' },
+  'algebananazzzzz-com': { mass: 1.8, color: '#c4b5fd', spectralClass: 'G5 V' },
+  nybble: { mass: 1.6, color: '#fca5a5', spectralClass: 'K2 V' },
+  'quiz-bot': { mass: 1.4, color: '#94a3b8', spectralClass: 'M4 V' },
 };
 
 const CLUSTER_COLOR: Record<string, string> = {
