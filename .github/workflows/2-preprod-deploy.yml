@@ -65,9 +65,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           terraform init \
-            -backend-config=backend.tfbackend \
+            -backend-config=config/preprod.tfbackend \
             -backend-config="endpoints={s3=\"https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com\"}"
-          terraform workspace select -or-create preprod
 
       - name: Terraform Apply
         if: github.ref_type == 'tag' || steps.changes.outputs.infra == 'true'

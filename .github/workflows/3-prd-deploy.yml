@@ -32,9 +32,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           terraform init \
-            -backend-config=backend.tfbackend \
+            -backend-config=config/prd.tfbackend \
             -backend-config="endpoints={s3=\"https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com\"}"
-          terraform workspace select -or-create prd
 
       - name: Terraform Apply
         working-directory: infra

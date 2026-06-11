@@ -1,3 +1,13 @@
+variable "env" {
+  description = "Deployment environment; the leading segment of every resource name."
+  type        = string
+
+  validation {
+    condition     = contains(["preprod", "prd"], var.env)
+    error_message = "env must be either 'preprod' or 'prd'."
+  }
+}
+
 variable "cloudflare_account_id" {
   description = "Cloudflare account identifier"
   type        = string
