@@ -89,6 +89,7 @@ jobs:
           command: pages deploy dist/ --project-name=preprod-web-pages-algebananazzzzz --branch=main
 
       - name: Promote to production tag
+        if: false # TEMP: beta-only deploy — re-enable to resume auto-promotion to prod
         uses: actions/github-script@v7
         env:
           BETA_TAG: ${{ format('v{0}-beta', steps.tag.outputs.new_version) || github.ref_name }}
