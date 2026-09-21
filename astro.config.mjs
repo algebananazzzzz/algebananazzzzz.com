@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import yaml from '@rollup/plugin-yaml';
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://www.algebananazzzzz.com',
+  site: process.env.SITE_URL || 'https://algebananazzzzz.com',
   base: '/',
   output: 'static',
   trailingSlash: 'ignore',

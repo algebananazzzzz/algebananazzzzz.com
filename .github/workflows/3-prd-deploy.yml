@@ -46,7 +46,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          SITE_URL: https://www.algebananazzzzz.com
+          SITE_URL: https://algebananazzzzz.com
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

@@ -156,7 +156,7 @@ Three workflows in `.github/workflows/`, plus Terraform in `infra/`:
 
 - `1-feature-branch-ci.yml` — runs on PRs to `main`. Gates: `format:check`, `astro check`, `vitest run`, `astro build`.
 - `2-preprod-deploy.yml` — runs on push to `main`. Auto-tags `vx.x.x-beta`, runs checks, optionally applies Terraform (`infra/` changes), builds with `SITE_URL=https://beta.algebananazzzzz.com`, deploys to `preprod-web-pages-algebananazzzzz`. On success, creates `vx.x.x` production tag.
-- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`). Applies Terraform, builds with `SITE_URL=https://www.algebananazzzzz.com`, deploys to `prd-web-pages-algebananazzzzz`.
+- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`). Applies Terraform, builds with `SITE_URL=https://algebananazzzzz.com`, deploys to `prd-web-pages-algebananazzzzz`.
 
 Terraform resources live in `infra/`. Per-env config in `infra/config/preprod.tfvars` and `infra/config/prd.tfvars`. State stored in Cloudflare R2 (`com-infra-tfstate-cloudflare`) with separate keys per environment.
 

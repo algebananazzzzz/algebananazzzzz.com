@@ -127,7 +127,7 @@ clusters:
           - 'Terraform-managed Cloudflare Pages with R2 state; auto-tagged beta → prod deploys via GitHub Actions.'
         date: '2026'
         magnitude: 1.8
-        href: 'https://www.algebananazzzzz.com'
+        href: 'https://algebananazzzzz.com'
 
       - id: nybble
         title: 'nybble'
