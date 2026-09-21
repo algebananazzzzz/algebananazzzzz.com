@@ -15,6 +15,7 @@ jobs:
     environment: preprod
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,7 +92,7 @@ jobs:
       - name: Promote to production tag
         uses: actions/github-script@v7
         env:
-          BETA_TAG: ${{ format('v{0}-beta', steps.tag.outputs.new_version) || github.ref_name }}
+          BETA_TAG: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}-beta', steps.tag.outputs.new_version) }}
         with:
           script: |
             const betaTag = process.env.BETA_TAG;
@@ -103,3 +104,10 @@ jobs:
               sha: context.sha,
             });
             core.info(`Created production tag: ${prodTag}`);
+            // Tags created with GITHUB_TOKEN don't fire push workflows, so dispatch prod explicitly.
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: '3-prd-deploy.yml',
+              ref: prodTag,
+            });

@@ -3,6 +3,7 @@ name: 3. Production Deploy
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 concurrency:
   group: prd-deploy
@@ -52,4 +53,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist/ --project-name=prd-web-pages-algebananazzzzz
+          command: pages deploy dist/ --project-name=prd-web-pages-algebananazzzzz --branch=main
