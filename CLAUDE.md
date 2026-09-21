@@ -4,11 +4,11 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 
 ## Stack
 
-- **Astro 5** static site generator, `output: 'static'`, 5 pages.
+- **Astro 7** static site generator, `output: 'static'`, 5 pages. Needs Node >=22.12; `.nvmrc` is 22 and all three workflows read it.
 - **React 18** islands for interactive components, hydrated via Astro `client:*` directives.
 - **Tailwind v4** via `@tailwindcss/vite`. Color/font tokens live in `src/styles/tokens.css`; the `@theme` block in `global.css` is a thin bridge that references those tokens via `var()`.
-- **TypeScript 5.7**, strict via `astro/tsconfigs/strict`. Content collections typed with Zod schemas in `src/content/config.ts`. Direct YAML imports shimmed in `src/types/yaml.d.ts` and cast at the import site.
-- **Vitest** for unit tests.
+- **TypeScript 5.7**, strict via `astro/tsconfigs/strict`. Content collections typed with Zod schemas in `src/content.config.ts`. Direct YAML imports shimmed in `src/types/yaml.d.ts` and cast at the import site.
+- **Vitest 5** for unit tests.
 - **Prettier** with `prettier-plugin-astro`. Run `npm run format`. CI gates on `npm run format:check`.
 
 ## Key paths
@@ -24,7 +24,7 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 - `src/components/island/*.module.css` — co-located CSS Modules for React islands. Import as `import s from './X.module.css'` and access via `s.camelCase`.
 - `src/styles/pages.css` — sub-page (`/about`, `/projects`, `/experience`) wrapper rules + shared utilities (`.tag`, `.cta-secondary`).
 - `src/styles/page-bg.css` — per-route accent washes + per-route cosmos tint variables.
-- `src/content/config.ts` — Zod schemas for content collections.
+- `src/content.config.ts` — Zod schemas and `file()` loaders for content collections.
 - `src/types/yaml.d.ts` — `*.yaml` module shim (`unknown`, cast at import site).
 - `design-handoff/` — original prototype (gitignored).
 
@@ -97,12 +97,15 @@ CSS is split between **CSS Modules** (co-located `.module.css` per React island)
 
 ## Content collections — how to add data
 
-Collections defined in `src/content/config.ts` (type `'data'`, file loaders, Zod schemas):
+Collections defined in `src/content.config.ts` (type `'data'`, `file()` loaders, Zod schemas, YAML parsed with `js-yaml`):
 
-| Collection   | File                          | Schema fields                                                                   |
-| ------------ | ----------------------------- | ------------------------------------------------------------------------------- |
-| `projects`   | `src/content/projects.yaml`   | id, title, tagline, tech, summary, bullets, role, impact, cluster, accent, href |
-| `experience` | `src/content/experience.yaml` | id, span, role, org, summary, tags, star (type, brightness)                     |
+| Collection        | File                          | Schema fields                                                                           |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------------------- |
+| `projects`        | `src/content/projects.yaml`   | id, title, tagline, tech, summary, bullets?, date, href?, magnitude, cluster            |
+| `projectClusters` | `src/content/projects.yaml`   | color (keyed by cluster id)                                                             |
+| `experience`      | `src/content/experience.yaml` | id, date, role, org, summary, bullets?, tags, star (`StarType` enum in the config file) |
+
+`projects.yaml` is grouped by cluster: `clusters.<id>.color` plus `clusters.<id>.projects[]`. `cluster` is not written per project; the loader fills it from the parent key.
 
 ### Wiki manifest — notes, topics, mottos
 
@@ -125,9 +128,9 @@ The manifest contains:
 
 Constellation auto-layouts nodes from `pages` (golden-angle spiral per topic zone) and derives edges from `pages[].links`. No hardcoded positions.
 
-To add a new project: append an entry to `src/content/projects.yaml` matching the schema. To add a field: update the schema in `config.ts`, then add the field to existing entries (or mark `.optional()` in the schema if not always present).
+To add a new project: append an entry to the right cluster's `projects:` list in `src/content/projects.yaml`, matching the schema. To add a field: update the schema in `content.config.ts`, then add the field to existing entries (or mark `.optional()` in the schema if not always present).
 
-Type-side: import `CollectionEntry` from `astro:content` and use `CollectionEntry<'projects'>['data']` etc. Don't try to import types from `config.ts` — schemas are inline.
+Type-side: import `CollectionEntry` from `astro:content` and use `CollectionEntry<'projects'>['data']` etc. Don't try to import types from `content.config.ts` — schemas are inline.
 
 Standalone YAML imports (not collections) — `site.yaml`, `about.yaml`, `now.yaml` — go through the `*.yaml` shim. Cast at the import site to a narrow named type:
 
@@ -152,15 +155,21 @@ const siteData = siteRaw as SiteData;
 
 ## CI & Deployment
 
-Three workflows in `.github/workflows/`, plus Terraform in `infra/`:
+Three workflows in `.github/workflows/`, plus Terraform in `infra/`. The repo is `algebananazzzzz/algebananazzzzz.com`; the only other repo named after the account is `algebananazzzzz` (the profile README).
 
 - `1-feature-branch-ci.yml` — runs on PRs to `main`. Gates: `format:check`, `astro check`, `vitest run`, `astro build`.
-- `2-preprod-deploy.yml` — runs on push to `main`. Auto-tags `vx.x.x-beta`, runs checks, optionally applies Terraform (`infra/` changes), builds with `SITE_URL=https://beta.algebananazzzzz.com`, deploys to `preprod-web-pages-algebananazzzzz`. On success, creates `vx.x.x` production tag.
-- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`). Applies Terraform, builds with `SITE_URL=https://algebananazzzzz.com`, deploys to `prd-web-pages-algebananazzzzz`.
+- `2-preprod-deploy.yml` — runs on push to `main` and on `v*-beta` tags. On a push it auto-tags `vx.x.x-beta`, runs checks, applies Terraform only when `infra/` changed (always on a beta tag), builds with `SITE_URL=https://beta.algebananazzzzz.com`, and deploys to `preprod-web-pages-algebananazzzzz` with `--branch=main`. On success it creates the `vx.x.x` production tag and dispatches `3-prd-deploy.yml` on it.
+- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`) and on `workflow_dispatch`. Applies Terraform, builds with `SITE_URL=https://algebananazzzzz.com`, and deploys to `prd-web-pages-algebananazzzzz` with `--branch=main`. Production is served at the apex; beta at `beta.algebananazzzzz.com`. Both come from `custom_domain` in the tfvars.
+
+Gotchas seen in real runs:
+
+- Tags created with `GITHUB_TOKEN` do not fire push workflows, which is why workflow 2 dispatches workflow 3 explicitly.
+- `wrangler pages deploy` needs `--branch=main`. On a tag checkout it otherwise deploys as a Preview and the domain shows "Deployment Not Found".
+- The beta tag version is computed from the last production tag plus conventional-commit types. If `vx.x.x-beta` already exists, the run fails at "Push beta tag"; delete the stale tag and re-run.
 
 Terraform resources live in `infra/`. Per-env config in `infra/config/preprod.tfvars` and `infra/config/prd.tfvars`. State stored in Cloudflare R2 (`com-infra-tfstate-cloudflare`) with separate keys per environment.
 
-Secrets required in GitHub repo settings (per-environment): `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`.
+Secrets required as GitHub repo secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`. The `preprod` and `prd` environments exist but hold no secrets of their own.
 
 ## Where the design handoff lives
 
