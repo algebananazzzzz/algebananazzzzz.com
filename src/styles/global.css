@@ -83,6 +83,10 @@ body {
 }
 html {
   font-family: var(--font-sans);
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 body {
   overflow-x: hidden;

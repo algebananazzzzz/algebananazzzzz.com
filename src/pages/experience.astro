@@ -10,16 +10,13 @@ const site = siteRaw as SiteData;
 const careerEntries = await getCareerEntries();
 ---
 
-<Base title="experience" description="experience in light-years." accent="nebula">
+<Base title="experience" description="experience in light-years." accent="cosmic">
   <div class="page">
     <div class="page-head">
       <div class="section-eyebrow">— experience —</div>
       <h1 class="page-title">
-        Experience <span class="grad-text g-nebula">in light-years</span>.
+        Past <span class="grad-text g-nebula">experiences</span>.
       </h1>
-      <p class="page-lead">
-        {site.pages.experience.lead}
-      </p>
     </div>
 
     <CareerList client:idle entries={careerEntries} />

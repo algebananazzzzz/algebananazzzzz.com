@@ -1,32 +1,18 @@
-building:
-  title: 'Sheares App, v3'
-  note: 'Rolling out the real-time noticeboard to all 14 blocks. ~500 daily actives across iOS, Android, web.'
-  since: '2024-11'
-  status: 'in flight'
-  tag: cloud
-writing:
-  title: 'Evals before vibes'
-  note: 'An assertion you can run beats a feeling you can argue. About halfway through the draft.'
-  progress: 0.62
-  words: 1340
-  status: budding
-  tag: llm
+developing:
+  title: 'Sheares Cupid, v3'
+  note: "Riding on the success of the CCA Allocation rounds, we're rolling out Cupid to support more day-to-day operations for JCRC."
+  tags:
+    - '2026-09'
+    - 'in flight'
+exploring:
+  title: 'LLM-as-a-Service'
+  note: 'Exploring self-hosting an LLM solution for my friends to keep track of Canvas tasks using Corum, my custom AI framework.'
+  tags:
+    - 'homelab'
+    - 'llm'
 obsessed:
-  title: 'Belgian saisons'
-  note: 'Pitching batch 3 this weekend — Wyeast 3711 at slightly cooler temps. Notes pending.'
-  batch: 3
-  tag: brewery
-listening:
-  title: 'Tigran Hamasyan — StandArt'
-  note: 'Stuck on track 2. Polyrhythms while debugging is somehow exactly right.'
-  tag: general
-learning:
-  title: 'Certified Kubernetes Administrator'
-  note: 'Practice exams every other evening. Aim: cert by July.'
-  progress: 0.4
-  tag: cloud
-reading:
-  title: 'How Buildings Learn'
-  author: 'Stewart Brand'
-  progress: 0.34
-  tag: reading
+  title: 'DHCP Options'
+  note: "I didn't expect that we can do so much with DHCP! No more manual boot in my homelab with option 66 and 150!"
+  tags:
+    - 'homelab'
+    - 'networking'

@@ -1,21 +1,22 @@
-heroSub: 'I love making things myself, be it brewing, cooking, mixing or developing. Anything that involves my own two hands and creating something that I call my own.'
+heroSub: 'Why Algebananazzzzz? This alias stuck to me since Primary School when I was obsessed with algebra and minions at the same time. Feel free to explore around this space and get to know me better!'
 
-intro: "I'm Daniel, a CS undergrad at NUS specializing in parallel computing and networking, currently interning at ByteDance."
+intro: "I'm Daniel, a NUS CS undergrad hoping to specialize in Infrastructure and Systems."
 what:
-  - "If I wasn't interested in tech I'd definitely be a chef. I really admire chefs. They cook with passion, infuse their soul into every dish, and love what they put out so much that they'll get heated if someone tells them to do it differently. This is exactly who I want to be."
-  - "Lately I've been going deep on bare metal, things like cgroups, cri, compiling kernels, basically what's happening behind the scenes at the hardware."
-  - "I'm also deeply invested in LLMs, always keeping myself up to date with what's new. I've been implementing LLM solutions at a large scale, things like knowledge wikis and automated root cause analysis frameworks. In fact the Milky Way is basically a knowledge wiki I manage together with my partner Claude."
+  - "If I wasn't into tech I'd definitely be a chef. They are always seeking ways to experiment and invent new flavors, infuse their soul into every dish, and wholeheartedly love what they put out. This is exactly who I want to be."
+  - 'I love exploring retro and foundational technology. By deep diving and reinventing some wheels in my homelab setup, I hope to better appreciate the history and evolutions in systems we take granted.'
+  - "I'm also deeply invested in the latest technologies like LLMs and Blockchain, always keeping myself up to date with what's new. I love experimentation and creating stuff, which is evident from all my hobbies!"
 valuesHeading: 'A few working principles'
 values:
   - label: 'Learning is always free'
-    note: "There's no opportunity cost to learning. Never stop diving into whatever you find curious."
+    note: "This goes two ways: there's no opportunity cost to learning, and if there are financial costs it's amortized."
   - label: 'Do it and get burnt'
-    note: "You don't learn heat by reading about fire, so just ship it, break it, and carry what you learned."
+    note: "You don't learn heat by reading about fire, so just ship it, break it, and internalize the process."
   - label: "It's okay to reinvent the wheel"
-    note: "Don't take things for granted. Real innovation comes when you do things differently, more often than not. Recompiling the kernel? Why not?"
+    note: "Don't take things for granted. Real innovation comes when you do things differently, more often than not."
 factoids:
   - { k: 'Based in', v: 'Singapore' }
-  - { k: 'Currently at', v: 'ByteDance (intern)' }
-  - { k: 'Currently brewing', v: 'Belgian quad, batch 02' }
+  - { k: 'Interests', v: 'Ultimate frisbee, cooking, smoked meat' }
+  - { k: 'Currently brewing', v: 'Germany Hefeweizen Beer (banana - clove characteristics)' }
+  - { k: 'Latest experience', v: 'ByteDance Backend SWE Intern (Foundational Technology)' }
   - { k: 'Last cert', v: 'AWS Solutions Architect Professional' }
   - { k: 'Deep in', v: 'cgroups and container internals' }

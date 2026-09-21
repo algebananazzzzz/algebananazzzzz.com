@@ -117,7 +117,9 @@ export default function Cosmos({ isHome = false }: { isHome?: boolean }) {
       const h = canvas.clientHeight;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
-      const count = Math.min(520, Math.round((w * h) / 4000));
+      const count = isHome
+        ? Math.min(220, Math.round((w * h) / 10000))
+        : Math.min(520, Math.round((w * h) / 4000));
       stars = [];
       for (let i = 0; i < count; i++) {
         const depth = Math.random();

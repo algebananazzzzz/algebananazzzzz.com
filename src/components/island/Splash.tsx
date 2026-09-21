@@ -193,13 +193,7 @@ export default function Splash() {
           Hello, I'm <em>Daniel</em>
         </h1>
         <div ref={subRef} className={s.splashSub}>
-          <span>NUS Computer Sciences</span>
-          <span className={s.sep} />
-          <span>builder</span>
-          <span className={s.sep} />
-          <span>brewer</span>
-          <span className={s.sep} />
-          <span>stargazer</span>
+          <span>Welcome to my portfolio site!</span>
         </div>
       </div>
 

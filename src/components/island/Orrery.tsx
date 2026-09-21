@@ -5,11 +5,11 @@ import s from './Orrery.module.css';
 interface OrreryItem {
   title: string;
   note: string;
-  tag: string;
+  tags: string[];
 }
 interface Props {
-  building: OrreryItem;
-  writing: OrreryItem;
+  developing: OrreryItem;
+  exploring: OrreryItem;
   obsessed: OrreryItem;
 }
 
@@ -85,30 +85,30 @@ function syncCanvas(
   return { w: cw, h: ch, scale, ox, oy };
 }
 
-export default function Orrery({ building, writing, obsessed }: Props) {
+export default function Orrery({ developing, exploring, obsessed }: Props) {
   const reduced = useReducedComplexity();
   const [hoverId, setHoverId] = useState<string | null>(null);
 
   const bodies: Body[] = useMemo(
     () => [
       {
-        id: 'building',
-        label: 'Building',
-        name: building.title,
-        note: building.note,
+        id: 'developing',
+        label: 'developing',
+        name: developing.title,
+        note: developing.note,
         color: '#fbbf24',
         glow: 'rgba(251, 191, 36, 0.55)',
         orbitR: 0.23,
         speed: 0.00045,
         phase: 0.3,
         radius: 2.8,
-        meta: ['since 2024-11', 'in flight'],
+        meta: developing.tags,
       },
       {
-        id: 'writing',
-        label: 'Writing',
-        name: writing.title,
-        note: writing.note,
+        id: 'exploring',
+        label: 'exploring',
+        name: exploring.title,
+        note: exploring.note,
         color: '#a78bfa',
         glow: 'rgba(167, 139, 250, 0.55)',
         orbitR: 0.38,
@@ -116,7 +116,7 @@ export default function Orrery({ building, writing, obsessed }: Props) {
         phase: 1.6,
         radius: 4.0,
         ring: true,
-        meta: ['budding', 'llm cluster'],
+        meta: exploring.tags,
       },
       {
         id: 'obsessed',
@@ -129,10 +129,10 @@ export default function Orrery({ building, writing, obsessed }: Props) {
         speed: 0.00018,
         phase: 2.9,
         radius: 3.2,
-        meta: ['batch 03', 'brewery cluster'],
+        meta: obsessed.tags,
       },
     ],
-    [building, writing, obsessed],
+    [developing, exploring, obsessed],
   );
 
   const stars = useMemo(() => {
@@ -227,7 +227,7 @@ export default function Orrery({ building, writing, obsessed }: Props) {
           moon2Ref.current.setAttribute('cy', String(m2y));
         }
 
-        // Draw ring particles to the two canvases instead of writing SVG attributes.
+        // Draw ring particles to the two canvases instead of exploring SVG attributes.
         if (backCanvas && frontCanvas && backCtx && frontCtx) {
           const back = syncCanvas(backCanvas, dpr);
           const front = syncCanvas(frontCanvas, dpr);
@@ -246,7 +246,7 @@ export default function Orrery({ building, writing, obsessed }: Props) {
             const sinR = Math.sin(rollRad);
             const parts = ringParticles[b.id] ?? [];
 
-            const isIce = b.id === 'writing';
+            const isIce = b.id === 'exploring';
             for (const p of parts) {
               const angle = p.baseAngle + now * p.speed;
               const lx = Math.cos(angle) * p.R;

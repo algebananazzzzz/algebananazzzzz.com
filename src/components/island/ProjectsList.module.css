@@ -59,8 +59,7 @@
   flex-wrap: wrap;
   gap: 6px;
 }
-.project-row-role,
-.project-row-impact {
+.project-row-date {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--fg-3);

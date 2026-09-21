@@ -1,9 +1,6 @@
 /* ============================================================
    Per-page accent washes (sub-pages only).
-   Home-section washes intentionally removed: the home cosmos is meant to
-   feel like one continuous space that drifts subtly with scroll, not
-   one that switches palette per section. The drift is now driven by
-   Cosmos.tsx (continuous hue-rotate based on scroll progress).
+   Home keeps a sparse starfield with a faint warm ambient glow.
    ============================================================ */
 
 /* Full-page signature wash on sub-pages (.page only — not .mw-page) */
@@ -85,6 +82,12 @@ html[data-accent] .page > * {
    inside .cosmos isn't a layer and isn't affected by these vars, so
    stars stay bright on sub-pages even while the colored nebulae take a
    back seat to each page's signature accent wash. */
+html[data-home='true'] .cosmos {
+  --layer-dim: 0;
+  background: radial-gradient(ellipse 85% 75% at 18% 28%, rgba(92, 25, 40, 0.24), transparent 75%),
+    radial-gradient(ellipse 80% 70% at 85% 78%, rgba(100, 39, 22, 0.16), transparent 75%), #030203;
+}
+
 html[data-accent='aurora'] .cosmos {
   --layer-hue: 80deg;
   --layer-sat-mul: 0.5;

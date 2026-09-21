@@ -19,9 +19,6 @@ const projects = projectEntries.map((p: CollectionEntry<'projects'>) => p.data);
       <h1 class="page-title">
         Projects <span class="grad-text g-sunset">in orbit</span>.
       </h1>
-      <p class="page-lead">
-        {site.pages.projects.lead}
-      </p>
     </div>
 
     <ProjectsList client:idle projects={projects} />

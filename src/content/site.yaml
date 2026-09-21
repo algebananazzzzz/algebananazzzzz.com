@@ -8,9 +8,3 @@ socials:
   gitlab: 'https://gitlab.com/algebananazzzzz'
   linkedin: 'https://linkedin.com/in/danielzqx'
   email: 'daniel.zhouqx@gmail.com'
-
-pages:
-  experience:
-    lead: 'Internships, the hall I mostly live in, and the two years of NS that gave me a working knowledge of tcpdump and a deep respect for runbooks.'
-  projects:
-    lead: "Most live on a Pi in my closet or a small AWS account. A few have actual users. All have READMEs I'd let my mother read."

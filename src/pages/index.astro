@@ -17,18 +17,27 @@ import { features } from '@/config/features';
 
 const wiki = manifest as WikiManifest;
 
-type NowItem = { title: string; note: string; tag: string };
-type NowData = {
-  building: NowItem & { since: string; status: string };
-  writing: NowItem & { progress: number; words: number; status: string };
-  obsessed: NowItem & { batch: number };
-  [k: string]: NowItem & Record<string, unknown>;
+type NowItem = {
+  title: string;
+  note: string;
+  tags: string[];
 };
+
+type NowData = {
+  developing: NowItem;
+  exploring: NowItem;
+  obsessed: NowItem;
+};
+
 const nowData = nowRaw as NowData;
 
 type AboutData = { heroSub: string };
 const about = aboutRaw as AboutData;
 
+const clusterEntries = await getCollection('projectClusters');
+const clusters = Object.fromEntries(
+  clusterEntries.map((entry: CollectionEntry<'projectClusters'>) => [entry.id, entry.data]),
+);
 const projectEntries = await getCollection('projects');
 const projects = projectEntries.map((p: CollectionEntry<'projects'>) => p.data);
 
@@ -43,7 +52,7 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
   <!-- Hero proper -->
   <section class="hero hero-single" data-screen-label="01 Hero" data-accent="cosmic">
     <div class="hero-content">
-      <div class="eyebrow">v2026 · personal archive</div>
+      <div class="eyebrow">my personal portfolio site</div>
       <h2 class="hero-greeting">
         Welcome to my <em>nebula</em>.
       </h2>
@@ -110,14 +119,14 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
     <div class="section-head">
       <div>
         <div class="eyebrow">what i'm doing now</div>
-        <h2 class="section-title"><em>Orrery</em></h2>
+        <h2 class="section-title">My <em>Orrery</em></h2>
       </div>
       <a href="/about" class="section-link">more about me →</a>
     </div>
     <Orrery
       client:idle
-      building={nowData.building}
-      writing={nowData.writing}
+      developing={nowData.developing}
+      exploring={nowData.exploring}
       obsessed={nowData.obsessed}
     />
   </section>
@@ -127,11 +136,11 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
     <div class="section-head">
       <div>
         <div class="eyebrow">things on my workbench</div>
-        <h2 class="section-title"><em>Spacetime</em></h2>
+        <h2 class="section-title">Project <em>Starmap</em></h2>
       </div>
       <a href="/projects" class="section-link">all projects →</a>
     </div>
-    <ProjectsConst client:idle projects={projects} />
+    <ProjectsConst client:idle projects={projects} clusters={clusters} />
   </section>
 
   <!-- Career -->
@@ -139,7 +148,7 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
     <div class="section-head">
       <div>
         <div class="eyebrow">where I've been</div>
-        <h2 class="section-title"><em>Trajectory</em></h2>
+        <h2 class="section-title">Past <em>Trajectory</em></h2>
       </div>
       <a href="/experience" class="section-link">full timeline →</a>
     </div>

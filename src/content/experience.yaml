@@ -1,13 +1,13 @@
 - id: bytedance-intern
-  date: '2026-02 — present'
+  date: '2026-02 - 2026-08'
   role: 'Backend SWE Intern'
   org: 'ByteDance'
-  summary: 'Foundational Technology — Orchestration & Scheduling for the container platform.'
+  summary: 'Foundational Technology - Kubernetes Scheduling & Orchestration'
   bullets:
-    - 'Engineered Golang controllers across 30+ production K8s clusters to preempt lower-priority pods over-consuming the shared resource pool, suppressing the sync controller reverting evictions at low QPS'
+    - 'Engineered Golang controllers across ** production K8s clusters to preempt lower-priority pods over-consuming the shared resource pool, suppressing the sync controller reverting evictions at low QPS'
     - 'Contributed to a GPU scheduler with hard network-protocol filters (RDMA/VPC), weighted scoring across shared topology/network affinity, and anti-concentration spread across data centers'
-    - 'Built LLM tooling abstracting 5+ core repos via deterministic AST walks to build relation graphs between CRDs and controllers, with a self-improving causal graph layer cutting manual RCA diagnosis by 60%+ for on-call SREs across the control plane'
-    - 'Built an LLM wiki distilling org-wide incident reports into reusable playbooks and procedures, preempting 30+ potential incidents'
+    - 'Developed an LLM RCA agent to autonomously diagnoses on-call incidents via self-improving knowledge layer across containerd, kernel, cgroups, http2p and disk subsystems, resolving 220+ P0–P2 incidents at ~92% accuracy and reducing manual diagnosis time by >80%.'
+    - 'Unified 70+ custom CRDs and 200+ relations into a self-designed K8s ontology system spanning * core repos, to a self-improving causal graph layer, cutting manual e2e events tracing by >90% for on-call SREs across fuzzy team boundaries'
   tags: [golang, kubernetes, llm]
   star: bgiant
 

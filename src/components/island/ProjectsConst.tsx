@@ -11,156 +11,67 @@ import css from './Constellation.module.css';
 export interface ProjectInput {
   id: string;
   title: string;
-  tagline?: string;
+  tagline: string;
   summary: string;
   tech: string[];
-  role: string;
+  date: string;
   cluster: string;
+  magnitude: number;
+  bullets?: string[];
   href?: string;
 }
 
 interface Props {
   projects: ProjectInput[];
-}
-
-interface VisualConfig {
-  mass: number;
-  color: string;
-  spectralClass: string;
+  clusters: Record<string, { color: string }>;
 }
 
 interface Star {
   id: string;
   title: string;
   summary: string;
-  role: string;
+  date: string;
   tech: string[];
   href?: string;
   mass: number;
   x: number;
   y: number;
   color: string;
-  spectralClass: string;
 }
 
-// Ordered by priority: higher-priority projects get more mass (bigger star +
-// wider gravity halo) and a more vibrant colour. Lower-priority ones fade toward
-// muted, then slate-grey. Spectral classes track the same scale — luminous
-// supergiants (O/B) at the top, dim dwarfs (K/M) at the bottom.
-const VISUAL_BY_ID: Record<string, VisualConfig> = {
-  nubenube: { mass: 4.2, color: '#22d3ee', spectralClass: 'O5 Ia' },
-  odyssey: { mass: 3.7, color: '#fb923c', spectralClass: 'B0 Ia' },
-  planear: { mass: 3.2, color: '#a78bfa', spectralClass: 'B3 II' },
-  'attendance-bot': { mass: 2.8, color: '#34d399', spectralClass: 'A0 III' },
-  'sheares-app': { mass: 2.4, color: '#fbbf24', spectralClass: 'A5 IV' },
-  nocturnal: { mass: 2.1, color: '#facc15', spectralClass: 'F2 V' },
-  'algebananazzzzz-com': { mass: 1.8, color: '#c4b5fd', spectralClass: 'G5 V' },
-  nybble: { mass: 1.6, color: '#fca5a5', spectralClass: 'K2 V' },
-  'quiz-bot': { mass: 1.4, color: '#94a3b8', spectralClass: 'M4 V' },
-};
-
-const CLUSTER_COLOR: Record<string, string> = {
-  brewery: '#f472b6',
-  llm: '#a78bfa',
-  cloud: '#7dd3fc',
-  reading: '#fda4af',
-  general: '#fde047',
-};
-
-function mulberry32(seed: number) {
-  let a = seed | 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-// FNV-1a over alphabetically-sorted IDs → stable regardless of array order.
-// Adding a new project changes the seed (and thus the layout), but an identical
-// set of projects always produces an identical layout.
-function hashSeed(ids: string[]): number {
-  const sorted = [...ids].sort();
-  let h = 0x811c9dc5;
-  for (const id of sorted) {
-    for (let i = 0; i < id.length; i++) {
-      h ^= id.charCodeAt(i);
-      h = Math.imul(h, 0x01000193);
-    }
-    h ^= 0x5f; // separator
+// Arrange cluster centers in visual space, then invert perspective so each
+// group stays compact on the tilted field. Stable IDs keep refreshes repeatable.
+function computeLayout(projects: ProjectInput[]): Map<string, { x: number; y: number }> {
+  const groups = new Map<string, ProjectInput[]>();
+  for (const project of [...projects].sort((a, b) => a.id.localeCompare(b.id))) {
+    const key = project.cluster;
+    const group = groups.get(key) ?? [];
+    group.push(project);
+    groups.set(key, group);
   }
-  return h >>> 0;
-}
-
-// Mitchell's Best Candidate in visual-y space.
-//
-// The perspective transform maps flat y → visual y via pow(t, 1.55), which
-// compresses the top and stretches the bottom. Sampling flat-y uniformly would
-// pack all stars into the lower visual half. Instead we sample uniformly in
-// *visual* y, convert candidates back to flat-y for storage, and score all
-// distances in visual coordinates so separation is even as the viewer sees it.
-// O(n·K) — trivially fast for n ≤ ~50.
-function computeLayout(n: number, seed: number): { x: number; y: number }[] {
-  if (n === 0) return [];
-  if (n === 1) return [{ x: 50, y: 30 }];
-
-  // Safe zone.
-  // X: flat (perspective x-scale is mild, ~±15% at extremes).
-  // Y: the warp simulation uses depth/pull constants tuned for flat y ∈ [20, 46].
-  //    Placing stars above flat y≈20 creates line-crossings in the grid.
-  //    We derive VY bounds from those flat limits so visual-space sampling
-  //    stays within the simulation's safe range.
-  // perspective constants (defined below in module scope but safe to read here at call-time)
-  const FH = 56.25; // FIELD_H
-  const POW = 1.55; // PERSP_VERT_POW
-
-  const X_MIN = 16,
-    X_MAX = 82;
-  const FY_MIN = 12,
-    FY_MAX = 46; // flat-y pre-warp range
-  const VY_MIN = Math.pow(FY_MIN / FH, POW) * FH; // ≈ 11.4 visual y
-  const VY_MAX = Math.pow(FY_MAX / FH, POW) * FH; // ≈ 41.3 visual y
-  const VW = X_MAX - X_MIN;
-  const VH = VY_MAX - VY_MIN;
-  const AR = VW / VH; // aspect-ratio normalisation in visual space
-
-  const toFlatY = (vy: number) => Math.pow(vy / FH, 1 / POW) * FH;
-  const toVisualY = (fy: number) => Math.pow(fy / FH, POW) * FH;
-
-  const rnd = mulberry32(seed);
-  const K = 40;
-
-  const pts: { x: number; y: number }[] = []; // stored as flat coords
-
-  for (let i = 0; i < n; i++) {
-    let best = { x: (X_MIN + X_MAX) / 2, y: toFlatY((VY_MIN + VY_MAX) / 2) };
-    let bestScore = -Infinity;
-
-    for (let c = 0; c < K; c++) {
-      const cx = X_MIN + rnd() * VW;
-      const vcy = VY_MIN + rnd() * VH; // uniform in visual y
-      const cy = toFlatY(vcy); // convert to flat y for storage
-
-      // Score in visual space: min distance to all existing points and borders
-      let score = Math.min(cx - X_MIN, X_MAX - cx, (vcy - VY_MIN) * AR, (VY_MAX - vcy) * AR);
-      for (const p of pts) {
-        const dx = cx - p.x;
-        const dvy = (vcy - toVisualY(p.y)) * AR;
-        const d = Math.sqrt(dx * dx + dvy * dvy);
-        if (d < score) score = d;
-      }
-
-      if (score > bestScore) {
-        bestScore = score;
-        best = { x: cx, y: cy };
-      }
-    }
-
-    pts.push(best);
-  }
-
-  return pts;
+  const keys = [...groups.keys()].sort();
+  const positions = new Map<string, { x: number; y: number }>();
+  const columns = Math.ceil(Math.sqrt(keys.length));
+  const rows = Math.ceil(keys.length / columns);
+  keys.forEach((key, groupIndex) => {
+    const row = Math.floor(groupIndex / columns);
+    const groupsInRow = Math.min(columns, keys.length - row * columns);
+    const col = groupIndex % columns;
+    const centerX = groupsInRow === 1 ? 46 : 24 + (col * 46) / (groupsInRow - 1);
+    const centerY = rows === 1 ? 20 : 10 + (row * 23) / (rows - 1);
+    const members = groups.get(key)!;
+    members.forEach((project, index) => {
+      // Vertical separation protects the two-line labels; lateral staggering
+      // gives each group an organic shape without packing names into a ring.
+      const spread = columns > 2 ? 3 : 4.5;
+      const [x, y] = unpersp(
+        centerX + (members.length === 1 ? 0 : Math.sin(index * 2.4) * spread),
+        centerY + (index - (members.length - 1) / 2) * 3.4,
+      );
+      positions.set(project.id, { x, y });
+    });
+  });
+  return positions;
 }
 
 const FIELD_W = 100;
@@ -251,32 +162,26 @@ function pathV(x: number, stars: Star[]): string {
   return d.trim();
 }
 
-export default function ProjectsConst({ projects }: Props) {
+export default function ProjectsConst({ projects, clusters }: Props) {
   const initialStars: Star[] = useMemo(() => {
-    // Sort by ID so the seed — and therefore the layout — is independent of
-    // the order projects arrive in. Same set of IDs → same positions always.
-    const sorted = [...projects].sort((a, b) => a.id.localeCompare(b.id));
-    const positions = computeLayout(sorted.length, hashSeed(sorted.map((p) => p.id)));
-    const posById = new Map(sorted.map((p, i) => [p.id, positions[i]]));
+    const posById = computeLayout(projects);
 
     return projects.map((p) => {
-      const vis = VISUAL_BY_ID[p.id];
       const pos = posById.get(p.id)!;
       return {
         id: p.id,
         title: p.title,
-        summary: p.tagline ?? p.summary,
-        role: p.role,
+        summary: p.tagline,
+        date: p.date,
         tech: p.tech,
         href: p.href,
         x: pos.x,
         y: pos.y,
-        mass: vis?.mass ?? 2.2,
-        color: vis?.color ?? CLUSTER_COLOR[p.cluster] ?? '#fde047',
-        spectralClass: vis?.spectralClass ?? 'G2 V',
+        mass: p.magnitude,
+        color: clusters[p.cluster].color,
       };
     });
-  }, [projects]);
+  }, [projects, clusters]);
 
   const [stars, setStars] = useState<Star[]>(initialStars);
   const [hover, setHover] = useState<string | null>(null);
@@ -439,12 +344,12 @@ export default function ProjectsConst({ projects }: Props) {
               fontFamily="var(--font-mono)"
               letterSpacing="0.06em"
             >
-              spacetime · workbench-1
+              starmap · andromeda constellation
             </text>
             <text
               x="98.8"
               y="2.0"
-              fontSize="0.85"
+              fontSize="1"
               fill="rgba(229,231,235,0.40)"
               fontFamily="var(--font-mono)"
               letterSpacing="0.06em"
@@ -471,7 +376,7 @@ export default function ProjectsConst({ projects }: Props) {
               letterSpacing="0.06em"
               textAnchor="end"
             >
-              plate 06 · 2026
+              plane 06 · 2026
             </text>
           </g>
 
@@ -528,7 +433,7 @@ export default function ProjectsConst({ projects }: Props) {
                   style={{
                     paintOrder: 'stroke',
                     stroke: 'rgba(2,3,10,0.55)',
-                    strokeWidth: 0.18,
+                    strokeWidth: 0.05,
                     transition: 'fill 200ms',
                   }}
                 >
@@ -545,11 +450,11 @@ export default function ProjectsConst({ projects }: Props) {
                   style={{
                     paintOrder: 'stroke',
                     stroke: 'rgba(2,3,10,0.55)',
-                    strokeWidth: 0.14,
+                    strokeWidth: 0.05,
                     transition: 'fill 200ms',
                   }}
                 >
-                  mag {s.mass.toFixed(1)} · {s.spectralClass}
+                  mag {s.mass.toFixed(1)} · {s.date}
                 </text>
               </g>
             );
@@ -561,7 +466,7 @@ export default function ProjectsConst({ projects }: Props) {
         <div className={css.projDetail} style={detailStyle}>
           <div className={css.title}>{hovered.title}</div>
           <div className={css.summary}>{hovered.summary}</div>
-          <div className={css.role}>{hovered.role}</div>
+          <div className={css.role}>{hovered.date}</div>
           <div className={css.techRow}>
             {hovered.tech.map((t) => (
               <span key={t} className="tag">
