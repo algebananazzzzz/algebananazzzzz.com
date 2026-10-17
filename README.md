@@ -4,7 +4,7 @@ Instead of building my portfolio from a generic template, I wanted a unique desi
 
 My corner of the internet. Go visit it at [algebananazzzzz.com](https://algebananazzzzz.com).
 
-A preview of whatever is on `main` lives at [beta.algebananazzzzz.com](https://beta.algebananazzzzz.com). Every push to `main` deploys there first, then gets promoted to the real site.
+A preview of whatever is on `main` lives at [beta.algebananazzzzz.com](https://beta.algebananazzzzz.com). Every push to `main` deploys there. Production is deployed by hand once beta looks right.
 
 ## Tech stack
 
@@ -69,8 +69,8 @@ src/
 Workflows are in `.github/workflows/`:
 
 - `1-feature-branch-ci.yml`: PR checks (format, type check, tests, build).
-- `2-preprod-deploy.yml`: pushes to `main` deploy to beta, then promote to production.
-- `3-prd-deploy.yml`: production deploy.
+- `2-preprod-deploy.yml`: pushes to `main` deploy to beta, then create the `vx.x.x` production tag.
+- `3-prd-deploy.yml`: production deploy, run by hand on a `vx.x.x` tag.
 
 Terraform lives in `infra/`.
 

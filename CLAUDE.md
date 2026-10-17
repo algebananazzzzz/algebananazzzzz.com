@@ -160,13 +160,13 @@ const siteData = siteRaw as SiteData;
 Three workflows in `.github/workflows/`, plus Terraform in `infra/`. The repo is `algebananazzzzz/algebananazzzzz.com`; the only other repo named after the account is `algebananazzzzz` (the profile README).
 
 - `1-feature-branch-ci.yml` — runs on PRs to `main`. Gates: `format:check`, `astro check`, `vitest run`, `astro build`.
-- `2-preprod-deploy.yml` — runs on push to `main` and on `v*-beta` tags. On a push it auto-tags `vx.x.x-beta`, runs checks, applies Terraform only when `infra/` changed (always on a beta tag), builds with `SITE_URL=https://beta.algebananazzzzz.com`, and deploys to `preprod-web-pages-algebananazzzzz` with `--branch=main`. On success it creates the `vx.x.x` production tag and dispatches `3-prd-deploy.yml` on it.
-- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`) and on `workflow_dispatch`. Applies Terraform, builds with `SITE_URL=https://algebananazzzzz.com`, and deploys to `prd-web-pages-algebananazzzzz` with `--branch=main`. Production is served at the apex; beta at `beta.algebananazzzzz.com`. Both come from `custom_domain` in the tfvars.
+- `2-preprod-deploy.yml` — runs on push to `main` and on `v*-beta` tags. On a push it auto-tags `vx.x.x-beta`, runs checks, applies Terraform only when `infra/` changed (always on a beta tag), builds with `SITE_URL=https://beta.algebananazzzzz.com`, and deploys to `preprod-web-pages-algebananazzzzz` with `--branch=main`. On success it creates the `vx.x.x` production tag but does not deploy it.
+- `3-prd-deploy.yml` — runs on production tags (`v*` without `-`) and on `workflow_dispatch`. Production is deployed by hand: run it via `workflow_dispatch` with the `vx.x.x` tag as the ref (`gh workflow run 3-prd-deploy.yml --ref vx.x.x`). Applies Terraform, builds with `SITE_URL=https://algebananazzzzz.com`, and deploys to `prd-web-pages-algebananazzzzz` with `--branch=main`. Production is served at the apex; beta at `beta.algebananazzzzz.com`. Both come from `custom_domain` in the tfvars.
 
 Gotchas seen in real runs:
 
-- Tags created with `GITHUB_TOKEN` do not fire push workflows, which is why workflow 2 dispatches workflow 3 explicitly.
 - `wrangler pages deploy` needs `--branch=main`. On a tag checkout it otherwise deploys as a Preview and the domain shows "Deployment Not Found".
+- Tags created with `GITHUB_TOKEN` do not fire push workflows, so the production tag workflow 2 creates never starts workflow 3 on its own.
 - The beta tag version is computed from the last production tag plus conventional-commit types. If `vx.x.x-beta` already exists, the run fails at "Push beta tag"; delete the stale tag and re-run.
 
 Terraform resources live in `infra/`. Per-env config in `infra/config/preprod.tfvars` and `infra/config/prd.tfvars`. State stored in Cloudflare R2 (`com-infra-tfstate-cloudflare`) with separate keys per environment.

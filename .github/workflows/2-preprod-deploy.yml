@@ -15,7 +15,6 @@ jobs:
     environment: preprod
     permissions:
       contents: write
-      actions: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -89,6 +88,8 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist/ --project-name=preprod-web-pages-algebananazzzzz --branch=main
 
+      # Tags created with GITHUB_TOKEN don't fire push workflows, so this tag does not
+      # deploy production. Run 3-prd-deploy.yml on it by hand once beta looks right.
       - name: Promote to production tag
         uses: actions/github-script@v7
         env:
@@ -104,10 +105,3 @@ jobs:
               sha: context.sha,
             });
             core.info(`Created production tag: ${prodTag}`);
-            // Tags created with GITHUB_TOKEN don't fire push workflows, so dispatch prod explicitly.
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: '3-prd-deploy.yml',
-              ref: prodTag,
-            });
