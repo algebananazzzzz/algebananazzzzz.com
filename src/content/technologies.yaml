@@ -1,0 +1,57 @@
+# Beacons for the orrery. Domains are laid out left to right in the
+# order written here. Every id in a project's `tech:` list must appear below,
+# or the build fails.
+domains:
+  virtualization:
+    label: 'Virtualization & containers'
+    tint: '#22c55e'
+    techs:
+      kvm-qemu: 'KVM/QEMU'
+      docker: 'Docker'
+      kubernetes: 'Kubernetes'
+      komodo: 'Komodo'
+
+  observability:
+    label: 'Observability'
+    tint: '#f59e0b'
+    techs:
+      prometheus: 'Prometheus'
+      grafana: 'Grafana'
+
+  cloud:
+    label: 'Cloud & infra'
+    tint: '#6366f1'
+    techs:
+      aws: 'AWS'
+      cloudflare: 'Cloudflare'
+      terraform: 'Terraform'
+      ansible: 'Ansible'
+      github-actions: 'GitHub Actions'
+      argocd: 'Argo CD'
+
+  backend:
+    label: 'Backend & systems'
+    tint: '#e11d48'
+    techs:
+      go: 'Go'
+      rust: 'Rust'
+      python: 'Python'
+      shell: 'Shell'
+      supabase: 'Supabase'
+      windmill: 'Windmill'
+
+  ai:
+    label: 'AI agents'
+    tint: '#a855f7'
+    techs:
+      llm: 'LLMs'
+
+  frontend:
+    label: 'Frontend'
+    tint: '#14b8a6'
+    techs:
+      react: 'React'
+      astro: 'Astro'
+      tailwindcss: 'Tailwind CSS'
+      expo: 'Expo'
+      tauri: 'Tauri'

@@ -1,0 +1,125 @@
+---
+// Brass armillary dial behind /projects: graduated rings counter-rotating
+// around a still sphere. Generated at build time; only CSS animates it.
+const round = (v: number) => Math.round(v * 100) / 100;
+
+function ticks(r: number, step: number, majorEvery: number, len: number) {
+  const out = [];
+  for (let i = 0; i < 360; i += step) {
+    const major = i % majorEvery === 0;
+    const t = (i * Math.PI) / 180;
+    const r1 = r - (major ? len * 1.8 : len);
+    out.push({
+      x1: round(Math.cos(t) * r),
+      y1: round(Math.sin(t) * r),
+      x2: round(Math.cos(t) * r1),
+      y2: round(Math.sin(t) * r1),
+      w: major ? 0.3 : 0.16,
+    });
+  }
+  return out;
+}
+
+function marks(r: number, n: number) {
+  return Array.from({ length: n }, (_, i) => {
+    const t = (i * 2 * Math.PI) / n;
+    return { cx: round(Math.cos(t) * r), cy: round(Math.sin(t) * r) };
+  });
+}
+---
+
+<div class="orrery-backdrop" aria-hidden="true">
+  <div class="haze"></div>
+  <div class="dial">
+    <svg class="dial-ring ring-a" viewBox="-100 -100 200 200">
+      <g fill="none" stroke="rgba(217,170,90,0.30)">
+        <circle r="90" stroke-width="0.35"></circle>
+        <circle r="85" stroke-width="0.16"></circle>
+        {ticks(90, 5, 30, 1.6).map((l) => <line {...l} stroke-width={l.w} />)}
+      </g>
+    </svg>
+    <svg class="dial-ring ring-b" viewBox="-100 -100 200 200">
+      <g stroke="rgba(217,170,90,0.26)">
+        <circle r="74" fill="none" stroke-width="0.3"></circle>
+        <circle r="69" fill="none" stroke-width="0.14" stroke-dasharray="0.8 1.4"></circle>
+        <g fill="none">{ticks(74, 15, 45, 2).map((l) => <line {...l} stroke-width={l.w} />)}</g>
+        <g fill="rgba(217,170,90,0.45)" stroke="none">
+          {marks(71.5, 12).map((m) => <circle {...m} r="0.55" />)}
+        </g>
+      </g>
+    </svg>
+    <svg class="dial-ring ring-c" viewBox="-100 -100 200 200">
+      <g fill="none" stroke="rgba(244,180,120,0.24)">
+        <circle r="58" stroke-width="0.26"></circle>
+        {ticks(58, 10, 90, 1.4).map((l) => <line {...l} stroke-width={l.w} />)}
+        <g fill="rgba(244,180,120,0.5)" stroke="none">
+          {marks(58, 4).map((m) => <circle {...m} r="0.8" />)}
+        </g>
+      </g>
+    </svg>
+    <svg viewBox="-100 -100 200 200">
+      <g fill="none" stroke="rgba(217,170,90,0.12)" stroke-width="0.14">
+        <circle r="44"></circle>
+        <ellipse rx="44" ry="7" transform="rotate(-23.4)"></ellipse>
+        <ellipse rx="17" ry="44" transform="rotate(-23.4)"></ellipse>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<style>
+  /* Above the page wash (z -1), below page content (z 1). The selector has
+     to outrank the `.page > *` rule in page-bg.css. */
+  :global(html[data-accent]) :global(.page) > .orrery-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .haze {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 45% 40% at 50% 50%, rgba(180, 83, 9, 0.16), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 18% 80%, rgba(190, 24, 93, 0.16), transparent 70%),
+      radial-gradient(ellipse 36% 28% at 85% 18%, rgba(251, 191, 36, 0.12), transparent 70%);
+  }
+  .dial {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(130vmin, 1000px);
+    height: max(130vmin, 1000px);
+    transform: translate(-50%, -50%);
+  }
+  /* Each ring is its own <svg> so the rotation runs on the compositor;
+     rotating <g> children would repaint the whole dial every frame. */
+  .dial > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .dial-ring {
+    will-change: transform;
+  }
+  .ring-a {
+    animation: spin-cw 420s linear infinite;
+  }
+  .ring-b {
+    animation: spin-ccw 260s linear infinite;
+  }
+  .ring-c {
+    animation: spin-cw 180s linear infinite;
+  }
+  @keyframes spin-cw {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes spin-ccw {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+</style>

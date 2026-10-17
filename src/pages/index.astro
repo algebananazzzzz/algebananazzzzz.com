@@ -1,18 +1,17 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
 import nowRaw from '@/content/now.yaml';
 import aboutRaw from '@/content/about.yaml';
 import manifest from '@/content/wiki-manifest.json';
 import type { WikiManifest } from '@/types/wiki';
 import Splash from '@/components/island/Splash';
+import Orbit from '@/components/island/Orbit';
 import Orrery from '@/components/island/Orrery';
-import ProjectsConst from '@/components/island/ProjectsConst';
 import CareerList from '@/components/island/CareerList';
 import MilkyWay from '@/components/island/MilkyWay';
 import MottoRotator from '@/components/static/MottoRotator.astro';
 import { getCareerEntries } from '@/lib/getCareerEntries';
+import { getOrrery } from '@/lib/getOrrery';
 import { features } from '@/config/features';
 
 const wiki = manifest as WikiManifest;
@@ -34,16 +33,14 @@ const nowData = nowRaw as NowData;
 type AboutData = { heroSub: string };
 const about = aboutRaw as AboutData;
 
-const clusterEntries = await getCollection('projectClusters');
-const clusters = Object.fromEntries(
-  clusterEntries.map((entry: CollectionEntry<'projectClusters'>) => [entry.id, entry.data]),
-);
-const projectEntries = await getCollection('projects');
-const projects = projectEntries.map((p: CollectionEntry<'projects'>) => p.data);
+const { orrery } = await getOrrery();
 
 const careerEntries = await getCareerEntries(3);
 
 const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
+const cta = features.milkyWay
+  ? { href: '/milky-way', label: 'Enter the Milky Way', aria: 'enter the milky way' }
+  : { href: '/projects', label: 'Enter the Orrery', aria: 'enter the orrery' };
 ---
 
 <Base isHome={true}>
@@ -64,29 +61,25 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
 
       <div class="hero-ctas">
         <a href="/about" class="cta-secondary">About Me</a>
-        {
-          features.milkyWay && (
-            <a href="/milky-way" class="cta-milky" aria-label="enter the milky way">
-              <span class="cta-star" />
-              <span class="cta-label">Enter the Milky Way</span>
-              <svg
-                class="cta-arrow"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </a>
-          )
-        }
+        <a href={cta.href} class="cta-milky" aria-label={cta.aria}>
+          <span class="cta-star"></span>
+          <span class="cta-label">{cta.label}</span>
+          <svg
+            class="cta-arrow"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </a>
       </div>
 
       <div class="orbiting">
@@ -114,16 +107,16 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
     </div>
   </section>
 
-  <!-- Now (orrery) -->
+  <!-- Now (orbit) -->
   <section class="section" data-screen-label="02 Now" data-accent="aurora">
     <div class="section-head">
       <div>
         <div class="eyebrow">what i'm doing now</div>
-        <h2 class="section-title">My <em>Orrery</em></h2>
+        <h2 class="section-title">Current <em>Orbit</em></h2>
       </div>
       <a href="/about" class="section-link">more about me →</a>
     </div>
-    <Orrery
+    <Orbit
       client:idle
       developing={nowData.developing}
       exploring={nowData.exploring}
@@ -135,12 +128,12 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
   <section class="section" data-screen-label="03 Projects" data-accent="sunset">
     <div class="section-head">
       <div>
-        <div class="eyebrow">things on my workbench</div>
-        <h2 class="section-title">Project <em>Starmap</em></h2>
+        <div class="eyebrow">projects, mapped by stack</div>
+        <h2 class="section-title">Project <em>Orrery</em>.</h2>
       </div>
       <a href="/projects" class="section-link">all projects →</a>
     </div>
-    <ProjectsConst client:idle projects={projects} clusters={clusters} />
+    <Orrery client:visible mode="compact" data={orrery} />
   </section>
 
   <!-- Career -->

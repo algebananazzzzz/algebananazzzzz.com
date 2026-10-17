@@ -1,0 +1,228 @@
+/* ============================================================
+   Orbit of Now — three bodies orbiting current focus.
+   Extracted from portfolio.css 2026-05-20.
+   ============================================================ */
+
+/* ============================================================
+   Orbit of Now
+   ============================================================ */
+.orbit-wrap {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+@media (max-width: 980px) {
+  .orbit-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+.orbit {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+  will-change: transform;
+}
+
+.orbit svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+/* Soft nebula glow sitting behind the orbit, blended into the cosmos */
+.orbit-bgglow {
+  position: absolute;
+  inset: -8%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(167, 139, 250, 0.18) 0%,
+    rgba(190, 24, 93, 0.12) 35%,
+    rgba(67, 56, 202, 0.1) 60%,
+    transparent 80%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sun + corona */
+.orbit .orbit-sun .sun-core {
+  filter: drop-shadow(0 0 6px rgba(255, 199, 0, 0.55))
+    drop-shadow(0 0 14px rgba(244, 114, 80, 0.45));
+  animation: sun-pulse 6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes sun-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(255, 199, 0, 0.55))
+      drop-shadow(0 0 14px rgba(244, 114, 80, 0.45));
+  }
+
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 10px rgba(255, 199, 0, 0.75))
+      drop-shadow(0 0 22px rgba(244, 114, 80, 0.55));
+  }
+}
+
+.orbit .orbit-sun .corona {
+  display: none;
+}
+
+/* Background twinkle stars inside the orbit svg */
+@keyframes :global(orbit-twinkle) {
+  0%,
+  100% {
+    opacity: var(--o, 0.3);
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.2);
+  }
+}
+
+/* Planet hover lift */
+.orbit .planet-group {
+  cursor: pointer;
+  transition: filter var(--dur-base);
+}
+
+.orbit .planet-group:hover .planet {
+  filter: brightness(1.2) drop-shadow(0 0 8px currentColor);
+}
+
+.orbit .orbit-ring {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.2);
+  stroke-dasharray: 1.5 3;
+  transition:
+    stroke var(--dur-base),
+    opacity var(--dur-base);
+}
+
+/* Small chart-readout in the corner of the orbit box */
+.orbit-readout-corner {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(229, 231, 235, 0.42);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.orbit-readout-corner .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(244, 114, 182, 0.7);
+  box-shadow: 0 0 6px rgba(244, 114, 182, 0.7);
+}
+
+.orbit-readout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.orbit-card {
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  transition:
+    border-color var(--dur-base),
+    background var(--dur-base),
+    transform var(--dur-base);
+  cursor: default;
+}
+
+.orbit-card[data-active='true'] {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(244, 114, 182, 0.45);
+  transform: translateX(4px);
+}
+
+.orbit-card .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(229, 231, 235, 0.55);
+}
+
+.orbit-card .label .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.orbit-card .name {
+  margin-top: 4px;
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: #f1f5f9;
+  letter-spacing: -0.015em;
+}
+
+.orbit-card .note {
+  margin-top: 4px;
+  font-size: var(--text-xs);
+  color: rgba(229, 231, 235, 0.7);
+  line-height: var(--leading-relaxed);
+}
+
+.orbit-card .meta {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(229, 231, 235, 0.5);
+  letter-spacing: 0.04em;
+  display: flex;
+  gap: 12px;
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  /* Orbit — stack readout under the orbit */
+  .orbit-wrap {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .orbit {
+    max-width: 380px;
+  }
+
+  .orbit-card {
+    padding: var(--space-4);
+  }
+
+  .orbit-card .name {
+    font-size: var(--text-lg);
+  }
+}

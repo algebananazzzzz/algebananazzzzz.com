@@ -1,24 +1,26 @@
-# algebananazzzzz — Personal Portfolio + Digital Garden
+# algebananazzzzz.com
 
-A personal portfolio + digital garden built as an interactive cartoon cosmos. Five pages laid out like a star map: a splash hero, an orrery of what I'm doing now, a gravity-warped project board, a stellar trajectory of my work history, and a milky-way constellation of notes.
+Instead of building my portfolio from a generic template, I wanted a unique design that captures my innate character and vision. As someone who's genuinely curious and explorative, I chose the theme of the cosmos, something we look up to in the night sky with admiration and vision. I'm really proud to have come up with such a cool design concept myself, like representing my projects as stars in a celestial orrery. Built with Astro and React islands on Tailwind, deployed on Cloudflare Pages.
 
-**Live:** https://algebananazzzzz.github.io
+My corner of the internet. Go visit it at [algebananazzzzz.com](https://algebananazzzzz.com).
+
+A preview of whatever is on `main` lives at [beta.algebananazzzzz.com](https://beta.algebananazzzzz.com). Every push to `main` deploys there first, then gets promoted to the real site.
 
 ## Tech stack
 
-- [Astro 5](https://astro.build) — static site generator
-- [React 18](https://react.dev) — interactive islands
-- [Tailwind v4](https://tailwindcss.com) — utility CSS
+- [Astro 7](https://astro.build): static site generator
+- [React 18](https://react.dev): interactive islands
+- [Tailwind v4](https://tailwindcss.com): utility CSS
 - [TypeScript 5.7](https://www.typescriptlang.org)
-- [Vitest](https://vitest.dev) — unit tests
+- [Vitest](https://vitest.dev): unit tests
 - [Prettier](https://prettier.io) with `prettier-plugin-astro`
-- [GitHub Pages](https://pages.github.com) — hosting via GitHub Actions
+- [Cloudflare Pages](https://pages.cloudflare.com): hosting, deployed via GitHub Actions, infrastructure in Terraform
 
 ## Local development
 
 ```bash
-git clone https://github.com/algebananazzzzz/algebananazzzzz2.0.git
-cd algebananazzzzz2.0
+git clone https://github.com/algebananazzzzz/algebananazzzzz.com.git
+cd algebananazzzzz.com
 
 # node version (uses .nvmrc)
 nvm use
@@ -47,30 +49,31 @@ src/
 ├── components/
 │   ├── island/        React components, hydrated on the client
 │   └── static/        Astro components, server-only (TopNav, Footer)
-├── content/           YAML data + Zod schemas (projects, experience, notes, clusters, mottos)
-├── layouts/           Base.astro — chrome layout
-├── lib/               Pure utilities + tests (magnitude, stardate, routes)
+├── content/           YAML data and the wiki manifest (projects, technologies, experience, now, about)
+├── content.config.ts  Zod schemas for the content collections
+├── layouts/           Base.astro, the page chrome
+├── lib/               Orrery layout, magnitude, stardate, routes
 ├── pages/             Route entries (5 routes)
 ├── styles/
 │   ├── tokens.css     Palette + type tokens (source of truth)
 │   ├── global.css     Tailwind + @theme bridge + base resets
 │   ├── portfolio.css  Barrel re-export
-│   ├── portfolio/     Themed CSS modules (cosmos, splash, hero, ...)
+│   ├── portfolio/     Global CSS (cosmos, hero, sections, legacy-resets)
 │   ├── pages.css      Sub-page wrappers
 │   └── page-bg.css    Per-route accent washes
-└── types/             *.yaml module shim
+└── types/             *.yaml module shim, wiki manifest types
 ```
 
 ## Deployment
 
-Pushes to `main` build and deploy automatically via `.github/workflows/2-preprod-deploy.yml`.
+Workflows are in `.github/workflows/`:
 
-Pull requests and non-`main` branches run CI via `.github/workflows/1-feature-branch-ci.yml` — format check, type check, tests, build.
+- `1-feature-branch-ci.yml`: PR checks (format, type check, tests, build).
+- `2-preprod-deploy.yml`: pushes to `main` deploy to beta, then promote to production.
+- `3-prd-deploy.yml`: production deploy.
 
-## Credits
-
-Design system + visual language hand-rolled with Claude Design assistance. Fonts: [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) (variable) + [Space Mono](https://fonts.google.com/specimen/Space+Mono) via `@fontsource`. Icons: inline SVG.
+Terraform lives in `infra/`.
 
 ## License
 
-Source code: MIT. Content (notes, copy, project descriptions) is not licensed for reuse.
+Code is MIT. The words, notes and project write-ups are mine, so please don't reuse them.

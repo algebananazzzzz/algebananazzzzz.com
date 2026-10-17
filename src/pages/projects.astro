@@ -1,26 +1,72 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-import ProjectsList from '@/components/island/ProjectsList';
-import siteRaw from '@/content/site.yaml';
+import Orrery, { type ProjectDetail } from '@/components/island/Orrery';
+import OrreryBackdrop from '@/components/static/OrreryBackdrop.astro';
+import { getOrrery } from '@/lib/getOrrery';
 
-type SiteData = { pages: { projects: { lead: string } } };
-const site = siteRaw as SiteData;
+const { orrery, projects } = await getOrrery();
 
-const projectEntries = await getCollection('projects');
-const projects = projectEntries.map((p: CollectionEntry<'projects'>) => p.data);
+const details: Record<string, ProjectDetail> = Object.fromEntries(
+  projects.map((p) => [
+    p.id,
+    { title: p.title, description: p.description, date: p.date, href: p.href },
+  ]),
+);
+
+// "2024 → 2026" shows as 2026, the year it was last worked on.
+const yearOf = (date?: string) => Number(date?.match(/\d{4}(?!.*\d{4})/)?.[0] ?? 0);
+const techLabel = new Map(orrery.techs.map((t) => [t.id, t.label]));
+const cluster = new Map(orrery.clusters.map((c) => [c.id, c]));
+const featured = projects
+  .filter((p) => p.featured !== undefined)
+  .sort((a, b) => a.featured! - b.featured!);
 ---
 
 <Base title="projects" description="projects in orbit." accent="sunset">
   <div class="page projects-page">
-    <div class="page-head">
-      <div class="section-eyebrow">— projects —</div>
-      <h1 class="page-title">
-        Projects <span class="grad-text g-sunset">in orbit</span>.
-      </h1>
+    <OrreryBackdrop />
+    <div class="mw-head">
+      <div class="section-eyebrow">— projects · the orrery —</div>
+      <h1 class="mw-title"><span class="grad-text g-sunset">Projects</span> in orbit.</h1>
+      <p class="mw-sub">
+        {projects.length} projects bound to the {orrery.techs.length} technologies they were built with.
+        Bigger beacons carry more projects. Click one to see its constellation, or pick a project to
+        read it.
+      </p>
     </div>
 
-    <ProjectsList client:idle projects={projects} />
+    <Orrery client:idle mode="inline" data={orrery} details={details} />
+
+    <section class="mw-recent">
+      <div class="section-eyebrow">— featured —</div>
+      <h2 class="mw-recent-title-row">The brightest stars in the system.</h2>
+      <div class="mw-recent-list">
+        {
+          featured.map((p) => (
+            <a class="mw-recent-row orrery-recent-row" href={`#project/${p.id}`}>
+              <span class="mw-recent-date">{yearOf(p.date) || '—'}</span>
+              <span class="orrery-recent-main">
+                <span class="mw-recent-title">{p.name}</span>
+                <span class="orrery-recent-tag">{p.title}</span>
+              </span>
+              <span class="orrery-recent-meta">
+                <span class="orrery-recent-cluster">
+                  <span class="dot" style={`background:${cluster.get(p.cluster)!.color}`} />
+                  {cluster.get(p.cluster)!.label}
+                </span>
+                <span class="orrery-recent-tech">
+                  {p.tech
+                    .slice(0, 3)
+                    .map((t: string) => techLabel.get(t))
+                    .join(' · ')}
+                  {p.tech.length > 3 ? ` +${p.tech.length - 3}` : ''}
+                </span>
+              </span>
+              <span class="mw-recent-arrow">→</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
   </div>
 </Base>

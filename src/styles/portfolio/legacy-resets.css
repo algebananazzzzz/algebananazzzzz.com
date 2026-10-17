@@ -1,5 +1,5 @@
 /* ============================================================
-   Legacy resets — v2 suppression + body baseline.
+   Legacy resets: starfield suppression + body baseline.
    Extracted from portfolio.css 2026-05-20.
    ============================================================ */
 
@@ -10,7 +10,7 @@ body {
   overflow-x: hidden;
 }
 
-/* This deliberately suppresses the v2 starfield/orb + page mascots */
+/* This deliberately suppresses the old starfield/orb + page mascots */
 body .page-root > .starfield,
 body .page-root > .orb-layers,
 body .page-root > .satellite-path,
@@ -19,7 +19,7 @@ body .page-mascot {
   display: none !important;
 }
 
-/* Override v2 constellation-svg animations that strand stars at opacity:0
+/* Override old constellation-svg animations that strand stars at opacity:0
    when the iframe is hidden during load. Same bug class as page-wrap. */
 .root .constellation-svg g[style*='cursor: pointer'] {
   animation: none !important;
@@ -37,7 +37,7 @@ body .page-mascot {
   stroke-dashoffset: 0 !important;
 }
 
-/* Same reason — v2's .page-wrap had opacity:0 start that stranded content
+/* Same reason: the old .page-wrap had opacity:0 start that stranded content
    when animations were paused. portfolio root just skips the entry. */
 .root .page-wrap {
   animation: none !important;

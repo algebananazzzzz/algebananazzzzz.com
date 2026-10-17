@@ -1,144 +1,262 @@
-# Projects inherit their cluster from the containing group.
-# Magnitude controls star size and gravity; larger values create larger stars.
+# Each project names its cluster; the cluster sets its color in the orrery.
+# Tech ids must exist in technologies.yaml.
+# name is the project name, title mirrors the GitHub repo description,
+# description mirrors the README's opening section, and href is the GitHub repo.
 clusters:
-  brewery:
-    color: '#f472b6'
-    projects: []
-
-  llm:
-    color: '#a78bfa'
-    projects:
-      - id: nubenube
-        title: 'NubeNube'
-        tagline: 'A desktop focus companion for Claude Code.'
-        tech: [tauri, rust, react]
-        summary: |
-          A local-first desktop pet that keeps you in the loop with your Claude Code sessions. When Claude works, your cloud creature grows; when it hands the turn back and you drift to a distraction app, the Nube droops until you return. No accounts, no servers, no telemetry — it reads local ~/.claude data and watches the foreground app.
-        bullets:
-          - 'Tauri (Rust core + React UI) shipping builds for macOS, Windows, and Linux.'
-          - 'Claude Code hooks fire the exact moment the turn returns; token throughput drives Nube health.'
-          - 'Idle ≠ drifting — health freezes when you step away, resets daily, banks up to 130% on focus.'
-        date: '2026'
-        magnitude: 4.2
-        href: 'https://github.com/algebananazzzzz/nubenube'
-
-  cloud:
+  homelab:
+    label: 'Homelab'
+    color: '#86efac'
+  sheares:
+    label: 'Sheares Web'
+    color: '#fb923c'
+  infra:
+    label: 'Infra'
     color: '#7dd3fc'
-    projects:
-      - id: odyssey
-        title: 'Odyssey'
-        tagline: 'A CLI that scaffolds AWS projects with IaC best practices baked in.'
-        tech: [go, terraform, aws]
-        summary: |
-          A Go CLI for the Odyssey Framework. It bootstraps new API or website projects with a single command — wiring up Terraform backend state, AWS region, and CI/CD so best practices are enforced from the first commit instead of bolted on later.
-        bullets:
-          - 'One-command project creation with Terraform backend + region pre-configured.'
-          - 'Ships cross-platform release binaries (Linux i386/arm64/x86_64, macOS, Windows).'
-          - 'Encodes an opinionated AWS + IaC + CI/CD layout so teams start consistent.'
-        date: '2024'
-        magnitude: 3.7
-        href: 'https://github.com/algebananazzzzz/odyssey'
-
-      - id: planear
-        title: 'Planear'
-        tagline: 'Reconcile a CSV desired state against a live remote — in two Go functions.'
-        tech: [go]
-        summary: |
-          A Go library that reconciles a CSV-defined desired state with a remote actual state. You write OnAdd, OnUpdate, OnDelete; Planear handles the diff, the plan file, parallel dispatch, and retries. No providers, no plugins, no state-file format to learn.
-        bullets:
-          - 'Terraform-style plan/apply ergonomics without the provider machinery.'
-          - 'Generic over your record type; you supply three callbacks.'
-          - 'Parallel dispatch with retries; published on pkg.go.dev with a release pipeline.'
-        date: '2026'
-        magnitude: 3.2
-        href: 'https://github.com/algebananazzzzz/planear'
-
-      - id: quiz-bot
-        title: 'Telegram Quiz Bot'
-        tagline: 'A serverless Telegram quiz bot you deploy with one terraform apply.'
-        tech: [go, terraform, aws]
-        summary: |
-          A Golang Telegram quiz bot provisioned as serverless AWS infrastructure via Terraform. Ships application code plus IaC — you configure environment variables and quiz data, then deploy. The bot logic lives in src; the rest is infrastructure handled for you.
-        bullets:
-          - 'Go bot handler running serverless on AWS behind a webhook.'
-          - 'Whole stack provisioned with Terraform — VPC, functions, and wiring.'
-          - 'Bring your own quiz data and env config; deploy without touching infra code.'
-        date: '2024'
-        magnitude: 1.4
-        href: 'https://github.com/algebananazzzzz/Go-Terraform-Telegram-Quiz-Bot'
-
-  reading:
-    color: '#fda4af'
-    projects: []
-
-  general:
+  personal:
+    label: 'Personal'
     color: '#fde047'
-    projects:
-      - id: attendance-bot
-        title: 'Attendance Bot'
-        tagline: 'A Telegram attendance bot backed entirely by Google Sheets.'
-        tech: [python]
-        summary: |
-          A Telegram bot that runs training attendance off a Google Sheet — no database. Members register via poll, trainings become date columns, and poll answers write straight into attendance cells. A /chase command pings whoever hasn't responded that week.
-        bullets:
-          - 'Google Sheets as the only datastore — Attendance, Trainings, Polls, Admins tabs.'
-          - 'Poll votes update attendance cells directly; /add_training spawns date columns.'
-          - '/chase auto-pings non-responders across every poll that week.'
-        date: '2026'
-        magnitude: 2.8
-        href: 'https://github.com/algebananazzzzz/attendance-bot'
 
-      - id: sheares-app
-        title: 'Sheares App'
-        tagline: 'The resident-facing app for 500 hall members.'
-        tech: [react-native, expo, aws]
-        summary: |
-          The mobile app for NUS Sheares Hall — noticeboard, bookings, and events for residents. Built with React Native and Expo on top of a PostgreSQL backend.
-        bullets:
-          - 'React Native + Expo client, used monthly by 500 active residents.'
-          - 'Boosted hall event participation by ~20%.'
-        date: '2024 → ongoing'
-        magnitude: 2.4
-        href: 'https://github.com/ShearesWeb/sheares-app'
+# Shown in this order under the orrery, and shining brighter on the map.
+featured:
+  - intranet
+  - cupid
+  - odyssey-cicd
+  - corum
+  - nubenube
+  - homelab-komodo
+  - algebananazzzzz-com
 
-      - id: nocturnal
-        title: 'NocturnalProject'
-        tagline: 'A Gatsby + Tailwind portfolio template I open-sourced.'
-        tech: [gatsby, tailwindcss]
-        summary: |
-          A free, opinionated portfolio template built with Gatsby-React and TailwindCSS, open-sourced after building my first site. Opinionated about content separation, theme tokens, and a wine-red illustration palette.
-        bullets:
-          - 'YAML-driven content. Add a project by editing a file, not a component.'
-          - 'Light / dark theme baked into the design tokens, not bolted on.'
-          - 'Open-sourced after my first portfolio; 21 forks to date.'
-        date: '2024'
-        magnitude: 2.1
-        href: 'https://github.com/algebananazzzzz/NocturnalProject'
+projects:
+  # Homelab
+  - id: homelab-ansible
+    cluster: homelab
+    name: 'Homelab Ansible'
+    title: 'Ansible configuration for provisioning my entire homelab setup from scratch'
+    tech: [kvm-qemu, ansible, docker, terraform, cloudflare]
+    description: |
+      All my configuration for my homelab platform lives here. This includes Ansible config for hypervisor and VM setup, virtual bridges and nftables for VM networking, Tailscale and Pi-hole DNS, Traefik and Cloudflare for public services, and automated VM and database backups with restic. Terraform manages the related Cloudflare and AWS resources the homelab depends on.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/homelab-ansible'
 
-      - id: algebananazzzzz-com
-        title: 'algebananazzzzz.com'
-        tagline: 'This site — a portfolio you navigate by star.'
-        tech: [astro, react, tailwindcss, terraform]
-        summary: |
-          The portfolio you're reading. An Astro 5 static site with React islands, where experience and projects render as a drifting starfield — brighter stars mean bigger impact. Ships on Cloudflare Pages behind a Terraform-managed pipeline with preprod and prod environments.
-        bullets:
-          - 'Astro islands hydrated on visibility; cosmos backdrop driven by a load-bearing CSS var contract.'
-          - 'Content collections (Zod-typed YAML) drive every project, role, and star.'
-          - 'Terraform-managed Cloudflare Pages with R2 state; auto-tagged beta → prod deploys via GitHub Actions.'
-        date: '2026'
-        magnitude: 1.8
-        href: 'https://algebananazzzzz.com'
+  - id: homelab-komodo
+    cluster: homelab
+    name: 'Homelab Komodo'
+    title: 'Provision all service containers in my homelab using Komodo'
+    tech: [komodo, docker, prometheus, grafana]
+    description: |
+      All the services in my homelab are declared here as Docker Compose stacks. This includes databases (Postgres and Redis), SSO (Authentik), observability (Prometheus, Grafana, Loki and Tempo), and other service apps. Komodo Resource Sync is configured to poll the main branch of this repo, and Renovate upgrades images periodically.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/homelab-komodo'
 
-      - id: nybble
-        title: 'nybble'
-        tagline: 'Auto-books your canteen lunch from a polished terminal UI.'
-        tech: [go, charm]
-        summary: |
-          A Go terminal app (built on Charm) that books your weekly canteen lunch automatically. You rank vendors and dishes in the TUI; when next week's slots open it logs in, matches your preferences day by day, and books the whole week in one shot.
-        bullets:
-          - 'Charm-based TUI for ranking favourite dishes and vendors.'
-          - 'Ranking walks favourites → vendor order → least-available-wins, so something always books.'
-          - 'Installs via curl with checksum verification, or `go install`.'
-        date: '2026'
-        magnitude: 1.6
-        href: 'https://github.com/algebananazzzzz/nybble'
+  - id: homelab-windmill
+    cluster: homelab
+    name: 'Homelab Windmill'
+    title: 'Automations for my homelab and daily workflow in Windmill'
+    tech: [windmill, github-actions]
+    description: |
+      Hosts Windmill scripts, flows and schedules. Changes made in the UI or via MCP get merged back to this repo via Windmill git sync, and GitHub Actions deploys changes in this repo on merge to main.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/homelab-windmill'
+
+  - id: homelab-k8s
+    cluster: homelab
+    name: 'Kubernetes Homelab'
+    title: '[Superseded] Homelab V1 hosting ArgoCD manifests to provision a Kubernetes cluster'
+    tech: [kubernetes, argocd, ansible, prometheus, grafana]
+    description: |
+      The first iteration of my homelab, used to experiment with and learn provisioning a Kubernetes cluster from scratch. This includes secrets (Vault and External Secrets), networking (Cilium and Tailscale), storage (Longhorn), observability (Prometheus, Loki and Fluent Bit), and serverless functions (OpenFaaS), using a two-tier app-of-apps to resolve the chicken-and-egg problem.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/homelab-manifests'
+
+  # Sheares Web
+  - id: intranet
+    cluster: sheares
+    name: 'Intranet'
+    title: '[Public mirror] The foundational, centralized backbone managing every piece of data in Sheares Hall'
+    tech: [go, supabase, github-actions]
+    description: |
+      To drive full digitalization of Sheares Hall, the natural first step was designing a robust system for managing its data. This repo provides a single source of truth for all data in Sheares Hall. It defines the core schema as code with Liquibase, encodes the hall's core logic as data validations, and enforces fine-grained access control in the database itself. Data is reconciled with Planear, a custom-built solution. It manages thousands of records with a guaranteed MTTR of 5 minutes, backed by nightly production snapshots and disaster recovery workflows that restore from preproduction.
+    date: '2025 → 2026'
+    href: 'https://github.com/ShearesWeb/intranet-public'
+
+  - id: intranet-next-app
+    cluster: sheares
+    name: 'Intranet Web App'
+    title: 'Centralized management portal for all residents in Sheares Hall'
+    tech: [react, supabase, cloudflare]
+    description: |
+      The Intranet provides a centralized management platform for performing any core operational task in Sheares Hall, used by the JCRC, appointment holders and residents alike. Built with Next.js on Cloudflare Workers and Supabase, it achieved a 100 Lighthouse Accessibility score across the board.
+    date: '2024 → 2026'
+    href: 'https://github.com/ShearesWeb/intranet-next-app'
+
+  - id: sheares-app
+    cluster: sheares
+    name: 'Sheares App'
+    title: 'Mobile app keeping Sheares Hall residents connected to hall announcements and CCAs'
+    tech: [expo, react, supabase]
+    description: |
+      The mobile app for Sheares Hall residents on iOS and Android. Residents receive hall announcements as push notifications and browse CCAs, with an events system that gamifies participation by rewarding residents for taking part in hall activities. Built with React Native and Expo on Supabase.
+    date: '2023 → 2025'
+    href: 'https://github.com/ShearesWeb/sheares-app'
+
+  - id: cupid
+    cluster: sheares
+    name: 'Cupid'
+    title: 'Sheares Cocurricular Unified Preference & Impartial Distribution System'
+    tech: [rust, tauri, react]
+    description: |
+      An internal management platform built on Rust for JCRC members to manage CCA appointments, with no code required. CCA allocation uses Gale-Shapley and immediate acceptance to match residents to positions fairly based on their preferences, while capping how many appointments any one resident can hold. The JCRC can preallocate or remove appointments as needed and review a full audit trail of every match. All changes are pushed to the intranet repository for upstream approval.
+    date: '2026'
+    href: 'https://github.com/ShearesWeb/cupid'
+
+  - id: sheares-web-bot
+    cluster: sheares
+    name: 'Sheares Bot'
+    title: 'Friendly Telegram bot for day-to-day life within each block'
+    tech: [python, aws, terraform, docker]
+    description: |
+      Sheares Bot gives residents a friendly Telegram interface for interacting within their block, automating the day-to-day routines they share, for instance laundry machines and sticker packs. Provisioned on AWS using Lambda, API Gateway, DynamoDB and EventBridge Scheduler, with Terraform.
+    date: '2026'
+    href: 'https://github.com/ShearesWeb/sheares-web-bot'
+
+  - id: sheares-photobooth
+    cluster: sheares
+    name: 'Sheares Photo Booth'
+    title: 'Scrapbook-style virtual photo booth for showcasing Sheares Hall'
+    tech: [react, supabase]
+    description: |
+      A public-facing virtual photo booth built to give prospective freshmen a taste of Sheares Hall and entice them to join. Visitors snap a photo on their webcam, dress it up with themed scenes, stickers and captions, and pin it to a shared wall of polaroids. Built with React on Supabase and hosted on GitHub Pages.
+    date: '2026'
+    href: 'https://github.com/ShearesWeb/sheares-photobooth'
+
+  - id: infra-vpc
+    cluster: sheares
+    name: 'VPC Bootstrap'
+    title: 'Production-ready AWS VPC at the lowest possible cost'
+    tech: [terraform, aws]
+    description: |
+      Bootstraps a production-ready VPC in any AWS account at the lowest possible cost. Every environment (prd, preprod, com) shares one VPC with isolated CIDR blocks across two availability zones, split into public, private and isolated subnet tiers. A fck-nat instance replaces the NAT Gateway, cutting NAT from about $32 to $3 a month, and can be switched off entirely for a zero-cost setup. Provisioned with Terraform.
+    date: '2026'
+    href: 'https://github.com/ShearesWeb/infra-vpc'
+
+  # Infra
+  - id: odyssey-cicd
+    cluster: infra
+    name: 'Odyssey CI/CD'
+    title: 'DevOps framework empowering developers to bootstrap projects with DevOps best practices'
+    tech: [go, github-actions, terraform, docker]
+    description: |
+      Odyssey distils composable template files encompassing best practices in CI/CD, testing and infrastructure architecture for common stacks. It provides odyssey-cli, a bootstrap TUI that packages GitHub Actions workflows, infrastructure as code, scripts and greenfield project files into a complete production-ready setup that traditionally takes days to create.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/odyssey-cicd'
+
+  - id: odyssey
+    cluster: infra
+    name: 'Odyssey CLI'
+    title: '[Superseded] Odyssey CLI bootstrapping AWS projects with DevOps best practices'
+    tech: [go, terraform, aws, docker]
+    description: |
+      Predecessor to odyssey-cicd. It was superseded because it was tied to AWS rather than vendor agnostic, and its framework couldn't scale to the many modern frameworks and developer use cases odyssey-cicd now supports.
+    date: '2025'
+    href: 'https://github.com/algebananazzzzz/odyssey'
+
+  - id: planear
+    cluster: infra
+    name: 'Planear'
+    title: 'Lightweight, generic Go library for state reconciliation at scale'
+    tech: [go]
+    description: |
+      Planear provides a simple interface to reconcile desired state defined in CSV with the actual state of live systems. Developers write custom handlers, and Planear handles state drift detection, planning and retries. While traditional state reconciliation engines refresh each resource's state separately and build the dependency graph resource by resource, Planear loads actual state in bulk, builds a dependency DAG across thousands of rows, and executes each layer in parallel on a goroutine worker pool. It prioritizes simplicity and performance, eliminating the concepts of providers, plugins and state files, and instead focuses on a simple interface easily extended in Go for custom use cases.
+    date: '2025 → 2026'
+    href: 'https://github.com/algebananazzzzz/planear'
+
+  - id: terraform-modules
+    cluster: infra
+    name: 'Terraform Modules'
+    title: 'Reusable Terraform modules for provisioning AWS infrastructure'
+    tech: [terraform, aws]
+    description: |
+      Personal Terraform modules abstracting the core patterns I used when provisioning AWS infrastructure across my projects. This includes serverless Lambda functions with API Gateway custom domains and integrations, containerized ECS services behind an ALB, static sites on CloudFront over S3, and IAM roles and policies.
+    date: '2024 → 2025'
+    href: 'https://github.com/algebananazzzzz/terraform-modules'
+
+  # Personal
+  - id: nubenube
+    cluster: personal
+    name: 'NubeNube'
+    title: 'Personalized desktop focus companion that incentivises users to maintain a healthy work-rest ratio'
+    tech: [tauri, rust, react]
+    description: |
+      NubeNube tracks work hours and encourages users to commit to balanced work targets on individual weekdays to earn rest time for the rest of the week. It monitors app and browser activity, and ships with a browser extension that blocks distracting sites during Pomodoro-style focus sessions. A floating desktop widget reminds users to stay on task and complete the day's work target. Built with Rust and Tauri, with a React frontend.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/nubenube'
+
+  - id: corum
+    cluster: personal
+    name: 'Corum'
+    title: 'Canvas LLM integration for building an agentic vault for coursework'
+    tech: [go, llm]
+    description: |
+      Corum ships with a TUI that builds a local vault of your Canvas coursework bundled with agentic skills and instructions, and a CLI that serves as the agentic surface for syncing every lecture, announcement, assignment and file. The skills direct agents to read the sync changelog and turn new or changed items into tasks in Kaneo, Jira or Google Tasks. Built in Go with Charm and Bubble Tea.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/Corum'
+
+  - id: nybble
+    cluster: personal
+    name: 'nybble'
+    title: 'Auto-book canteen lunch from a polished terminal UI'
+    tech: [go]
+    description: |
+      nybble is a little Go terminal app (built with Charm) that automates your weekly canteen-lunch booking. You rank the vendors and dishes you like in the TUI; when next week's slots open it logs in, picks the best available match to your preferences for each day, and books the whole week in one shot.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/nybble'
+
+  - id: algebananazzzzz-com
+    cluster: personal
+    name: 'algebananazzzzz.com'
+    title: 'A personalized portfolio site built around a celestial theme'
+    tech: [astro, react, tailwindcss, cloudflare, terraform]
+    description: |
+      Instead of building my portfolio from a generic template, I wanted a unique design that captures my innate character and vision. As someone who's genuinely curious and explorative, I chose the theme of the cosmos, something we look up to in the night sky with admiration and vision. I'm really proud to have come up with such a cool design concept myself, like representing my projects as stars in a celestial orrery. Built with Astro and React islands on Tailwind, deployed on Cloudflare Pages.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/algebananazzzzz.com'
+
+  - id: chickenhook
+    cluster: personal
+    name: 'ChickenHook'
+    title: 'A hook that makes your AI coding tools scream like a chicken when they need you'
+    tech: [shell]
+    description: |
+      I run several Claude, Codex and Coco sessions in parallel, fire a prompt, then drift into reels while I wait. Gentle notification sounds never pulled me back, so ChickenHook wires the screaming chicken meme into Claude Code, Gemini CLI and friends: when a session finishes or needs attention, the chicken screams and I drop the phone.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/screaming_chicken_hook'
+
+  - id: kaboom-careers
+    cluster: personal
+    name: 'KaboomCareers'
+    title: 'A serverless job scraper that posts new openings to Telegram'
+    tech: [aws, terraform, docker]
+    description: |
+      A serverless job scraper that automatically discovers new job opportunities and notifies a Telegram channel. It scrapes AWS, Sea and Shopee daily from Lambda, deduplicates postings in DynamoDB, and adds new companies through configuration.
+    date: '2025'
+    href: 'https://github.com/algebananazzzzz/KaboomCareers'
+
+  - id: hakka-voicebox
+    cluster: personal
+    name: '客家话音库'
+    title: 'A custom 客家话音库 site I built for 公公'
+    tech: [astro, react, cloudflare]
+    description: |
+      公公 wishes to teach Hakka to future generations. Instead of watching him record himself for YouTube, I decided to build a friendlier and more useful interface everyone can use to read each word and sentence in Chinese, English and Hakka romanisation and play his recordings, leaving a lasting legacy of his Hakka on the internet.
+    date: '2026'
+    href: 'https://github.com/algebananazzzzz/hakka-voicebox'
+
+  - id: nocturnal
+    cluster: personal
+    name: 'NocturnalProject'
+    title: 'An open source portfolio template built with Gatsby-React and TailwindCSS'
+    tech: [react, tailwindcss]
+    description: |
+      A stylish, dark-mode portfolio template you can customize in 5 minutes, no coding required. Edit YAML files, push to GitHub, and GitHub Actions builds and deploys it.
+    date: '2024 → 2025'
+    href: 'https://github.com/algebananazzzzz/NocturnalProject'

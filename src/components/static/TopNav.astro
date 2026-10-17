@@ -4,10 +4,14 @@ import { features } from '@/config/features';
 const { pathname } = Astro.url;
 const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
+// The pill leads into the Milky Way once it ships; until then it opens the orrery.
+const pill = features.milkyWay
+  ? { href: '/milky-way', label: 'Milky Way', aria: 'enter the milky way' }
+  : { href: '/projects', label: 'Orrery', aria: 'enter the orrery' };
+
 const links = [
   { href: '/', label: 'Home', key: 'home' },
   { href: '/about', label: 'About', key: 'about' },
-  { href: '/projects', label: 'Projects', key: 'projects' },
   { href: '/experience', label: 'Experience', key: 'experience' },
 ];
 ---
@@ -32,32 +36,28 @@ const links = [
           </a>
         ))
       }
-      {
-        features.milkyWay && (
-          <a
-            href="/milky-way"
-            class="milky-pill"
-            aria-current={isActive('/milky-way') ? 'page' : undefined}
-            aria-label="enter the milky way"
-          >
-            <span class="star" aria-hidden="true" />
-            <span>Milky Way</span>
-            <svg
-              class="arrow"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </a>
-        )
-      }
+      <a
+        href={pill.href}
+        class:list={['milky-pill', { 'is-orrery': !features.milkyWay }]}
+        aria-current={isActive(pill.href) ? 'page' : undefined}
+        aria-label={pill.aria}
+      >
+        <span class="star" aria-hidden="true"></span>
+        <span>{pill.label}</span>
+        <svg
+          class="arrow"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
+      </a>
     </nav>
 
     <div class="topnav-tools">
@@ -232,6 +232,7 @@ const links = [
     font-weight: 600;
     color: #ffffff;
     letter-spacing: 0.01em;
+    white-space: nowrap;
     position: relative;
     background: linear-gradient(
       110deg,
@@ -297,6 +298,21 @@ const links = [
 
   .milky-pill:hover .arrow {
     transform: translateX(3px);
+  }
+
+  /* Sunset variant while the Milky Way is off. After :hover so it keeps its
+     own glow, as in the design. The design's #f59e0b amber stop drops white
+     text to 2.3:1, so it is deepened to #b45309. */
+  .milky-pill.is-orrery {
+    background: linear-gradient(110deg, #c2410c, #db2777, #b45309, #c2410c);
+    background-size: 250% 100%;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 4px 14px -4px rgba(249, 115, 22, 0.45);
+  }
+
+  .milky-pill.is-orrery::before {
+    opacity: 0.5;
   }
 
   @keyframes milkyShift {
@@ -410,7 +426,7 @@ const links = [
       display: none;
     }
 
-    /* Hide the desktop nav links — only show brand + Milky Way pill */
+    /* Hide the desktop nav links — only show brand + the pill */
     .nav-links .nav-link {
       display: none;
     }
@@ -434,7 +450,7 @@ const links = [
       display: none;
     }
 
-    /* Hide the text nav links — keep the Milky Way pill as the sole CTA,
+    /* Hide the text nav links — keep the pill as the sole CTA,
        and let users reach other pages via search or the home page. */
     .nav-link {
       display: none;

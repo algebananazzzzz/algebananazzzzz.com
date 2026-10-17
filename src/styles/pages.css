@@ -342,6 +342,63 @@
   }
 }
 
+/* /projects: wider than the other sub-pages so the orrery map has room */
+.projects-page {
+  max-width: min(1440px, 100%);
+}
+.projects-page .mw-recent {
+  margin-top: var(--space-16);
+}
+.orrery-recent-row {
+  grid-template-columns: 72px minmax(0, 1fr) minmax(0, 300px) 24px;
+}
+.orrery-recent-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.orrery-recent-tag {
+  font-size: var(--text-sm);
+  color: rgba(229, 231, 235, 0.62);
+  line-height: 1.45;
+}
+.orrery-recent-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.orrery-recent-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(229, 231, 235, 0.85);
+  white-space: nowrap;
+}
+.orrery-recent-cluster .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+.orrery-recent-tech {
+  color: rgba(229, 231, 235, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 720px) {
+  .orrery-recent-row {
+    grid-template-columns: 1fr;
+  }
+  .orrery-recent-row .mw-recent-arrow {
+    display: none;
+  }
+}
+
 /* CTA buttons */
 .cta-secondary {
   display: inline-flex;

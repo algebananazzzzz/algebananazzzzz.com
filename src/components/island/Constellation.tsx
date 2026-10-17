@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import css from './Constellation.module.css';
 import { forceSimulation, forceLink, forceManyBody, forceCollide, forceX, forceY } from 'd3-force';
 import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
 import type { WikiPage, WikiTopic } from '@/types/wiki';
