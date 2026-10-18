@@ -138,7 +138,7 @@ export default function Meteor({ quotes, enabled = true, intervalMs = 30_000 }: 
         callout.innerHTML = `
           <div class="${s.calloutQuote}">&ldquo;${escapeHtml(q.text)}&rdquo;</div>
           <div class="${s.calloutMeta}">
-            <span class="dim">caught at stardate · ${sd}</span>
+            <span class="dim">caught at stardate ${sd}</span>
           </div>
           <div class="${s.calloutActions}">
             <button type="button" class="${s.calloutDismiss}">release</button>

@@ -6,7 +6,6 @@ type SiteData = {
   name: string;
   title: string;
   description: string;
-  location: string;
   gardenUrl: string;
   sourceUrl: string;
   socials: Record<string, string>;
@@ -32,7 +31,7 @@ const iconLinks = ICONS.map((i) => ({ ...i, url: socials[i.key] }))
 const sourceDisplay = siteData.sourceUrl.split('/').pop();
 
 const buildDate = new Date();
-const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+const updatedStr = `Last updated ${buildDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
 ---
 
 <footer class="footer" data-accent="nebula">
@@ -51,7 +50,7 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
         </a>
       )
     }
-    <div>Algebananazzzzz · Singapore · {updatedStr}</div>
+    <div>Algebananazzzzz, Singapore. {updatedStr}</div>
   </div>
   <div class="icons">
     {
@@ -70,7 +69,7 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
   </div>
   <div class="col-right">
     <div>
-      source ·{' '}
+      source:{' '}
       <a class="source" href={siteData.sourceUrl} target="_blank" rel="noopener noreferrer"
         >{sourceDisplay}</a
       >

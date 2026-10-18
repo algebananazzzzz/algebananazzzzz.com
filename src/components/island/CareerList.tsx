@@ -72,7 +72,7 @@ export default function CareerList({ entries, defaultOpenIndex = 0 }: Props) {
               <span className={s.date}>{e.date}</span>
               <span className={s.role}>
                 {e.role}
-                <span className={s.orgSep}>·</span>
+                <span className={s.orgSep}>at</span>
                 <span className={s.org}>{e.org}</span>
               </span>
               <span className={s.class}>{e.stellarClass.toLowerCase()}</span>

@@ -183,7 +183,7 @@ export default function Splash() {
         <div ref={eyebrowRef} className={s.splashEyebrow}>
           <span className={s.dot} />
           <span>
-            singapore · 1.3°n · stardate{' '}
+            singapore, 1.3°n, stardate{' '}
             <span className={s.stardateNum} ref={stardateRef} suppressHydrationWarning>
               {computeStardate()}
             </span>

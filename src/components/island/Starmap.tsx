@@ -550,7 +550,7 @@ export default function Starmap({ data }: { data: StarmapData }) {
 
         <MapHud
           className={s.maphud}
-          label="drag to pan · click a star"
+          label="drag to pan, click a star"
           fs={isFs}
           onToggle={toggleFs}
         />

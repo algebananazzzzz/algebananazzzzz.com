@@ -565,7 +565,7 @@ export default function Orrery(props: Props) {
         </svg>
 
         {compact ? (
-          <div className={s.hud}>drag to pan · click a star</div>
+          <div className={s.hud}>drag to pan, click a star</div>
         ) : (
           <MapHud className={s.maphud} label="drag to pan" fs={isFs} onToggle={toggleFs} />
         )}

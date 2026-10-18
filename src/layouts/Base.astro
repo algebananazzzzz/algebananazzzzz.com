@@ -6,7 +6,6 @@ type SiteData = {
   name: string;
   title: string;
   description: string;
-  location: string;
   gardenUrl: string;
   socials: Record<string, string>;
 };
@@ -29,7 +28,7 @@ export interface Props {
 }
 
 const { title, description, accent = 'cosmic', isHome = false, theme = 'dark' } = Astro.props;
-const fullTitle = title ? `${title} · ${siteData.name}` : siteData.title;
+const fullTitle = title ? `${title} | ${siteData.name}` : siteData.title;
 const desc = description ?? siteData.description;
 const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---

@@ -57,8 +57,7 @@ const featured = projects
                   {p.tech
                     .slice(0, 3)
                     .map((t: string) => techLabel.get(t))
-                    .join(' · ')}
-                  {p.tech.length > 3 ? ` +${p.tech.length - 3}` : ''}
+                    .join(', ')}
                 </span>
               </span>
               <span class="recent-arrow">→</span>
