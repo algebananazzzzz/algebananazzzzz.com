@@ -1,21 +1,21 @@
-heroSub: 'Why Algebananazzzzz? This alias stuck to me since Primary School when I was obsessed with algebra and minions at the same time. Feel free to explore around this space and get to know me better!'
+heroSub: 'Why Algebananazzzzz? This alias stuck to me since Primary School when I was obsessed with algebra and minions. I created this space because I truly believe in being an open book to others. Feel free to explore and get to know me better!'
 
-intro: "I'm Daniel, a NUS CS undergrad hoping to specialize in Infrastructure and Systems."
+intro: "I'm Daniel, a NUS CS undergrad hoping to specialize in Infra and Systems."
 what:
   - "If I wasn't into tech I'd definitely be a chef. They are always seeking ways to experiment and invent new flavors, infuse their soul into every dish, and wholeheartedly love what they put out. This is exactly who I want to be."
-  - 'I love exploring retro and foundational technology. By deep diving and reinventing some wheels in my homelab setup, I hope to better appreciate the history and evolutions in systems we take granted.'
-  - "I'm also deeply invested in the latest technologies like LLMs and Blockchain, always keeping myself up to date with what's new. I love experimentation and creating stuff, which is evident from all my hobbies!"
+  - 'I love exploring retro and foundational technology. I love deep diving into these "forgotten" areas of tech, as I find myself better appreciating the history and evolutions in systems we take granted.'
+  - 'I’m a passionate builder who loves experimenting and creating things to solve problems for me and the people around me. I always find myself unsatisfied with existing solutions, and unafraid to reinvent the wheel and create my own.'
 valuesHeading: 'A few working principles'
 values:
   - label: 'Learning is always free'
-    note: "This goes two ways: there's no opportunity cost to learning, and if there are financial costs it's amortized."
-  - label: 'Do it and get burnt'
-    note: "You don't learn heat by reading about fire, so just ship it, break it, and internalize the process."
+    note: "There's no opportunity cost to learning, and if there are costs it's often amortized."
+  - label: 'Just do it and get burnt'
+    note: "You don't learn heat by reading about fire, so just ship it, break it, and learn in the process."
   - label: "It's okay to reinvent the wheel"
-    note: "Don't take things for granted. Real innovation comes when you do things differently, more often than not."
+    note: Don't be satisfied with just the "industry standard". Real innovation comes when we do things differently.
 factoids:
   - { k: 'Based in', v: 'Singapore' }
-  - { k: 'Interests', v: 'Ultimate frisbee, cooking, smoked meat' }
+  - { k: 'Interests', v: 'Craft brewing, smoking meat, cooking' }
   - { k: 'Currently brewing', v: 'Germany Hefeweizen Beer (banana - clove characteristics)' }
   - { k: 'Latest experience', v: 'ByteDance Backend SWE Intern (Foundational Technology)' }
   - { k: 'Last cert', v: 'AWS Solutions Architect Professional' }
