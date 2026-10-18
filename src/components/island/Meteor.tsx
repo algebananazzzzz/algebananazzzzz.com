@@ -138,7 +138,7 @@ export default function Meteor({ quotes }: { quotes: StarmapQuote[] }) {
           </div>
           <div class="${s.calloutActions}">
             <button type="button" class="${s.calloutDismiss}">release</button>
-            <a class="${s.calloutLink}" href="${escapeHtml(q.href)}" target="_blank" rel="noopener noreferrer">read more like this <span class="${s.arr}">→</span></a>
+            <a class="${s.calloutLink}" href="${escapeHtml(q.href)}" target="_blank" rel="noopener noreferrer">read this <span class="${s.arr}">→</span></a>
           </div>
         `;
         layer.appendChild(callout);
