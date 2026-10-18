@@ -138,13 +138,15 @@ export default function Starmap({ data }: { data: StarmapData }) {
     setHash(id);
     frameFocus(id);
   };
+  // Back leads up the tree, not through history.
   const back = () => {
-    const next = stack.slice(0, -1);
-    const id = next[next.length - 1] ?? null;
-    setStack(next);
+    const parent = focus ? byId.get(focus)!.parent : null;
+    if (!parent) return clear();
+    setStack([parent]);
     setHover(null);
-    setHash(id);
-    frameFocus(id);
+    reveal(parent);
+    setHash(parent);
+    frameFocus(parent);
   };
   const clear = () => {
     setStack([]);
@@ -313,8 +315,8 @@ export default function Starmap({ data }: { data: StarmapData }) {
   const grid = useMemo(() => GRID.map((l, i) => <line key={i} {...l} />), []);
 
   const fn = focus ? byId.get(focus)! : null;
-  const prev = stack[stack.length - 2];
-  const backLabel = prev ? byId.get(prev)!.title : 'the whole sky';
+  const parentId = fn?.parent ?? null;
+  const backLabel = parentId ? byId.get(parentId)!.title : 'the whole sky';
 
   // Search narrows the tree to matches and their ancestors, all expanded.
   const visible = match ? new Set([...match].flatMap((id) => byId.get(id)!.path)) : null;
@@ -614,8 +616,25 @@ export default function Starmap({ data }: { data: StarmapData }) {
 
         {fn && (
           <div className={s.detail}>
-            <button type="button" className={s.back} onClick={back}>
-              ← {backLabel}
+            <button
+              type="button"
+              className={s.back}
+              onClick={back}
+              aria-label={`back to ${backLabel}`}
+            >
+              <span className={s.backIcon} aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </span>
+              <span className={s.backLabel}>{backLabel}</span>
             </button>
             {fn.path.length > 1 && (
               <div className={s.crumbs}>

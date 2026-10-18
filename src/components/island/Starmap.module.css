@@ -312,17 +312,59 @@
 }
 .back {
   align-self: flex-start;
-  margin: 2px 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  margin-bottom: 6px;
+  padding: 4px 12px 4px 4px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
   font-family: var(--font-mono);
   font-size: 11px;
+  letter-spacing: 0.04em;
   cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
 }
-.back:hover {
+.back:hover,
+.back:focus-visible {
+  border-color: rgba(27, 34, 56, 0.3);
+  background: #fff;
   color: var(--ink);
+}
+.back:focus-visible {
+  outline: 2px solid rgba(27, 34, 56, 0.4);
+  outline-offset: 2px;
+}
+.back-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(27, 34, 56, 0.07);
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+.back-icon svg {
+  width: 12px;
+  height: 12px;
+}
+.back:hover .back-icon {
+  transform: translateX(-2px);
+  background: rgba(27, 34, 56, 0.12);
+}
+.back-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .crumbs {
   display: flex;
