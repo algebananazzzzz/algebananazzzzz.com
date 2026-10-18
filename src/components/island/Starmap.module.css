@@ -8,7 +8,6 @@
   --ink-2: rgba(27, 34, 56, 0.74);
   --ink-3: rgba(27, 34, 56, 0.58);
   --line: rgba(27, 34, 56, 0.12);
-  --accent: #4f46e5;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   height: clamp(560px, calc(100vh - 140px), 860px);

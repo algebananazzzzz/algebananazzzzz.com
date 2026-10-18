@@ -36,12 +36,6 @@
   line-height: 1.02;
   margin: 0 0 var(--space-5);
 }
-.page-lead {
-  font-size: var(--text-lg);
-  color: var(--fg-2);
-  max-width: 64ch;
-  line-height: var(--leading-relaxed);
-}
 
 .section-eyebrow {
   font-family: var(--font-mono);

@@ -268,22 +268,3 @@ samp,
   font-family: var(--font-mono);
   font-size: 0.95em;
 }
-
-/* Three signature accent text gradients — clip to text to use. */
-.text-grad-sunset,
-.text-grad-aurora,
-.text-grad-cosmic {
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-.text-grad-sunset {
-  background-image: var(--grad-sunset);
-}
-.text-grad-aurora {
-  background-image: var(--grad-aurora);
-}
-.text-grad-cosmic {
-  background-image: var(--grad-cosmic);
-}

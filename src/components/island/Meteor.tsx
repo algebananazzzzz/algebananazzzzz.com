@@ -4,19 +4,15 @@ import type { StarmapQuote } from '@/lib/starmap';
 import { useReducedComplexity } from '@/lib/useReducedComplexity';
 import s from './Meteor.module.css';
 
-interface Props {
-  quotes: StarmapQuote[];
-  enabled?: boolean;
-  intervalMs?: number;
-}
+const INTERVAL_MS = 30_000;
 
-export default function Meteor({ quotes, enabled = true, intervalMs = 30_000 }: Props) {
+export default function Meteor({ quotes }: { quotes: StarmapQuote[] }) {
   const layerRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
   const reduced = useReducedComplexity();
 
   useEffect(() => {
-    if (!enabled || reduced || !quotes.length) return;
+    if (reduced || !quotes.length) return;
     const layer = layerRef.current;
     if (!layer) return;
 
@@ -138,7 +134,7 @@ export default function Meteor({ quotes, enabled = true, intervalMs = 30_000 }: 
         callout.innerHTML = `
           <div class="${s.calloutQuote}">&ldquo;${escapeHtml(q.text)}&rdquo;</div>
           <div class="${s.calloutMeta}">
-            <span class="dim">caught at stardate ${sd}</span>
+            <span>caught at stardate ${sd}</span>
           </div>
           <div class="${s.calloutActions}">
             <button type="button" class="${s.calloutDismiss}">release</button>
@@ -233,7 +229,7 @@ export default function Meteor({ quotes, enabled = true, intervalMs = 30_000 }: 
     let intervalId: ReturnType<typeof setInterval> | null = null;
     const startT = setTimeout(() => {
       launch();
-      intervalId = setInterval(launch, intervalMs);
+      intervalId = setInterval(launch, INTERVAL_MS);
     }, 3500);
 
     return () => {
@@ -241,7 +237,7 @@ export default function Meteor({ quotes, enabled = true, intervalMs = 30_000 }: 
       if (intervalId) clearInterval(intervalId);
       cleanups.forEach((fn) => fn());
     };
-  }, [quotes, enabled, intervalMs, reduced]);
+  }, [quotes, reduced]);
 
   return <div ref={layerRef} className={s.meteorLayer} aria-hidden="false" />;
 }

@@ -22,8 +22,8 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 - `scripts/sync-starmap.ts` — regenerates `starmap-manifest.json` from Outline (`npm run sync:starmap`).
 - `src/styles/tokens.css` — palette + type + spacing tokens. **Source of truth.**
 - `src/styles/global.css` — Tailwind import + `@theme` bridge + base resets.
-- `src/styles/portfolio.css` — barrel re-export for **global-only** CSS (`legacy-resets`, `cosmos`, `hero`, `sections`).
-- `src/styles/portfolio/*.css` — global cross-cutting CSS: `cosmos`, `hero`, `sections`, `legacy-resets`.
+- `src/styles/portfolio.css` — barrel re-export for **global-only** CSS (`cosmos`, `hero`, `sections`).
+- `src/styles/portfolio/*.css` — global cross-cutting CSS: `cosmos`, `hero`, `sections`.
 - `src/components/island/*.module.css` — co-located CSS Modules for React islands. Import as `import s from './X.module.css'` and access via `s.camelCase`.
 - `src/styles/pages.css` — sub-page (`/about`, `/projects`, `/experience`) wrapper rules + shared utilities (`.tag`, `.cta-secondary`).
 - `src/styles/page-bg.css` — per-route accent washes + per-route cosmos tint variables, and the starmap's paper backdrop.
@@ -89,15 +89,14 @@ CSS is split between **CSS Modules** (co-located `.module.css` per React island)
 
 ### Global CSS (in `src/styles/`)
 
-| Scope                                                | File                          |
-| ---------------------------------------------------- | ----------------------------- |
-| `Cosmos.tsx`, `AccentOrb.tsx`                        | `portfolio/cosmos.css`        |
-| Hero on `/`                                          | `portfolio/hero.css`          |
-| `.section`, `.section-head`, `.eyebrow`, `.orbiting` | `portfolio/sections.css`      |
-| Old-starfield suppression, animation resets          | `portfolio/legacy-resets.css` |
-| `/about`, `/projects`, `/experience` page wrappers   | `pages.css`                   |
-| Per-route accent wash + cosmos tint vars             | `page-bg.css`                 |
-| `.tag`, `.cta-secondary`, `.cosmic-card` (shared)    | `pages.css`                   |
+| Scope                                                | File                     |
+| ---------------------------------------------------- | ------------------------ |
+| `Cosmos.tsx`, `AccentOrb.tsx`                        | `portfolio/cosmos.css`   |
+| Hero on `/`                                          | `portfolio/hero.css`     |
+| `.section`, `.section-head`, `.eyebrow`, `.orbiting` | `portfolio/sections.css` |
+| `/about`, `/projects`, `/experience` page wrappers   | `pages.css`              |
+| Per-route accent wash + cosmos tint vars             | `page-bg.css`            |
+| `.tag`, `.cta-secondary`, `.cosmic-card` (shared)    | `pages.css`              |
 
 ## Content collections — how to add data
 
