@@ -47,14 +47,16 @@ const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
-    <link rel="icon" href="/assets/banana.png" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={ogUrl} />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={ogUrl} />
-    <meta property="og:image" content="/assets/banana.png" />
+    <meta property="og:image" content="/assets/icon-512.png" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={fullTitle} />
