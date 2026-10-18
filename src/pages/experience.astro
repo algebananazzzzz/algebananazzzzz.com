@@ -2,10 +2,6 @@
 import Base from '@/layouts/Base.astro';
 import CareerList from '@/components/island/CareerList';
 import { getCareerEntries } from '@/lib/getCareerEntries';
-import siteRaw from '@/content/site.yaml';
-
-type SiteData = { pages: { experience: { lead: string } } };
-const site = siteRaw as SiteData;
 
 const careerEntries = await getCareerEntries();
 ---

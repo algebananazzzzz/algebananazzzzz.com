@@ -422,3 +422,49 @@
     display: none !important;
   }
 }
+
+/* ============================================================
+   Starmap: on cream paper the meteor is drawn in ink, not light
+   ============================================================ */
+
+:global(html[data-site-theme='light']) .meteor:hover {
+  filter: none;
+}
+
+:global(html[data-site-theme='light']) .meteor .trail {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0), rgba(79, 70, 229, 0.55));
+  box-shadow: none;
+  filter: none;
+}
+
+:global(html[data-site-theme='light']) .meteor .head {
+  width: 5px;
+  height: 5px;
+  background: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+:global(html[data-site-theme='light']) .meteor .head::before {
+  background: none;
+  border: 1px solid rgba(79, 70, 229, 0.35);
+  box-shadow: none;
+}
+
+:global(html[data-site-theme='light']) .meteor:hover .head {
+  transform: translate(50%, -50%) scale(1.4);
+  box-shadow: 0 0 0 5px rgba(79, 70, 229, 0.14);
+}
+
+:global(html[data-site-theme='light']) .meteor .quote {
+  color: rgba(27, 34, 56, 0.62);
+  text-shadow: none;
+}
+
+:global(html[data-site-theme='light']) .meteor:hover .quote {
+  color: #1b2238;
+}
+
+:global(html[data-site-theme='light']) .meteor-callout {
+  filter: invert(1) hue-rotate(180deg);
+}

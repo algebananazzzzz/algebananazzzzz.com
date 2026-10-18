@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { file } from 'astro/loaders';
 import { load } from 'js-yaml';
 
@@ -24,7 +25,7 @@ const projectSchema = z.object({
   tech: z.array(z.string()).min(1),
   description: z.string(),
   date: z.string().optional(),
-  href: z.string().url().optional(),
+  href: z.url().optional(),
 });
 const clusterSchema = z.object({ label: z.string().min(1), color: z.string().min(1) });
 const projectFileSchema = z.object({

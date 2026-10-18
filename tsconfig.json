@@ -7,13 +7,9 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@content/*": ["src/content/*"],
-      "@lib/*": ["src/lib/*"],
-      "@styles/*": ["src/styles/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "astro.config.mjs"],
+  "include": ["src/**/*", "scripts/**/*", "astro.config.mjs"],
   "exclude": ["dist", "node_modules"]
 }

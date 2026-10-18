@@ -52,13 +52,13 @@ src/
 ├── content/           YAML data and the wiki manifest (projects, technologies, experience, now, about)
 ├── content.config.ts  Zod schemas for the content collections
 ├── layouts/           Base.astro, the page chrome
-├── lib/               Orrery layout, magnitude, stardate, routes
+├── lib/               Orrery and starmap layouts, stardate, quotes
 ├── pages/             Route entries (5 routes)
 ├── styles/
 │   ├── tokens.css     Palette + type tokens (source of truth)
 │   ├── global.css     Tailwind + @theme bridge + base resets
 │   ├── portfolio.css  Barrel re-export
-│   ├── portfolio/     Global CSS (cosmos, hero, sections, legacy-resets)
+│   ├── portfolio/     Global CSS (cosmos, hero, sections)
 │   ├── pages.css      Sub-page wrappers
 │   └── page-bg.css    Per-route accent washes
 └── types/             *.yaml module shim, wiki manifest types

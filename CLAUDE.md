@@ -14,17 +14,19 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 ## Key paths
 
 - `src/layouts/Base.astro` — single source of layout chrome (Cosmos, AccentOrb, Meteor, TopNav inside `<header>`, Footer, the one `<main>`). Owns the `<html>` `data-accent` attribute.
-- `src/pages/*.astro` — five route entries: `/`, `/about`, `/projects`, `/experience`, `/milky-way`. Pages emit `<div class="page">` (or `<div class="mw-page">`) — never `<main>`.
+- `src/pages/*.astro` — five route entries: `/`, `/about`, `/projects`, `/experience`, `/starmap`. Pages emit `<div class="page">` (or `<div class="starmap-page">`) — never `<main>`.
 - `src/components/island/*.tsx` — interactive React components. Always require a hydration directive in the page that uses them.
 - `src/components/static/*.astro` — server-only components (TopNav, Footer, OrreryBackdrop).
 - `src/lib/orrery.ts` — build-time layout for the orrery (`/` and `/projects`). `src/lib/getOrrery.ts` loads the collections and runs it once per build.
+- `src/lib/starmap.ts` — build-time layout for the starmap (`/starmap`), from `src/content/starmap-manifest.json`.
+- `scripts/sync-starmap.ts` — regenerates `starmap-manifest.json` from Outline (`npm run sync:starmap`).
 - `src/styles/tokens.css` — palette + type + spacing tokens. **Source of truth.**
 - `src/styles/global.css` — Tailwind import + `@theme` bridge + base resets.
-- `src/styles/portfolio.css` — barrel re-export for **global-only** CSS (`legacy-resets`, `cosmos`, `hero`, `sections`).
-- `src/styles/portfolio/*.css` — global cross-cutting CSS: `cosmos`, `hero`, `sections`, `legacy-resets`.
+- `src/styles/portfolio.css` — barrel re-export for **global-only** CSS (`cosmos`, `hero`, `sections`).
+- `src/styles/portfolio/*.css` — global cross-cutting CSS: `cosmos`, `hero`, `sections`.
 - `src/components/island/*.module.css` — co-located CSS Modules for React islands. Import as `import s from './X.module.css'` and access via `s.camelCase`.
 - `src/styles/pages.css` — sub-page (`/about`, `/projects`, `/experience`) wrapper rules + shared utilities (`.tag`, `.cta-secondary`).
-- `src/styles/page-bg.css` — per-route accent washes + per-route cosmos tint variables.
+- `src/styles/page-bg.css` — per-route accent washes + per-route cosmos tint variables, and the starmap's paper backdrop.
 - `src/content.config.ts` — Zod schemas and `file()` loaders for content collections.
 - `src/types/yaml.d.ts` — `*.yaml` module shim (`unknown`, cast at import site).
 - `design-handoff/` — original prototype (gitignored).
@@ -47,9 +49,9 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 
 5. **`Meteor.tsx` double-rAF + forced reflow stays.** Under React+Vite the single-rAF pattern collapses the initial+target style flush and the animation never plays. Don't simplify.
 
-6. **`MilkyWayStreak` is `client:only="react"`.** The component renders ~480 random dust circles; SSR/CSR mismatch otherwise.
+6. **The starmap is the one light page.** `<Base theme="light">` drops Cosmos and AccentOrb and sets `html[data-site-theme="light"]`; TopNav, Footer and Meteor carry light overrides keyed on that attribute. Its wrapper is `.starmap-page`, not `.page`, because `.page`'s wash and vignette assume the dark cosmos.
 
-7. **The orrery layout runs at build time only.** `buildOrrery()` returns rounded coordinates and link paths that `Orrery.tsx` renders as-is. Don't move the force simulation into the island: it costs hydration time and reintroduces server/client float drift in SVG attributes.
+7. **The orrery and starmap layouts run at build time only.** `buildOrrery()` and `buildStarmap()` return rounded coordinates and link paths that `Orrery.tsx` and `Starmap.tsx` render as-is. Don't move the force simulation into the island: it costs hydration time and reintroduces server/client float drift in SVG attributes.
 
 8. **`prefers-reduced-motion` is handled globally** in `global.css`. Don't re-add per-component opt-outs.
 
@@ -59,7 +61,7 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 
 11. **No `: any` annotations.** `npm run check` is at 0 errors. Type from `CollectionEntry<'name'>['data']` or a local named type; never `as any`.
 
-12. **Below-fold home islands use `client:visible`**, not `client:idle`. Hydration cost on first idle should not be spent on sections the user may never scroll to (`Orrery`, `CareerList`, `MilkyWay` preview on home). Above-fold islands stay `client:idle`.
+12. **Below-fold home islands use `client:visible`**, not `client:idle`. Hydration cost on first idle should not be spent on sections the user may never scroll to (`Orrery`, `CareerList`). Above-fold islands stay `client:idle`.
 
 ## Component → CSS file map
 
@@ -67,14 +69,15 @@ CSS is split between **CSS Modules** (co-located `.module.css` per React island)
 
 ### CSS Modules (import as `s` or `css`, access via `s.camelCase`)
 
-| Component                            | Module file                    |
-| ------------------------------------ | ------------------------------ |
-| `Splash.tsx`                         | `island/Splash.module.css`     |
-| `Meteor.tsx`                         | `island/Meteor.module.css`     |
-| `Orbit.tsx`                          | `island/Orbit.module.css`      |
-| `Orrery.tsx`                         | `island/Orrery.module.css`     |
-| `CareerList.tsx`                     | `island/CareerList.module.css` |
-| `MilkyWay.tsx`, `MilkyWayStreak.tsx` | `island/MilkyWay.module.css`   |
+| Component                               | Module file                    |
+| --------------------------------------- | ------------------------------ |
+| `Splash.tsx`                            | `island/Splash.module.css`     |
+| `Meteor.tsx`                            | `island/Meteor.module.css`     |
+| `Orbit.tsx`                             | `island/Orbit.module.css`      |
+| `Orrery.tsx`                            | `island/Orrery.module.css`     |
+| `CareerList.tsx`                        | `island/CareerList.module.css` |
+| `Starmap.tsx`                           | `island/Starmap.module.css`    |
+| `MapHud.tsx` (fullscreen for both maps) | `island/MapHud.module.css`     |
 
 ### Astro scoped styles (inline `<style>` block)
 
@@ -86,15 +89,14 @@ CSS is split between **CSS Modules** (co-located `.module.css` per React island)
 
 ### Global CSS (in `src/styles/`)
 
-| Scope                                                | File                          |
-| ---------------------------------------------------- | ----------------------------- |
-| `Cosmos.tsx`, `AccentOrb.tsx`                        | `portfolio/cosmos.css`        |
-| Hero on `/`                                          | `portfolio/hero.css`          |
-| `.section`, `.section-head`, `.eyebrow`, `.orbiting` | `portfolio/sections.css`      |
-| Old-starfield suppression, animation resets          | `portfolio/legacy-resets.css` |
-| `/about`, `/projects`, `/experience` page wrappers   | `pages.css`                   |
-| Per-route accent wash + cosmos tint vars             | `page-bg.css`                 |
-| `.tag`, `.cta-secondary`, `.cosmic-card` (shared)    | `pages.css`                   |
+| Scope                                                | File                     |
+| ---------------------------------------------------- | ------------------------ |
+| `Cosmos.tsx`, `AccentOrb.tsx`                        | `portfolio/cosmos.css`   |
+| Hero on `/`                                          | `portfolio/hero.css`     |
+| `.section`, `.section-head`, `.eyebrow`, `.orbiting` | `portfolio/sections.css` |
+| `/about`, `/projects`, `/experience` page wrappers   | `pages.css`              |
+| Per-route accent wash + cosmos tint vars             | `page-bg.css`            |
+| `.tag`, `.cta-secondary`, `.cosmic-card` (shared)    | `pages.css`              |
 
 ## Content collections — how to add data
 
@@ -109,26 +111,15 @@ Collections defined in `src/content.config.ts` (type `'data'`, `file()` loaders,
 
 `projects.yaml` has a `clusters` map (label + color) and a flat `projects` list where each project names its `cluster`. Every tech id in a project's `tech:` list must exist in `technologies.yaml`; `buildOrrery()` throws at build time on an unknown tech or cluster. Domains are laid out left to right in file order.
 
-### Wiki manifest — notes, topics, mottos
+### Starmap — the Outline wiki
 
-Notes, topics (clusters), and mottos are **not** Astro content collections. They come from `src/content/wiki-manifest.json`, a file generated by the personal-wiki publish skill. Types live in `src/types/wiki.ts` (`WikiManifest`, `WikiPage`, `WikiTopic`, `WikiMotto`).
+`src/content/starmap-manifest.json` is generated, never hand-edited. `npm run sync:starmap` reads the **Public** collection in Outline (needs `OUTLINE_API_TOKEN` in `.env`) and writes the page tree: `id` (the Outline slug), `title`, `description`, `links`, `children`, plus `color` on second-level pages. Conventions in Outline that the sync enforces, failing with the page names otherwise:
 
-Import pattern:
+- Every page opens with a `>` blockquote; that quote is its description.
+- Every second-level page (a branch, like Knowledge › Golang) has an icon colour; everything below inherits it.
+- Every tip callout (`:::tip`) opens with a bold sentence, and that sentence is a quote; a page can have several. `src/lib/quotes.ts` collects them for the meteors and the hero and footer mottos, each linking to its page on the public share. With no quotes, those three render nothing.
 
-```ts
-import manifest from '@/content/wiki-manifest.json';
-import type { WikiManifest } from '@/types/wiki';
-const wiki = manifest as WikiManifest;
-```
-
-The manifest contains:
-
-- `meta.baseUrl` — wiki site origin for constructing page links (`${baseUrl}/${page.id}`)
-- `topics[]` — id, label, dotColor (drives constellation clusters + orbiting chips)
-- `pages[]` — id, title, kind, topic, status, excerpt, date, words, links (array of connected page IDs)
-- `mottos[]` — id, text, topic, pageId (LLM-generated from prominent pages)
-
-Constellation auto-layouts nodes from `pages` (golden-angle spiral per topic zone) and derives edges from `pages[].links`. No hardcoded positions.
+Links point at the collection's public share (`<shareUrl>/doc/<id>`), because plain `/doc/` links need an Outline login. Cross-links to pages outside Public are dropped.
 
 To add a new project: append an entry to `projects:` in `src/content/projects.yaml` with its `cluster`, and add any new tech ids to `technologies.yaml`. To add a field: update the schema in `content.config.ts`, then add the field to existing entries (or mark `.optional()` in the schema if not always present).
 
@@ -144,16 +135,17 @@ const siteData = siteRaw as SiteData;
 
 ## Workflows
 
-| Command                | What it does                                                     |
-| ---------------------- | ---------------------------------------------------------------- |
-| `npm run dev`          | Astro dev server on `:4321`.                                     |
-| `npm run build`        | Static build to `dist/`.                                         |
-| `npm run preview`      | Serve the built `dist/`.                                         |
-| `npm run check`        | `astro check` — TypeScript + Astro diagnostics. **Must exit 0.** |
-| `npm test`             | Vitest single-run.                                               |
-| `npm run test:watch`   | Vitest watch mode.                                               |
-| `npm run format`       | Prettier write.                                                  |
-| `npm run format:check` | Prettier check (CI gate).                                        |
+| Command                | What it does                                                         |
+| ---------------------- | -------------------------------------------------------------------- |
+| `npm run dev`          | Astro dev server on `:4321`.                                         |
+| `npm run build`        | Static build to `dist/`.                                             |
+| `npm run preview`      | Serve the built `dist/`.                                             |
+| `npm run check`        | `astro check` — TypeScript + Astro diagnostics. **Must exit 0.**     |
+| `npm test`             | Vitest single-run.                                                   |
+| `npm run test:watch`   | Vitest watch mode.                                                   |
+| `npm run format`       | Prettier write.                                                      |
+| `npm run format:check` | Prettier check (CI gate).                                            |
+| `npm run sync:starmap` | Regenerate `starmap-manifest.json` from Outline's Public collection. |
 
 ## CI & Deployment
 

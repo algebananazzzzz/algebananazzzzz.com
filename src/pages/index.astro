@@ -2,19 +2,13 @@
 import Base from '@/layouts/Base.astro';
 import nowRaw from '@/content/now.yaml';
 import aboutRaw from '@/content/about.yaml';
-import manifest from '@/content/wiki-manifest.json';
-import type { WikiManifest } from '@/types/wiki';
 import Splash from '@/components/island/Splash';
 import Orbit from '@/components/island/Orbit';
 import Orrery from '@/components/island/Orrery';
 import CareerList from '@/components/island/CareerList';
-import MilkyWay from '@/components/island/MilkyWay';
 import MottoRotator from '@/components/static/MottoRotator.astro';
 import { getCareerEntries } from '@/lib/getCareerEntries';
 import { getOrrery } from '@/lib/getOrrery';
-import { features } from '@/config/features';
-
-const wiki = manifest as WikiManifest;
 
 type NowItem = {
   title: string;
@@ -37,17 +31,18 @@ const { orrery } = await getOrrery();
 
 const careerEntries = await getCareerEntries(3);
 
-const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
-const cta = features.milkyWay
-  ? { href: '/milky-way', label: 'Enter the Milky Way', aria: 'enter the milky way' }
-  : { href: '/projects', label: 'Enter the Orrery', aria: 'enter the orrery' };
+// Dot colours match the developing and exploring planets in Orbit.tsx.
+const orbitingTopics = [
+  { kind: 'developing', label: nowData.developing.title, dotColor: '#fbbf24' },
+  { kind: 'exploring', label: nowData.exploring.title, dotColor: '#a78bfa' },
+];
 ---
 
 <Base isHome={true}>
   <Splash client:load />
 
   <!-- Hero proper -->
-  <section class="hero hero-single" data-screen-label="01 Hero" data-accent="cosmic">
+  <section class="hero hero-single">
     <div class="hero-content">
       <div class="eyebrow">my personal portfolio site</div>
       <h2 class="hero-greeting">
@@ -61,9 +56,9 @@ const cta = features.milkyWay
 
       <div class="hero-ctas">
         <a href="/about" class="cta-secondary">About Me</a>
-        <a href={cta.href} class="cta-milky" aria-label={cta.aria}>
+        <a href="/starmap" class="cta-starmap" aria-label="enter the starmap">
           <span class="cta-star"></span>
-          <span class="cta-label">{cta.label}</span>
+          <span class="cta-label">Enter the Starmap</span>
           <svg
             class="cta-arrow"
             width="16"
@@ -85,30 +80,19 @@ const cta = features.milkyWay
       <div class="orbiting">
         <span class="label">currently orbiting</span>
         {
-          orbitingTopics.map((t) =>
-            features.milkyWay ? (
-              <a
-                href={`/milky-way?cluster=${t.id}`}
-                class="orbiting-chip"
-                title={`Notes in the ${t.label} cluster`}
-              >
-                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
-                {t.label}
-              </a>
-            ) : (
-              <span class="orbiting-chip" title={`${t.label} cluster`}>
-                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
-                {t.label}
-              </span>
-            ),
-          )
+          orbitingTopics.map((t) => (
+            <span class="orbiting-chip" title={t.kind}>
+              <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
+              {t.label}
+            </span>
+          ))
         }
       </div>
     </div>
   </section>
 
   <!-- Now (orbit) -->
-  <section class="section" data-screen-label="02 Now" data-accent="aurora">
+  <section class="section">
     <div class="section-head">
       <div>
         <div class="eyebrow">what i'm doing now</div>
@@ -125,10 +109,10 @@ const cta = features.milkyWay
   </section>
 
   <!-- Projects -->
-  <section class="section" data-screen-label="03 Projects" data-accent="sunset">
+  <section class="section">
     <div class="section-head">
       <div>
-        <div class="eyebrow">projects, mapped by stack</div>
+        <div class="eyebrow">my projects</div>
         <h2 class="section-title">Project <em>Orrery</em>.</h2>
       </div>
       <a href="/projects" class="section-link">all projects →</a>
@@ -137,7 +121,7 @@ const cta = features.milkyWay
   </section>
 
   <!-- Career -->
-  <section class="section" data-screen-label="04 Experience" data-accent="nebula">
+  <section class="section">
     <div class="section-head">
       <div>
         <div class="eyebrow">where I've been</div>
@@ -147,29 +131,4 @@ const cta = features.milkyWay
     </div>
     <CareerList client:visible entries={careerEntries} />
   </section>
-
-  {
-    /* Milky Way preview */
-    features.milkyWay && (
-      <section class="section" data-screen-label="06 Milky Way" data-accent="cosmic">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">my digital garden</div>
-            <h2 class="section-title">
-              <em>The milky way</em>
-            </h2>
-          </div>
-          <a href="/milky-way" class="section-link">
-            enter the milky way →
-          </a>
-        </div>
-        <MilkyWay
-          client:visible
-          pages={wiki.pages}
-          topics={wiki.topics}
-          baseUrl={wiki.meta.baseUrl}
-        />
-      </section>
-    )
-  }
 </Base>

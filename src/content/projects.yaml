@@ -20,10 +20,10 @@ clusters:
 featured:
   - intranet
   - cupid
+  - homelab-ansible
   - odyssey-cicd
-  - corum
+  - planear
   - nubenube
-  - homelab-komodo
   - algebananazzzzz-com
 
 projects:

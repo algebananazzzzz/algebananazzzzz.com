@@ -1,37 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { computeStardate } from '@/lib/stardate';
+import type { StarmapQuote } from '@/lib/starmap';
 import { useReducedComplexity } from '@/lib/useReducedComplexity';
 import s from './Meteor.module.css';
 
-type Quote = { text: string; cluster: string };
+const INTERVAL_MS = 30_000;
 
-const QUOTES: Quote[] = [
-  { text: 'Learning is always free.', cluster: 'general' },
-  { text: 'Patience is the second yeast.', cluster: 'brewery' },
-  { text: 'Read like a magpie, link like a librarian.', cluster: 'reading' },
-  { text: 'Names outlast architectures.', cluster: 'cloud' },
-  { text: 'Prompt like you mean it. Evals before vibes.', cluster: 'llm' },
-  { text: 'I keep a garden, not a blog.', cluster: 'general' },
-  { text: 'Wonder is a renewable resource.', cluster: 'general' },
-  { text: 'Cache is a promise you keep tomorrow.', cluster: 'cloud' },
-  { text: 'Margin notes are the real book.', cluster: 'reading' },
-  { text: 'Quote slow, summarise slower.', cluster: 'reading' },
-  { text: 'The map is not the model.', cluster: 'llm' },
-  { text: 'Every batch is a confession.', cluster: 'brewery' },
-];
-
-interface Props {
-  enabled?: boolean;
-  intervalMs?: number;
-}
-
-export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
+export default function Meteor({ quotes }: { quotes: StarmapQuote[] }) {
   const layerRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
   const reduced = useReducedComplexity();
 
   useEffect(() => {
-    if (!enabled || reduced) return;
+    if (reduced || !quotes.length) return;
     const layer = layerRef.current;
     if (!layer) return;
 
@@ -49,7 +30,7 @@ export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
       const endY = startY + drop;
       const duration = 18_000 + Math.random() * 4_000;
 
-      const q = QUOTES[indexRef.current % QUOTES.length];
+      const q = quotes[indexRef.current % quotes.length];
       indexRef.current++;
 
       const node = document.createElement('div');
@@ -137,9 +118,7 @@ export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
           removeT = null;
         }
         try {
-          window.dispatchEvent(
-            new CustomEvent('meteor-caught', { detail: { quote: q.text, cluster: q.cluster } }),
-          );
+          window.dispatchEvent(new CustomEvent('meteor-caught', { detail: { quote: q.text } }));
         } catch {
           /* noop */
         }
@@ -155,11 +134,11 @@ export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
         callout.innerHTML = `
           <div class="${s.calloutQuote}">&ldquo;${escapeHtml(q.text)}&rdquo;</div>
           <div class="${s.calloutMeta}">
-            <span class="dim">caught at stardate · ${sd}</span>
+            <span>caught at stardate ${sd}</span>
           </div>
           <div class="${s.calloutActions}">
             <button type="button" class="${s.calloutDismiss}">release</button>
-            <a class="${s.calloutLink}" href="/milky-way">read more like this <span class="${s.arr}">→</span></a>
+            <a class="${s.calloutLink}" href="${escapeHtml(q.href)}" target="_blank" rel="noopener noreferrer">read more like this <span class="${s.arr}">→</span></a>
           </div>
         `;
         layer.appendChild(callout);
@@ -250,7 +229,7 @@ export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
     let intervalId: ReturnType<typeof setInterval> | null = null;
     const startT = setTimeout(() => {
       launch();
-      intervalId = setInterval(launch, intervalMs);
+      intervalId = setInterval(launch, INTERVAL_MS);
     }, 3500);
 
     return () => {
@@ -258,7 +237,7 @@ export default function Meteor({ enabled = true, intervalMs = 30_000 }: Props) {
       if (intervalId) clearInterval(intervalId);
       cleanups.forEach((fn) => fn());
     };
-  }, [enabled, intervalMs, reduced]);
+  }, [quotes, reduced]);
 
   return <div ref={layerRef} className={s.meteorLayer} aria-hidden="false" />;
 }

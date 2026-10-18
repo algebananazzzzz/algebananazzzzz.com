@@ -2,7 +2,6 @@ import { useState, type CSSProperties } from 'react';
 import s from './CareerList.module.css';
 
 export interface StarData {
-  type: string;
   stellarClass: string;
   classDesc: string;
   color: string;
@@ -23,15 +22,10 @@ export interface CareerEntry {
   star: StarData;
 }
 
-interface Props {
-  entries: CareerEntry[];
-  defaultOpenIndex?: number;
-}
-
 const BASE_SIZE = 12;
 
-export default function CareerList({ entries, defaultOpenIndex = 0 }: Props) {
-  const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
+export default function CareerList({ entries }: { entries: CareerEntry[] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const list = entries.map((e) => ({
     ...e,
@@ -72,7 +66,7 @@ export default function CareerList({ entries, defaultOpenIndex = 0 }: Props) {
               <span className={s.date}>{e.date}</span>
               <span className={s.role}>
                 {e.role}
-                <span className={s.orgSep}>·</span>
+                <span className={s.orgSep}>at</span>
                 <span className={s.org}>{e.org}</span>
               </span>
               <span className={s.class}>{e.stellarClass.toLowerCase()}</span>

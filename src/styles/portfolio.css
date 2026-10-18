@@ -4,7 +4,6 @@
    React islands, or as <style> blocks in Astro components.
    Only cross-cutting / shared styles remain here.
    ============================================================ */
-@import './portfolio/legacy-resets.css';
 @import './portfolio/cosmos.css';
 @import './portfolio/hero.css';
 @import './portfolio/sections.css';

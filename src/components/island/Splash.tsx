@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { computeStardate } from '@/lib/stardate';
 import { useReducedComplexity } from '@/lib/useReducedComplexity';
 import s from './Splash.module.css';
@@ -39,7 +39,6 @@ export default function Splash() {
       const y = window.scrollY || 0;
       const vh = window.innerHeight || 800;
       const p = Math.min(1, Math.max(0, y / (vh * 0.9)));
-      const pe = p * p;
 
       if (innerRef.current) {
         innerRef.current.style.opacity = String(1 - p * 1.05);
@@ -166,7 +165,7 @@ export default function Splash() {
   };
 
   return (
-    <section className={s.splash} aria-label="welcome" data-accent="cosmic">
+    <section className={s.splash} aria-label="welcome">
       <div ref={warpRef} className={s.splashWarp} aria-hidden="true">
         {warpLines.map((l) => (
           <span
@@ -183,7 +182,7 @@ export default function Splash() {
         <div ref={eyebrowRef} className={s.splashEyebrow}>
           <span className={s.dot} />
           <span>
-            singapore · 1.3°n · stardate{' '}
+            singapore, 1.3°n, stardate{' '}
             <span className={s.stardateNum} ref={stardateRef} suppressHydrationWarning>
               {computeStardate()}
             </span>

@@ -479,7 +479,8 @@ export default function Orbit({ developing, exploring, obsessed }: Props) {
             <div className={s.meta}>
               {b.meta.map((m, i) => (
                 <span key={i}>
-                  {i > 0 ? '·' : ''} {m}
+                  {m}
+                  {i < b.meta.length - 1 ? ',' : ''}
                 </span>
               ))}
             </div>

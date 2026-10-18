@@ -62,13 +62,6 @@
   }
 }
 
-.domlabel {
-  font-family: var(--font-mono);
-  fill: rgba(229, 231, 235, 0.6);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .link {
   transition:
     opacity 0.3s,
@@ -200,6 +193,33 @@
   text-transform: uppercase;
   color: rgba(229, 231, 235, 0.6);
   pointer-events: none;
+}
+
+.maphud {
+  color: rgba(229, 231, 235, 0.6);
+}
+.maphud button {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: rgba(241, 245, 249, 0.8);
+}
+.maphud button:hover {
+  background: rgba(30, 41, 59, 0.95);
+  color: #fff;
+}
+
+.root[data-fs='true'] {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: radial-gradient(ellipse 70% 60% at 25% 30%, rgba(91, 33, 182, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 75%, rgba(190, 24, 93, 0.1), transparent 60%), #05060f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .zoom {
@@ -517,5 +537,12 @@
   }
   .hud {
     display: none;
+  }
+  .root[data-fs='true'] {
+    grid-template-rows: minmax(0, 1fr) 40%;
+  }
+  .root[data-fs='true'] .map {
+    height: 100%;
+    aspect-ratio: auto;
   }
 }

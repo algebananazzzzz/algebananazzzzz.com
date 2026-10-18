@@ -81,27 +81,6 @@
   flex-wrap: wrap;
 }
 
-.cta-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 18px;
-  border-radius: var(--radius-sm);
-  background: #f1f5f9;
-  color: #0f172a;
-  font-weight: 600;
-  font-size: var(--text-sm);
-  transition:
-    transform var(--dur-base),
-    box-shadow var(--dur-base);
-  box-shadow: 0 8px 24px -8px rgba(255, 255, 255, 0.3);
-}
-
-.cta-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 32px -8px rgba(255, 255, 255, 0.4);
-}
-
 .cta-secondary {
   display: inline-flex;
   align-items: center;
@@ -122,10 +101,10 @@
   border-color: rgba(244, 114, 182, 0.7);
 }
 
-/* ── cta-milky ──
-   The hero CTA — a larger, more theatrical version of the topnav's milky pill.
-   Animated nebula gradient, twinkling starfield, soft outer glow. */
-.cta-milky {
+/* ── cta-starmap ──
+   The hero CTA into the starmap: white paper with ink, like the nav pill,
+   lit by a soft glow so it still reads as the way in. */
+.cta-starmap {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -136,205 +115,46 @@
   font-size: var(--text-base);
   font-weight: 600;
   letter-spacing: 0.005em;
-  color: #ffffff;
-  background: linear-gradient(
-    110deg,
-    #4338ca 0%,
-    #7e22ce 28%,
-    #be185d 56%,
-    #6366f1 82%,
-    #4338ca 100%
-  );
-  background-size: 280% 100%;
-  background-position: 0% 50%;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #1b2238;
+  background: #fff;
+  border: 1px solid rgba(27, 34, 56, 0.14);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 14px 36px -10px rgba(190, 24, 93, 0.55),
-    0 8px 22px -6px rgba(79, 70, 229, 0.55),
-    0 0 60px -10px rgba(244, 114, 182, 0.35);
-  animation: cta-milky-shift 16s linear infinite;
-  isolation: isolate;
-  overflow: hidden;
+    0 1px 0 #fff inset,
+    0 12px 32px -12px rgba(199, 210, 254, 0.65),
+    0 0 48px -12px rgba(255, 255, 255, 0.45);
   transition:
     box-shadow var(--dur-base),
     transform var(--dur-base);
 }
 
-.cta-milky::before {
-  /* inner specular highlight + bright/dim haze, like a galactic core */
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: radial-gradient(
-      ellipse 55% 100% at 18% 50%,
-      rgba(255, 255, 255, 0.3),
-      transparent 60%
-    ),
-    radial-gradient(ellipse 45% 100% at 82% 50%, rgba(255, 230, 200, 0.22), transparent 60%),
-    radial-gradient(ellipse 30% 70% at 50% 30%, rgba(244, 114, 182, 0.3), transparent 70%);
-  z-index: -1;
-  mix-blend-mode: screen;
-}
-
-.cta-milky::after {
-  /* faint starfield speckle inside the pill */
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: radial-gradient(circle 0.7px at 18% 38%, #fff 100%, transparent),
-    radial-gradient(circle 0.6px at 30% 70%, #fff 100%, transparent),
-    radial-gradient(circle 0.8px at 42% 30%, #fde68a 100%, transparent),
-    radial-gradient(circle 0.5px at 55% 65%, #fff 100%, transparent),
-    radial-gradient(circle 0.7px at 68% 25%, #fff 100%, transparent),
-    radial-gradient(circle 0.6px at 78% 70%, #ddd6fe 100%, transparent),
-    radial-gradient(circle 0.5px at 88% 40%, #fff 100%, transparent);
-  opacity: 0.85;
-  pointer-events: none;
-  z-index: -1;
-  animation: cta-milky-twinkle 4.4s ease-in-out infinite;
-}
-
-.cta-milky .cta-star {
+.cta-starmap .cta-star {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff 0%, #fde68a 60%, transparent 100%);
-  box-shadow:
-    0 0 8px #fff,
-    0 0 18px rgba(253, 230, 138, 0.75),
-    0 0 30px rgba(244, 114, 182, 0.5);
+  background: #1b2238;
+  box-shadow: 0 0 0 3px rgba(27, 34, 56, 0.14);
   flex-shrink: 0;
 }
 
-.cta-milky .cta-label {
+.cta-starmap .cta-label {
   white-space: nowrap;
 }
 
-.cta-milky .cta-arrow {
+.cta-starmap .cta-arrow {
   transition: transform var(--dur-base);
   flex-shrink: 0;
 }
 
-.cta-milky:hover {
+.cta-starmap:hover {
   transform: translateY(-1px);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
-    0 18px 42px -10px rgba(190, 24, 93, 0.75),
-    0 10px 26px -6px rgba(79, 70, 229, 0.7),
-    0 0 80px -10px rgba(244, 114, 182, 0.55);
+    0 1px 0 #fff inset,
+    0 16px 40px -12px rgba(199, 210, 254, 0.85),
+    0 0 64px -10px rgba(255, 255, 255, 0.6);
 }
 
-.cta-milky:hover .cta-arrow {
+.cta-starmap:hover .cta-arrow {
   transform: translateX(4px);
-}
-
-@keyframes cta-milky-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 280% 50%;
-  }
-}
-
-@keyframes cta-milky-twinkle {
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-
-  50% {
-    opacity: 0.55;
-  }
-}
-
-/* Mascot becomes a glowing celestial body (less cartoony) */
-.hero-celestial {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1 / 1;
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-.hero-celestial .halo {
-  position: absolute;
-  inset: -10%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(244, 114, 182, 0.35) 0%,
-    rgba(167, 139, 250, 0.25) 30%,
-    transparent 65%
-  );
-  filter: blur(36px);
-  animation: haloPulse 9s ease-in-out infinite;
-}
-
-@keyframes haloPulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-
-  50% {
-    transform: scale(1.06);
-    opacity: 1;
-  }
-}
-
-.hero-celestial img {
-  position: relative;
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 24px rgba(167, 139, 250, 0.45))
-    drop-shadow(0 16px 36px rgba(0, 0, 0, 0.6));
-  animation: float 10s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-1.2deg);
-  }
-
-  50% {
-    transform: translateY(-14px) rotate(1.2deg);
-  }
-}
-
-/* Orbital ring around the celestial body */
-.hero-celestial .ring {
-  position: absolute;
-  border: 1px dashed rgba(167, 139, 250, 0.28);
-  border-radius: 50%;
-  animation: ringSpin linear infinite;
-  pointer-events: none;
-}
-
-.hero-celestial .ring.r1 {
-  inset: -6%;
-  animation-duration: 70s;
-}
-
-.hero-celestial .ring.r2 {
-  inset: -18%;
-  animation-duration: 130s;
-  animation-direction: reverse;
-  border-color: rgba(244, 114, 182, 0.22);
-}
-
-@keyframes ringSpin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* Mobile */
@@ -345,11 +165,6 @@
     gap: var(--space-8);
     min-height: auto;
   }
-
-  .hero-celestial {
-    max-width: 320px;
-    order: -1;
-  }
 }
 
 @media (max-width: 720px) {
@@ -357,10 +172,6 @@
   .hero {
     padding: var(--space-8) var(--space-4);
     grid-template-columns: 1fr;
-  }
-
-  .hero-celestial {
-    max-width: 240px;
   }
 
   .hero-greeting {
@@ -380,30 +191,19 @@
     gap: 10px;
   }
 
-  .cta-milky {
+  .cta-starmap {
     padding: 12px 18px 12px 16px;
     font-size: var(--text-sm);
     gap: 11px;
   }
 
-  .cta-milky .cta-star {
+  .cta-starmap .cta-star {
     width: 8px;
     height: 8px;
   }
 
-  .cta-milky .cta-arrow {
+  .cta-starmap .cta-arrow {
     width: 14px;
     height: 14px;
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .hero-celestial img,
-  .hero-celestial .halo {
-    animation: none !important;
-  }
-  .hero-motto {
-    transition: none;
   }
 }

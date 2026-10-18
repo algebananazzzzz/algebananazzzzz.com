@@ -34,48 +34,6 @@
   --font-mono: var(--font-mono);
 }
 
-@utility bg-grad-sunset {
-  background-image: var(--grad-sunset);
-}
-@utility bg-grad-aurora {
-  background-image: var(--grad-aurora);
-}
-@utility bg-grad-cosmic {
-  background-image: var(--grad-cosmic);
-}
-@utility bg-grad-nebula {
-  background-image: var(--grad-nebula);
-}
-
-@utility text-grad-sunset {
-  background-image: var(--grad-sunset);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-@utility text-grad-aurora {
-  background-image: var(--grad-aurora);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-@utility text-grad-cosmic {
-  background-image: var(--grad-cosmic);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-@utility text-grad-nebula {
-  background-image: var(--grad-nebula);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
 html,
 body {
   background: #000;

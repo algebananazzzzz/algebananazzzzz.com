@@ -6,8 +6,6 @@ type SiteData = {
   name: string;
   title: string;
   description: string;
-  location: string;
-  gardenUrl: string;
   socials: Record<string, string>;
 };
 
@@ -17,17 +15,19 @@ import Footer from '@/components/static/Footer.astro';
 import Cosmos from '@/components/island/Cosmos';
 import AccentOrb from '@/components/island/AccentOrb';
 import Meteor from '@/components/island/Meteor';
+import { quotes } from '@/lib/quotes';
 
 export interface Props {
   title?: string;
   description?: string;
   accent?: 'cosmic' | 'sunset' | 'aurora' | 'nebula';
   isHome?: boolean;
-  mwPage?: boolean;
+  /** The starmap is a daylight chart: no cosmos or accent orb, cream paper instead. */
+  theme?: 'dark' | 'light';
 }
 
-const { title, description, accent = 'cosmic', isHome = false, mwPage = false } = Astro.props;
-const fullTitle = title ? `${title} · ${siteData.name}` : siteData.title;
+const { title, description, accent = 'cosmic', isHome = false, theme = 'dark' } = Astro.props;
+const fullTitle = title ? `${title} | ${siteData.name}` : siteData.title;
 const desc = description ?? siteData.description;
 const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -39,20 +39,23 @@ const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
   data-theme="dark"
   data-accent={accent}
   data-home={isHome ? 'true' : 'false'}
+  data-site-theme={theme}
 >
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
-    <link rel="icon" href="/assets/banana.png" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={ogUrl} />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={ogUrl} />
-    <meta property="og:image" content="/assets/banana.png" />
+    <meta property="og:image" content="/assets/icon-512.png" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={fullTitle} />
@@ -69,20 +72,20 @@ const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
       })}
     />
   </head>
-  <body data-mw-page={mwPage ? 'true' : 'false'}>
+  <body>
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-star focus:px-3 focus:py-2 focus:text-night focus:font-medium"
     >
       Skip to content
     </a>
-    {!mwPage && <Cosmos client:idle isHome={isHome} />}
-    {!mwPage && !isHome && <AccentOrb client:idle />}
+    {theme === 'dark' && <Cosmos client:idle isHome={isHome} />}
+    {theme === 'dark' && !isHome && <AccentOrb client:idle />}
     <header><TopNav /></header>
     <main id="main-content">
       <slot />
     </main>
-    <Meteor client:idle />
+    <Meteor client:idle quotes={quotes} />
     <Footer />
   </body>
 </html>

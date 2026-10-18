@@ -25,28 +25,27 @@ const featured = projects
 <Base title="projects" description="projects in orbit." accent="sunset">
   <div class="page projects-page">
     <OrreryBackdrop />
-    <div class="mw-head">
-      <div class="section-eyebrow">— projects · the orrery —</div>
-      <h1 class="mw-title"><span class="grad-text g-sunset">Projects</span> in orbit.</h1>
-      <p class="mw-sub">
-        {projects.length} projects bound to the {orrery.techs.length} technologies they were built with.
-        Bigger beacons carry more projects. Click one to see its constellation, or pick a project to
-        read it.
+    <div class="map-head">
+      <div class="section-eyebrow">— project orrery —</div>
+      <h1 class="map-title">My <span class="grad-text g-sunset">Project</span> Orrery.</h1>
+      <p class="map-sub">
+        Explore how I experiment and create things to solve problems for me and the people around me
+        through my projects!
       </p>
     </div>
 
     <Orrery client:idle mode="inline" data={orrery} details={details} />
 
-    <section class="mw-recent">
+    <section class="recent">
       <div class="section-eyebrow">— featured —</div>
-      <h2 class="mw-recent-title-row">The brightest stars in the system.</h2>
-      <div class="mw-recent-list">
+      <h2 class="recent-heading">Featured projects.</h2>
+      <div class="recent-list">
         {
           featured.map((p) => (
-            <a class="mw-recent-row orrery-recent-row" href={`#project/${p.id}`}>
-              <span class="mw-recent-date">{yearOf(p.date) || '—'}</span>
+            <a class="recent-row orrery-recent-row" href={`#project/${p.id}`}>
+              <span class="recent-date">{yearOf(p.date) || '—'}</span>
               <span class="orrery-recent-main">
-                <span class="mw-recent-title">{p.name}</span>
+                <span class="recent-title">{p.name}</span>
                 <span class="orrery-recent-tag">{p.title}</span>
               </span>
               <span class="orrery-recent-meta">
@@ -58,11 +57,10 @@ const featured = projects
                   {p.tech
                     .slice(0, 3)
                     .map((t: string) => techLabel.get(t))
-                    .join(' · ')}
-                  {p.tech.length > 3 ? ` +${p.tech.length - 3}` : ''}
+                    .join(', ')}
                 </span>
               </span>
-              <span class="mw-recent-arrow">→</span>
+              <span class="recent-arrow">→</span>
             </a>
           ))
         }

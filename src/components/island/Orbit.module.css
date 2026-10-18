@@ -53,7 +53,7 @@
   z-index: 0;
 }
 
-/* Sun + corona */
+/* Sun */
 .orbit .orbit-sun .sun-core {
   filter: drop-shadow(0 0 6px rgba(255, 199, 0, 0.55))
     drop-shadow(0 0 14px rgba(244, 114, 80, 0.45));
@@ -75,10 +75,6 @@
     filter: drop-shadow(0 0 10px rgba(255, 199, 0, 0.75))
       drop-shadow(0 0 22px rgba(244, 114, 80, 0.55));
   }
-}
-
-.orbit .orbit-sun .corona {
-  display: none;
 }
 
 /* Background twinkle stars inside the orbit svg */
@@ -203,7 +199,7 @@
   color: rgba(229, 231, 235, 0.5);
   letter-spacing: 0.04em;
   display: flex;
-  gap: 12px;
+  gap: 6px;
 }
 
 /* Mobile */

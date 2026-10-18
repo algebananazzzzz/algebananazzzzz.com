@@ -1,0 +1,57 @@
+/* ============================================================
+   Map HUD: the hint label and fullscreen button shared by the
+   orrery and the starmap. Each map colours it via `className`.
+   ============================================================ */
+
+.hud {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.btn {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* While a map is fullscreen the page stops scrolling, the nav steps aside, and
+   <main> rises above the footer and meteors so the fixed frame covers them. */
+:global(html).lock,
+:global(html).lock :global(body) {
+  overflow: hidden;
+}
+:global(html).lock :global(#topnav) {
+  visibility: hidden;
+}
+:global(html).lock :global(#main-content) {
+  position: relative;
+  z-index: 300;
+}
+
+@media (max-width: 900px) {
+  :global(html).lock .label {
+    display: none;
+  }
+}

@@ -1,0 +1,28 @@
+---
+import Base from '@/layouts/Base.astro';
+import Starmap from '@/components/island/Starmap';
+import starmapRaw from '@/content/starmap-manifest.json';
+import { buildStarmap, type StarmapInput } from '@/lib/starmap';
+
+const starmap = buildStarmap(starmapRaw as StarmapInput);
+---
+
+<Base title="starmap" description="the wiki, charted." accent="cosmic" theme="light">
+  <div class="starmap-bg" aria-hidden="true">
+    <div class="starmap-bg-grid"></div>
+    <div class="starmap-bg-band"></div>
+  </div>
+
+  <div class="starmap-page">
+    <div class="map-head">
+      <div class="section-eyebrow">— wiki starmap —</div>
+      <h1 class="map-title">My <span class="grad-text g-cosmic">wiki's</span> starmap.</h1>
+      <p class="map-sub">
+        Being an open book is really important to me. Explore my thought processes through my wiki
+        and see how my past experiences shape who I am!
+      </p>
+    </div>
+
+    <Starmap client:idle data={starmap} />
+  </div>
+</Base>

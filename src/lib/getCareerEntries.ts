@@ -3,11 +3,18 @@ import type { CollectionEntry } from 'astro:content';
 import type { CareerEntry } from '@/components/island/CareerList';
 import starsData from './stars.json';
 
-type StarRecord = (typeof starsData)[number];
+type StarRecord = {
+  name: string;
+  stellarClass: string;
+  classDesc: string;
+  color: string;
+  accent?: string;
+  glow: string;
+  sizeMul: number;
+  bri: number;
+};
 
-const starsById: Record<string, StarRecord> = Object.fromEntries(starsData.map((s) => [s.name, s]));
-
-const fallback = starsById['mainseq'];
+const starsById = new Map((starsData as StarRecord[]).map((s) => [s.name, s]));
 
 export async function getCareerEntries(limit?: number): Promise<CareerEntry[]> {
   const expEntries = await getCollection('experience');
@@ -20,7 +27,8 @@ export async function getCareerEntries(limit?: number): Promise<CareerEntry[]> {
   }
 
   return exps.map((e) => {
-    const star = starsById[e.star] ?? fallback;
+    const star = starsById.get(e.star);
+    if (!star) throw new Error(`No entry in stars.json for star type "${e.star}" (${e.id}).`);
     return {
       id: e.id,
       date: e.date,
@@ -28,13 +36,12 @@ export async function getCareerEntries(limit?: number): Promise<CareerEntry[]> {
       org: e.org,
       summary: e.summary,
       bullets: e.bullets,
-      tags: e.tags ?? [],
+      tags: e.tags,
       star: {
-        type: e.star,
         stellarClass: star.stellarClass,
         classDesc: star.classDesc,
         color: star.color,
-        accent: 'accent' in star ? (star as any).accent : star.color,
+        accent: star.accent ?? star.color,
         glow: star.glow,
         sizeMul: star.sizeMul,
         bri: star.bri,
