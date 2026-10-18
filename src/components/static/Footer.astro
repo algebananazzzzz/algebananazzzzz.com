@@ -8,6 +8,7 @@ type SiteData = {
   description: string;
   location: string;
   gardenUrl: string;
+  sourceUrl: string;
   socials: Record<string, string>;
 };
 
@@ -28,8 +29,7 @@ const iconLinks = ICONS.map((i) => ({ ...i, url: socials[i.key] }))
     external: i.key !== 'email',
   }));
 
-const githubUrl = socials.github ?? '';
-const sourceDisplay = githubUrl.replace(/^https?:\/\//, '');
+const sourceDisplay = siteData.sourceUrl.split('/').pop();
 
 const buildDate = new Date();
 const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
@@ -69,7 +69,12 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
     }
   </div>
   <div class="col-right">
-    <div>source · {sourceDisplay}</div>
+    <div>
+      source ·{' '}
+      <a class="source" href={siteData.sourceUrl} target="_blank" rel="noopener noreferrer"
+        >{sourceDisplay}</a
+      >
+    </div>
     <div class="love">
       built with love <span aria-hidden="true">❤</span>
     </div>
@@ -194,6 +199,16 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
     text-align: right;
   }
 
+  .footer .source {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .footer .source:hover {
+    color: rgba(229, 231, 235, 1);
+    text-decoration: underline;
+  }
+
   .footer .love {
     margin-top: 6px;
     color: rgba(229, 231, 235, 0.7);
@@ -210,7 +225,8 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
     color: rgba(27, 34, 56, 0.78);
   }
 
-  :global(html[data-site-theme='light']) .footer .col-left .quote:hover {
+  :global(html[data-site-theme='light']) .footer .col-left .quote:hover,
+  :global(html[data-site-theme='light']) .footer .source:hover {
     color: #1b2238;
   }
 
