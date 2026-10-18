@@ -1,7 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
 import Starmap from '@/components/island/Starmap';
-import starmapRaw from '@/content/starmap.yaml';
+import starmapRaw from '@/content/starmap-manifest.json';
 import { buildStarmap, type StarmapInput } from '@/lib/starmap';
 
 const starmap = buildStarmap(starmapRaw as StarmapInput);

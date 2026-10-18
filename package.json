@@ -12,7 +12,7 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "sync:starmap": "node --env-file=.env --experimental-strip-types scripts/sync-starmap.ts && prettier --write src/content/starmap.yaml"
+    "sync:starmap": "node --env-file=.env --experimental-strip-types scripts/sync-starmap.ts && prettier --write src/content/starmap-manifest.json"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

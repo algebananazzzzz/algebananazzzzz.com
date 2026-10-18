@@ -1,5 +1,4 @@
 import { readFileSync } from 'node:fs';
-import { load } from 'js-yaml';
 import { describe, expect, it } from 'vitest';
 import { buildStarmap, collectQuotes, STARMAP_H, STARMAP_W, type StarmapInput } from './starmap';
 
@@ -102,8 +101,10 @@ describe('buildStarmap', () => {
     expect(() => buildStarmap(dangling)).toThrow(/"a" links to unknown page "ghost"/);
   });
 
-  it('lays out the generated starmap.yaml', () => {
-    const real = load(readFileSync('src/content/starmap.yaml', 'utf8')) as StarmapInput;
+  it('lays out the generated starmap-manifest.json', () => {
+    const real = JSON.parse(
+      readFileSync('src/content/starmap-manifest.json', 'utf8'),
+    ) as StarmapInput;
     const { nodes } = buildStarmap(real);
     expect(nodes.length).toBeGreaterThan(0);
     expect(nodes.filter((n) => n.depth === 1).every((n) => n.color)).toBe(true);

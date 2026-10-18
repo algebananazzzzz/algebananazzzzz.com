@@ -18,8 +18,8 @@ Operational guide for Claude sessions working on this repo. Read this before tou
 - `src/components/island/*.tsx` — interactive React components. Always require a hydration directive in the page that uses them.
 - `src/components/static/*.astro` — server-only components (TopNav, Footer, OrreryBackdrop).
 - `src/lib/orrery.ts` — build-time layout for the orrery (`/` and `/projects`). `src/lib/getOrrery.ts` loads the collections and runs it once per build.
-- `src/lib/starmap.ts` — build-time layout for the starmap (`/starmap`), from `src/content/starmap.yaml`.
-- `scripts/sync-starmap.ts` — regenerates `starmap.yaml` from Outline (`npm run sync:starmap`).
+- `src/lib/starmap.ts` — build-time layout for the starmap (`/starmap`), from `src/content/starmap-manifest.json`.
+- `scripts/sync-starmap.ts` — regenerates `starmap-manifest.json` from Outline (`npm run sync:starmap`).
 - `src/styles/tokens.css` — palette + type + spacing tokens. **Source of truth.**
 - `src/styles/global.css` — Tailwind import + `@theme` bridge + base resets.
 - `src/styles/portfolio.css` — barrel re-export for **global-only** CSS (`legacy-resets`, `cosmos`, `hero`, `sections`).
@@ -114,17 +114,13 @@ Collections defined in `src/content.config.ts` (type `'data'`, `file()` loaders,
 
 ### Starmap — the Outline wiki
 
-`src/content/starmap.yaml` is generated, never hand-edited. `npm run sync:starmap` reads the **Public** collection in Outline (needs `OUTLINE_API_TOKEN` in `.env`) and writes the page tree: `id` (the Outline slug), `title`, `description`, `links`, `children`, plus `color` on second-level pages. Conventions in Outline that the sync enforces, failing with the page names otherwise:
+`src/content/starmap-manifest.json` is generated, never hand-edited. `npm run sync:starmap` reads the **Public** collection in Outline (needs `OUTLINE_API_TOKEN` in `.env`) and writes the page tree: `id` (the Outline slug), `title`, `description`, `links`, `children`, plus `color` on second-level pages. Conventions in Outline that the sync enforces, failing with the page names otherwise:
 
 - Every page opens with a `>` blockquote; that quote is its description.
 - Every second-level page (a branch, like Knowledge › Golang) has an icon colour; everything below inherits it.
 - Every tip callout (`:::tip`) opens with a bold sentence, and that sentence is a quote; a page can have several. `src/lib/quotes.ts` collects them for the meteors and the hero and footer mottos, each linking to its page on the public share. With no quotes, those three render nothing.
 
 Links point at the collection's public share (`<shareUrl>/doc/<id>`), because plain `/doc/` links need an Outline login. Cross-links to pages outside Public are dropped.
-
-### Wiki manifest — orbiting topics
-
-`src/content/wiki-manifest.json` (types in `src/types/wiki.ts`) now only feeds the home "currently orbiting" chips. Import it as `manifest as WikiManifest`.
 
 To add a new project: append an entry to `projects:` in `src/content/projects.yaml` with its `cluster`, and add any new tech ids to `technologies.yaml`. To add a field: update the schema in `content.config.ts`, then add the field to existing entries (or mark `.optional()` in the schema if not always present).
 
@@ -140,17 +136,17 @@ const siteData = siteRaw as SiteData;
 
 ## Workflows
 
-| Command                | What it does                                                     |
-| ---------------------- | ---------------------------------------------------------------- |
-| `npm run dev`          | Astro dev server on `:4321`.                                     |
-| `npm run build`        | Static build to `dist/`.                                         |
-| `npm run preview`      | Serve the built `dist/`.                                         |
-| `npm run check`        | `astro check` — TypeScript + Astro diagnostics. **Must exit 0.** |
-| `npm test`             | Vitest single-run.                                               |
-| `npm run test:watch`   | Vitest watch mode.                                               |
-| `npm run format`       | Prettier write.                                                  |
-| `npm run format:check` | Prettier check (CI gate).                                        |
-| `npm run sync:starmap` | Regenerate `starmap.yaml` from Outline's Public collection.      |
+| Command                | What it does                                                         |
+| ---------------------- | -------------------------------------------------------------------- |
+| `npm run dev`          | Astro dev server on `:4321`.                                         |
+| `npm run build`        | Static build to `dist/`.                                             |
+| `npm run preview`      | Serve the built `dist/`.                                             |
+| `npm run check`        | `astro check` — TypeScript + Astro diagnostics. **Must exit 0.**     |
+| `npm test`             | Vitest single-run.                                                   |
+| `npm run test:watch`   | Vitest watch mode.                                                   |
+| `npm run format`       | Prettier write.                                                      |
+| `npm run format:check` | Prettier check (CI gate).                                            |
+| `npm run sync:starmap` | Regenerate `starmap-manifest.json` from Outline's Public collection. |
 
 ## CI & Deployment
 

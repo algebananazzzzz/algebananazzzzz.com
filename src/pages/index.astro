@@ -2,8 +2,6 @@
 import Base from '@/layouts/Base.astro';
 import nowRaw from '@/content/now.yaml';
 import aboutRaw from '@/content/about.yaml';
-import manifest from '@/content/wiki-manifest.json';
-import type { WikiManifest } from '@/types/wiki';
 import Splash from '@/components/island/Splash';
 import Orbit from '@/components/island/Orbit';
 import Orrery from '@/components/island/Orrery';
@@ -11,8 +9,6 @@ import CareerList from '@/components/island/CareerList';
 import MottoRotator from '@/components/static/MottoRotator.astro';
 import { getCareerEntries } from '@/lib/getCareerEntries';
 import { getOrrery } from '@/lib/getOrrery';
-
-const wiki = manifest as WikiManifest;
 
 type NowItem = {
   title: string;
@@ -35,7 +31,11 @@ const { orrery } = await getOrrery();
 
 const careerEntries = await getCareerEntries(3);
 
-const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
+// Dot colours match the developing and exploring planets in Orbit.tsx.
+const orbitingTopics = [
+  { kind: 'developing', label: nowData.developing.title, dotColor: '#fbbf24' },
+  { kind: 'exploring', label: nowData.exploring.title, dotColor: '#a78bfa' },
+];
 ---
 
 <Base isHome={true}>
@@ -81,7 +81,7 @@ const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
         <span class="label">currently orbiting</span>
         {
           orbitingTopics.map((t) => (
-            <span class="orbiting-chip" title={`${t.label} cluster`}>
+            <span class="orbiting-chip" title={t.kind}>
               <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
               {t.label}
             </span>
