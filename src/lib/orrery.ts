@@ -267,15 +267,13 @@ export function buildOrrery(
     }),
   );
 
-  // Domain labels sit 17 units above each anchor; the resting camera fits these too.
   const all = [...techs, ...projects];
   const xs = all.map((n) => n.x);
   const ys = all.map((n) => n.y);
-  const top = Math.min(...ys, ...anchors.map((d) => d.y - 18));
   const bounds = {
     minX: round2(Math.min(...xs) - 9),
     maxX: round2(Math.max(...xs) + 9),
-    minY: round2(top - 5),
+    minY: round2(Math.min(...ys) - 9),
     maxY: round2(Math.max(...ys) + 9),
   };
 

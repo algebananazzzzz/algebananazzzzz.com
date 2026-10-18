@@ -2,7 +2,7 @@ export type Accent = 'cosmic' | 'sunset' | 'aurora' | 'nebula';
 
 const MAP: Record<string, Accent> = {
   '/': 'cosmic',
-  '/milky-way': 'cosmic',
+  '/starmap': 'cosmic',
   '/about': 'aurora',
   '/projects': 'sunset',
   '/experience': 'nebula',

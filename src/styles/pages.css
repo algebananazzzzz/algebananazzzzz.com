@@ -209,35 +209,11 @@
   margin: 0;
 }
 
-/* Constellation lit-node pulse */
-@keyframes cons-pulse {
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-  50% {
-    opacity: 0.45;
-  }
-}
-
-/* ---------- MilkyWayPage ---------- */
-.mw-page {
-  position: relative;
-  z-index: 2;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 110px var(--space-6) var(--space-12);
-}
-@media (max-width: 720px) {
-  .mw-page {
-    padding: 96px var(--space-4) var(--space-10);
-  }
-}
-.mw-head {
+.map-head {
   max-width: 920px;
   margin-bottom: var(--space-8);
 }
-.mw-title {
+.map-title {
   font-size: clamp(2.6rem, 6vw + 1rem, 5rem);
   font-weight: var(--weight-medium);
   color: var(--fg-1);
@@ -245,29 +221,29 @@
   line-height: 1.02;
   margin: 0 0 var(--space-5);
 }
-.mw-sub {
+.map-sub {
   font-size: var(--text-lg);
   color: var(--fg-2);
   max-width: 60ch;
   line-height: var(--leading-relaxed);
 }
 
-.mw-recent {
+.recent {
   margin-top: var(--space-12);
 }
-.mw-recent-title-row {
+.recent-heading {
   font-size: var(--text-2xl);
   font-weight: var(--weight-medium);
   color: var(--fg-1);
   letter-spacing: -0.02em;
   margin: 0 0 var(--space-6);
 }
-.mw-recent-list {
+.recent-list {
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--night-line);
 }
-.mw-recent-row {
+.recent-row {
   display: grid;
   grid-template-columns: 100px 1fr 220px 24px;
   gap: var(--space-4);
@@ -284,61 +260,59 @@
   transition: background var(--dur-base);
   width: 100%;
 }
-.mw-recent-row:hover {
+.recent-row:hover {
   background: var(--bg-elev-1);
 }
-.mw-recent-date {
+.recent-date {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--fuchsia);
   letter-spacing: 0.04em;
 }
-.mw-recent-title {
+.recent-title {
   color: var(--fg-1);
   font-size: var(--text-base);
   letter-spacing: -0.005em;
 }
-.mw-recent-row:hover .mw-recent-title {
+.recent-row:hover .recent-title {
   color: var(--star);
 }
-.mw-recent-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--fg-2);
-}
-.mw-recent-meta .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-}
-.mw-recent-meta .muted {
-  color: var(--fg-3);
-}
-.mw-recent-meta .magnitude {
-  color: var(--star);
-}
-.mw-recent-arrow {
+.recent-arrow {
   color: var(--fg-3);
   transition:
     transform var(--dur-base),
     color var(--dur-base);
   text-align: center;
 }
-.mw-recent-row:hover .mw-recent-arrow {
+.recent-row:hover .recent-arrow {
   color: var(--star);
   transform: translateX(4px);
 }
 
 @media (max-width: 720px) {
-  .mw-recent-row {
+  .recent-row {
     grid-template-columns: 1fr;
     gap: 6px;
   }
-  .mw-recent-meta {
-    font-size: 10px;
+}
+
+/* /starmap: ink on cream. Not a .page, whose wash and vignette assume the dark cosmos,
+   so it carries its own spacing and re-points the shared text tokens at the chart's ink. */
+.starmap-page {
+  --fg-1: #1b2238;
+  --fg-2: rgba(27, 34, 56, 0.74);
+  --fg-3: rgba(27, 34, 56, 0.58);
+  --grad-cosmic: linear-gradient(90deg, #7e22ce, #4f46e5);
+  position: relative;
+  z-index: 2;
+  max-width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 120px var(--space-6) var(--space-12);
+  color: #1b2238;
+}
+@media (max-width: 720px) {
+  .starmap-page {
+    padding: 96px var(--space-4) var(--space-10);
   }
 }
 
@@ -346,7 +320,7 @@
 .projects-page {
   max-width: min(1440px, 100%);
 }
-.projects-page .mw-recent {
+.projects-page .recent {
   margin-top: var(--space-16);
 }
 .orrery-recent-row {
@@ -394,7 +368,7 @@
   .orrery-recent-row {
     grid-template-columns: 1fr;
   }
-  .orrery-recent-row .mw-recent-arrow {
+  .orrery-recent-row .recent-arrow {
     display: none;
   }
 }

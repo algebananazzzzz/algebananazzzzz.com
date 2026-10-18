@@ -3,7 +3,7 @@
    Home keeps a sparse starfield with a faint warm ambient glow.
    ============================================================ */
 
-/* Full-page signature wash on sub-pages (.page only — not .mw-page) */
+/* Full-page signature wash on sub-pages (.page only — not the starmap) */
 html[data-accent] .page {
   position: relative;
   isolation: isolate;
@@ -109,37 +109,42 @@ html[data-accent='nebula'] .cosmos {
   --layer-dim: 0.45;
 }
 
-/* ---------- /milky-way: deep-void backdrop + painterly Milky Way streak SVG ----------
-   Cosmos and AccentOrb are not rendered at all on this route (see Base.astro
-   `mwPage` prop), so this file only owns the page background + streak placement.
-   The streak's painterly content lives in MilkyWayStreak.tsx — this rule only
-   anchors and tilts the SVG. */
-body[data-mw-page='true'],
-html:has(body[data-mw-page='true']) {
-  background: transparent;
+/* ---------- /starmap: a daylight chart on cream paper ----------
+   Cosmos and AccentOrb are not rendered on this route (see Base.astro `theme`),
+   so this file owns the paper, a faint chart grid and the band of the galaxy. */
+html[data-site-theme='light'],
+html[data-site-theme='light'] body {
+  background: #f6f5f0;
 }
-.mw-page-bg {
+.starmap-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
-  background: #02030a;
+  background: #f6f5f0;
 }
-.mw-page-bg .mw-streak {
+.starmap-bg-grid {
   position: absolute;
-  left: -10%;
-  right: -10%;
-  top: 2%;
-  width: 120%;
-  height: 90vh;
-  transform: rotate(-10deg);
-  opacity: 0.85;
-  display: block;
+  inset: 0;
+  background-image: linear-gradient(rgba(27, 34, 56, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 34, 56, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 30%, transparent 85%);
 }
-@media (max-width: 720px) {
-  .mw-page-bg .mw-streak {
-    transform: rotate(-16deg);
-    top: 14%;
-  }
+.starmap-bg-band {
+  position: absolute;
+  left: -25%;
+  right: -25%;
+  top: 4%;
+  height: 60vh;
+  transform: rotate(-12deg);
+  background: radial-gradient(
+      ellipse 48% 34% at 50% 50%,
+      rgba(122, 136, 186, 0.16),
+      transparent 70%
+    ),
+    radial-gradient(ellipse 22% 18% at 58% 50%, rgba(170, 130, 210, 0.12), transparent 70%);
+  filter: blur(6px);
 }

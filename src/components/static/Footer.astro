@@ -1,7 +1,6 @@
 ---
 import siteRaw from '@/content/site.yaml';
-import manifest from '@/content/wiki-manifest.json';
-import type { WikiManifest } from '@/types/wiki';
+import { quotes } from '@/lib/quotes';
 
 type SiteData = {
   name: string;
@@ -14,9 +13,6 @@ type SiteData = {
 
 const siteData = siteRaw as SiteData;
 const socials = siteData.socials;
-const wiki = manifest as WikiManifest;
-const baseUrl = wiki.meta.baseUrl;
-const mottos = wiki.mottos.map((m) => ({ text: m.text, href: `${baseUrl}/${m.pageId}` }));
 
 const ICONS = [
   { key: 'github', src: '/assets/icons/github-dark.svg', label: 'GitHub' },
@@ -41,16 +37,20 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
 
 <footer class="footer" data-accent="nebula">
   <div class="col-left">
-    <a
-      class="quote"
-      id="footer-quote"
-      href={mottos[0].href}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-mottos={JSON.stringify(mottos)}
-    >
-      &ldquo;{mottos[0].text}&rdquo;
-    </a>
+    {
+      quotes[0] && (
+        <a
+          class="quote"
+          id="footer-quote"
+          href={quotes[0].href}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-mottos={JSON.stringify(quotes)}
+        >
+          &ldquo;{quotes[0].text}&rdquo;
+        </a>
+      )
+    }
     <div>Algebananazzzzz · Singapore · {updatedStr}</div>
   </div>
   <div class="icons">
@@ -70,7 +70,7 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
   </div>
   <div class="col-right">
     <div>source · {sourceDisplay}</div>
-    <div style="margin-top: 6px; color: rgba(229,231,235,0.7);">
+    <div class="love">
       built with love <span aria-hidden="true">❤</span>
     </div>
   </div>
@@ -192,6 +192,34 @@ const updatedStr = `updated ${buildDate.toLocaleDateString('en-US', { month: 'sh
 
   .footer .col-right {
     text-align: right;
+  }
+
+  .footer .love {
+    margin-top: 6px;
+    color: rgba(229, 231, 235, 0.7);
+  }
+
+  /* The starmap is ink on cream */
+  :global(html[data-site-theme='light']) .footer {
+    color: rgba(27, 34, 56, 0.6);
+    border-top-color: rgba(27, 34, 56, 0.12);
+  }
+
+  :global(html[data-site-theme='light']) .footer .col-left .quote,
+  :global(html[data-site-theme='light']) .footer .love {
+    color: rgba(27, 34, 56, 0.78);
+  }
+
+  :global(html[data-site-theme='light']) .footer .col-left .quote:hover {
+    color: #1b2238;
+  }
+
+  :global(html[data-site-theme='light']) .footer .icon-btn:hover {
+    background: rgba(27, 34, 56, 0.06);
+  }
+
+  :global(html[data-site-theme='light']) .footer .icon-btn img {
+    filter: brightness(0.45);
   }
 
   @media (max-width: 720px) {

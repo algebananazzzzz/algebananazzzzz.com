@@ -1,23 +1,23 @@
 ---
-import manifest from '@/content/wiki-manifest.json';
-import type { WikiManifest } from '@/types/wiki';
+import { quotes } from '@/lib/quotes';
 
-const wiki = manifest as WikiManifest;
-const baseUrl = wiki.meta.baseUrl;
-const mottos = wiki.mottos.map((m) => ({ text: m.text, href: `${baseUrl}/${m.pageId}` }));
-const initial = mottos[0];
+const initial = quotes[0];
 ---
 
-<a
-  class="hero-motto"
-  id="hero-motto"
-  href={initial.href}
-  target="_blank"
-  rel="noopener noreferrer"
-  data-mottos={JSON.stringify(mottos)}
->
-  &ldquo;{initial.text}&rdquo;
-</a>
+{
+  initial && (
+    <a
+      class="hero-motto"
+      id="hero-motto"
+      href={initial.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-mottos={JSON.stringify(quotes)}
+    >
+      &ldquo;{initial.text}&rdquo;
+    </a>
+  )
+}
 
 <script>
   const el = document.getElementById('hero-motto') as HTMLAnchorElement | null;

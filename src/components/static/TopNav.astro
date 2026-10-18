@@ -1,18 +1,17 @@
 ---
-import { features } from '@/config/features';
-
 const { pathname } = Astro.url;
 const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
-
-// The pill leads into the Milky Way once it ships; until then it opens the orrery.
-const pill = features.milkyWay
-  ? { href: '/milky-way', label: 'Milky Way', aria: 'enter the milky way' }
-  : { href: '/projects', label: 'Orrery', aria: 'enter the orrery' };
 
 const links = [
   { href: '/', label: 'Home', key: 'home' },
   { href: '/about', label: 'About', key: 'about' },
   { href: '/experience', label: 'Experience', key: 'experience' },
+];
+
+// The two maps are the site's exhibits, so each gets a door of its own.
+const pills = [
+  { href: '/projects', label: 'Orrery', variant: 'is-orrery' },
+  { href: '/starmap', label: 'Starmap', variant: 'is-starmap' },
 ];
 ---
 
@@ -36,28 +35,34 @@ const links = [
           </a>
         ))
       }
-      <a
-        href={pill.href}
-        class:list={['milky-pill', { 'is-orrery': !features.milkyWay }]}
-        aria-current={isActive(pill.href) ? 'page' : undefined}
-        aria-label={pill.aria}
-      >
-        <span class="star" aria-hidden="true"></span>
-        <span>{pill.label}</span>
-        <svg
-          class="arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14"></path>
-          <path d="m12 5 7 7-7 7"></path>
-        </svg>
-      </a>
+      <div class="nav-pills">
+        {
+          pills.map(({ href, label, variant }) => (
+            <a
+              href={href}
+              class:list={['nav-pill', variant, { 'is-current': isActive(href) }]}
+              aria-current={isActive(href) ? 'page' : undefined}
+              aria-label={`enter the ${label.toLowerCase()}`}
+            >
+              <span class="star" aria-hidden="true" />
+              <span>{label}</span>
+              <svg
+                class="arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+          ))
+        }
+      </div>
     </nav>
 
     <div class="topnav-tools">
@@ -220,8 +225,16 @@ const links = [
     color: #f1f5f9;
   }
 
-  /* Milky Way pill — solid nebula gradient button */
-  .milky-pill {
+  /* Map pills: the orrery in sunset, the starmap in white */
+  .nav-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 6px;
+  }
+
+  .nav-pill {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -230,37 +243,51 @@ const links = [
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: #ffffff;
     letter-spacing: 0.01em;
     white-space: nowrap;
-    position: relative;
-    background: linear-gradient(
-      110deg,
-      #4338ca 0%,
-      #7e22ce 28%,
-      #be185d 56%,
-      #6366f1 82%,
-      #4338ca 100%
-    );
-    background-size: 250% 100%;
-    background-position: 0% 50%;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-      0 8px 24px -8px rgba(190, 24, 93, 0.45),
-      0 4px 14px -4px rgba(79, 70, 229, 0.45);
     transition:
-      background-position 5s ease,
       box-shadow var(--dur-base),
       transform var(--dur-base);
-    animation: milkyShift 14s linear infinite;
+  }
+
+  .nav-pill .star {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .nav-pill .arrow {
+    width: 14px;
+    height: 14px;
+    transition: transform var(--dur-base);
+  }
+
+  .nav-pill:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  .nav-pill.is-current .arrow {
+    display: none;
+  }
+
+  /* The design's #f59e0b amber stop drops white text to 2.3:1, so it is deepened to #b45309. */
+  .nav-pill.is-orrery {
+    color: #fff;
+    background: linear-gradient(110deg, #c2410c, #db2777, #b45309, #c2410c);
+    background-size: 250% 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 4px 14px -4px rgba(249, 115, 22, 0.45);
+    animation: pillShift 14s linear infinite;
     isolation: isolate;
   }
 
-  .milky-pill::before {
+  .nav-pill.is-orrery::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: -1;
     border-radius: 999px;
     background: radial-gradient(
         ellipse 60% 100% at 20% 50%,
@@ -268,54 +295,25 @@ const links = [
         transparent 60%
       ),
       radial-gradient(ellipse 50% 100% at 80% 50%, rgba(255, 230, 200, 0.15), transparent 60%);
-    pointer-events: none;
-    z-index: -1;
     mix-blend-mode: screen;
+    opacity: 0.5;
+    pointer-events: none;
   }
 
-  .milky-pill:hover {
+  .nav-pill.is-orrery:hover {
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-      0 12px 30px -8px rgba(190, 24, 93, 0.65),
-      0 6px 18px -4px rgba(79, 70, 229, 0.55);
+      0 0 0 1px rgba(255, 255, 255, 0.14) inset,
+      0 8px 22px -6px rgba(249, 115, 22, 0.65);
   }
 
-  .milky-pill .star {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+  .nav-pill.is-orrery .star {
     background: #fff;
     box-shadow:
       0 0 8px #fff,
       0 0 16px rgba(255, 255, 255, 0.65);
   }
 
-  .milky-pill .arrow {
-    width: 14px;
-    height: 14px;
-    transition: transform var(--dur-base);
-  }
-
-  .milky-pill:hover .arrow {
-    transform: translateX(3px);
-  }
-
-  /* Sunset variant while the Milky Way is off. After :hover so it keeps its
-     own glow, as in the design. The design's #f59e0b amber stop drops white
-     text to 2.3:1, so it is deepened to #b45309. */
-  .milky-pill.is-orrery {
-    background: linear-gradient(110deg, #c2410c, #db2777, #b45309, #c2410c);
-    background-size: 250% 100%;
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-      0 4px 14px -4px rgba(249, 115, 22, 0.45);
-  }
-
-  .milky-pill.is-orrery::before {
-    opacity: 0.5;
-  }
-
-  @keyframes milkyShift {
+  @keyframes pillShift {
     0% {
       background-position: 0% 50%;
     }
@@ -323,6 +321,61 @@ const links = [
     100% {
       background-position: 250% 50%;
     }
+  }
+
+  /* Always white, on the dark pages and on the starmap's cream alike */
+  .nav-pill.is-starmap {
+    color: #1b2238;
+    background: #fff;
+    border: 1px solid rgba(27, 34, 56, 0.14);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 6px 18px -8px rgba(199, 210, 254, 0.55);
+  }
+
+  .nav-pill.is-starmap:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 8px 22px -6px rgba(199, 210, 254, 0.7);
+  }
+
+  .nav-pill.is-starmap .star {
+    background: #1b2238;
+    box-shadow: 0 0 0 2px rgba(27, 34, 56, 0.14);
+  }
+
+  /* On the starmap itself the bar turns to paper too */
+  :global(html[data-site-theme='light']) .topnav {
+    background: linear-gradient(to bottom, rgba(246, 245, 240, 0.9), rgba(246, 245, 240, 0.66));
+    border-bottom-color: rgba(27, 34, 56, 0.1);
+  }
+
+  :global(html[data-site-theme='light']) .brand,
+  :global(html[data-site-theme='light']) .nav-link:hover,
+  :global(html[data-site-theme='light']) .nav-link.active {
+    color: #1b2238;
+  }
+
+  :global(html[data-site-theme='light']) .nav-link {
+    color: rgba(27, 34, 56, 0.6);
+  }
+
+  :global(html[data-site-theme='light']) .nav-pill.is-starmap {
+    box-shadow:
+      0 1px 0 #fff inset,
+      0 4px 14px -6px rgba(27, 34, 56, 0.3);
+  }
+
+  :global(html[data-site-theme='light']) .meteor-counter {
+    color: rgba(27, 34, 56, 0.7);
+    border-color: rgba(27, 34, 56, 0.16);
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  :global(html[data-site-theme='light']) .meteor-counter .num {
+    color: #1b2238;
+    background: rgba(27, 34, 56, 0.06);
+    border-color: rgba(27, 34, 56, 0.14);
   }
 
   /* Right-side tools cluster — meteor counter, soundscape, search */
@@ -450,21 +503,26 @@ const links = [
       display: none;
     }
 
-    /* Hide the text nav links — keep the pill as the sole CTA,
-       and let users reach other pages via search or the home page. */
+    /* Hide the text nav links; the map pills carry the nav on phones,
+       and the home page links to everything else. */
     .nav-link {
       display: none;
     }
 
-    .milky-pill {
+    .nav-pills {
+      gap: 6px;
+      margin-left: 0;
+    }
+
+    .nav-pill {
       padding: 6px 13px 6px 12px;
       font-size: 12px;
       gap: 7px;
     }
 
-    .milky-pill .arrow {
-      width: 12px;
-      height: 12px;
+    /* Two pills and the meteor counter share a phone-width bar */
+    .nav-pill .arrow {
+      display: none;
     }
 
     /* Meteor counter loses the icon label on mobile — keep it compact */
@@ -480,7 +538,7 @@ const links = [
   }
 
   @media (max-width: 420px) {
-    .milky-pill {
+    .nav-pill {
       padding: 6px 11px;
       font-size: 11px;
       gap: 6px;

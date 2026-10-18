@@ -8,11 +8,9 @@ import Splash from '@/components/island/Splash';
 import Orbit from '@/components/island/Orbit';
 import Orrery from '@/components/island/Orrery';
 import CareerList from '@/components/island/CareerList';
-import MilkyWay from '@/components/island/MilkyWay';
 import MottoRotator from '@/components/static/MottoRotator.astro';
 import { getCareerEntries } from '@/lib/getCareerEntries';
 import { getOrrery } from '@/lib/getOrrery';
-import { features } from '@/config/features';
 
 const wiki = manifest as WikiManifest;
 
@@ -38,9 +36,6 @@ const { orrery } = await getOrrery();
 const careerEntries = await getCareerEntries(3);
 
 const orbitingTopics = wiki.topics.filter((t) => t.id !== 'field-notes');
-const cta = features.milkyWay
-  ? { href: '/milky-way', label: 'Enter the Milky Way', aria: 'enter the milky way' }
-  : { href: '/projects', label: 'Enter the Orrery', aria: 'enter the orrery' };
 ---
 
 <Base isHome={true}>
@@ -61,9 +56,9 @@ const cta = features.milkyWay
 
       <div class="hero-ctas">
         <a href="/about" class="cta-secondary">About Me</a>
-        <a href={cta.href} class="cta-milky" aria-label={cta.aria}>
+        <a href="/starmap" class="cta-starmap" aria-label="enter the starmap">
           <span class="cta-star"></span>
-          <span class="cta-label">{cta.label}</span>
+          <span class="cta-label">Enter the Starmap</span>
           <svg
             class="cta-arrow"
             width="16"
@@ -85,23 +80,12 @@ const cta = features.milkyWay
       <div class="orbiting">
         <span class="label">currently orbiting</span>
         {
-          orbitingTopics.map((t) =>
-            features.milkyWay ? (
-              <a
-                href={`/milky-way?cluster=${t.id}`}
-                class="orbiting-chip"
-                title={`Notes in the ${t.label} cluster`}
-              >
-                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
-                {t.label}
-              </a>
-            ) : (
-              <span class="orbiting-chip" title={`${t.label} cluster`}>
-                <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
-                {t.label}
-              </span>
-            ),
-          )
+          orbitingTopics.map((t) => (
+            <span class="orbiting-chip" title={`${t.label} cluster`}>
+              <span class="dot" style={`background:${t.dotColor};color:${t.dotColor}`} />
+              {t.label}
+            </span>
+          ))
         }
       </div>
     </div>
@@ -147,29 +131,4 @@ const cta = features.milkyWay
     </div>
     <CareerList client:visible entries={careerEntries} />
   </section>
-
-  {
-    /* Milky Way preview */
-    features.milkyWay && (
-      <section class="section" data-screen-label="06 Milky Way" data-accent="cosmic">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">my digital garden</div>
-            <h2 class="section-title">
-              <em>The milky way</em>
-            </h2>
-          </div>
-          <a href="/milky-way" class="section-link">
-            enter the milky way →
-          </a>
-        </div>
-        <MilkyWay
-          client:visible
-          pages={wiki.pages}
-          topics={wiki.topics}
-          baseUrl={wiki.meta.baseUrl}
-        />
-      </section>
-    )
-  }
 </Base>

@@ -7,6 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import { LINK_SCALE, ORRERY_H, ORRERY_W, type OrreryData } from '@/lib/orrery';
+import MapHud, { useMapFullscreen } from './MapHud';
 import s from './Orrery.module.css';
 
 export type ProjectDetail = { title: string; description: string; date?: string; href?: string };
@@ -84,6 +85,7 @@ export default function Orrery(props: Props) {
     return { x: (b.minX + b.maxX) / 2, y: (b.minY + b.maxY) / 2, k };
   };
 
+  const [isFs, toggleFs] = useMapFullscreen();
   const [shown, setShown] = useState(() => new Set(data.clusters.map((c) => c.id)));
   const [stack, setStack] = useState<Focus[]>([]);
   const [hover, setHover] = useState<Focus | null>(null);
@@ -370,7 +372,11 @@ export default function Orrery(props: Props) {
   );
 
   return (
-    <div className={compact ? `${s.root} ${s.compact}` : s.root} ref={rootRef}>
+    <div
+      className={compact ? `${s.root} ${s.compact}` : s.root}
+      ref={rootRef}
+      data-fs={isFs ? 'true' : 'false'}
+    >
       <div className={s.map} ref={mapRef}>
         <svg
           ref={svgRef}
@@ -434,18 +440,6 @@ export default function Orrery(props: Props) {
                   ry="24"
                   fill={`url(#po-neb-${d.id})`}
                 />
-              ))}
-              {data.domains.map((d) => (
-                <text
-                  key={d.id}
-                  className={s.domlabel}
-                  x={d.x}
-                  y={d.y - 17}
-                  textAnchor="middle"
-                  fontSize={fs(1.1)}
-                >
-                  {d.label}
-                </text>
               ))}
             </g>
 
@@ -570,9 +564,11 @@ export default function Orrery(props: Props) {
           </g>
         </svg>
 
-        <div className={s.hud}>
-          {compact ? 'drag to pan · click a star to open' : 'drag to pan'}
-        </div>
+        {compact ? (
+          <div className={s.hud}>drag to pan · click a star to open</div>
+        ) : (
+          <MapHud className={s.maphud} label="drag to pan" fs={isFs} onToggle={toggleFs} />
+        )}
         <div className={s.zoom}>
           <button type="button" onClick={() => zoomBy(1.4)} aria-label="Zoom in">
             +

@@ -1,0 +1,29 @@
+---
+import Base from '@/layouts/Base.astro';
+import Starmap from '@/components/island/Starmap';
+import starmapRaw from '@/content/starmap.yaml';
+import { buildStarmap, type StarmapInput } from '@/lib/starmap';
+
+const starmap = buildStarmap(starmapRaw as StarmapInput);
+---
+
+<Base title="starmap" description="the wiki, charted." accent="cosmic" theme="light">
+  <div class="starmap-bg" aria-hidden="true">
+    <div class="starmap-bg-grid"></div>
+    <div class="starmap-bg-band"></div>
+  </div>
+
+  <div class="starmap-page">
+    <div class="map-head">
+      <div class="section-eyebrow">— wiki · the starmap —</div>
+      <h1 class="map-title">The <span class="grad-text g-cosmic">wiki</span>, charted.</h1>
+      <p class="map-sub">
+        {starmap.nodes.length} pages across {starmap.roots.length} constellations. Solid lines trace
+        the wiki's folders, dashed arcs its {starmap.cross.length} cross-links. Click a star to see everything
+        it connects to, then open it in the wiki.
+      </p>
+    </div>
+
+    <Starmap client:idle data={starmap} />
+  </div>
+</Base>
