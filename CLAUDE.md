@@ -117,7 +117,8 @@ Collections defined in `src/content.config.ts` (type `'data'`, `file()` loaders,
 
 - Every page opens with a `>` blockquote; that quote is its description.
 - Every second-level page (a branch, like Knowledge › Golang) has an icon colour; everything below inherits it.
-- Every tip callout (`:::tip`) opens with a bold sentence, and that sentence is a quote; a page can have several. `src/lib/quotes.ts` collects them for the meteors and the hero and footer mottos, each linking to its page on the public share. With no quotes, those three render nothing.
+
+A callout of any type (`:::tip`, `:::info`, `:::warning`, `:::success`) that opens with a bold sentence makes that sentence a quote; a page can have several, and callouts without a bold opener, or whose opener is under five words (labels like "Observe:") or ends in a colon, are skipped. `src/lib/quotes.ts` collects them for the meteors and the hero and footer mottos, each linking to its page on the public share. With no quotes, those three render nothing.
 
 Links point at the collection's public share (`<shareUrl>/doc/<id>`), because plain `/doc/` links need an Outline login. Cross-links to pages outside Public are dropped.
 

@@ -50,13 +50,16 @@ export function description(text: string): string | null {
 }
 
 /**
- * Every tip callout opens with a bold sentence, and that sentence is a quote for the meteors
- * and mottos. Null marks a tip that breaks the convention.
+ * A callout of any type that opens with a bold sentence makes that sentence a quote for the
+ * meteors and mottos. Callouts without one are plain notes and give no quote. A bold opener
+ * under five words is a label like "Observe:", not a sentence, and one ending in a colon
+ * introduces what follows rather than standing alone.
  */
-export function tipQuotes(text: string): (string | null)[] {
-  return [...text.matchAll(/^:::tip\n([\s\S]*?)\n:::/gm)].map((m) => {
+export function calloutQuotes(text: string): string[] {
+  return [...text.matchAll(/^:::\w+\n([\s\S]*?)\n:::/gm)].flatMap((m) => {
     const lead = /^\s*\*\*(.+?)\*\*/.exec(m[1]);
-    return lead ? stripMarkdown(lead[1]) || null : null;
+    const quote = lead && stripMarkdown(lead[1]);
+    return quote && quote.split(/\s+/).length >= 5 && !quote.endsWith(':') ? [quote] : [];
   });
 }
 
@@ -93,7 +96,6 @@ export function toStarmap(
 
   const missingQuote: string[] = [];
   const missingColor: string[] = [];
-  const unboldTip: string[] = [];
 
   const build = (n: OutlineNode, depth: number): StarmapPageOut => {
     const doc = byId.get(n.id);
@@ -112,9 +114,7 @@ export function toStarmap(
       ),
     ].map((id) => slugById.get(id)!);
 
-    const tips = tipQuotes(doc.text);
-    if (tips.includes(null)) unboldTip.push(n.title);
-    const pageQuotes = tips.filter((q): q is string => q !== null);
+    const pageQuotes = calloutQuotes(doc.text);
     return {
       id: slugOf(n),
       title: n.title,
@@ -130,7 +130,6 @@ export function toStarmap(
   const problems = [
     ...missingQuote.map((t) => `"${t}" does not start with a > quote to use as its description.`),
     ...missingColor.map((t) => `"${t}" is a branch page and needs an icon colour in Outline.`),
-    ...unboldTip.map((t) => `"${t}" has a tip callout that does not open with a bold sentence.`),
   ];
   if (problems.length) throw new Error(`Outline pages need fixing:\n  ${problems.join('\n  ')}`);
   return { shareUrl, pages };
