@@ -22,10 +22,7 @@
               "id": "everything-as-code-W6y87thaaM",
               "title": "Everything as Code",
               "description": "Why clickops can't scale, a history of as-code tools, and how to pick between push and pull reconcile.",
-              "quotes": [
-                "Push or pull reconcile?",
-                "Declarative or procedural depends on the execution domain."
-              ],
+              "quotes": ["Declarative or procedural depends on the execution domain."],
               "children": [
                 {
                   "id": "configuration-management-b8jLkxAOLQ",
@@ -42,24 +39,21 @@
                     "Infrastructure as code should be declarative.",
                     "For mission-critical infra, I want a receipt of success."
                   ]
-                },
-                {
-                  "id": "container-management-czzmkpwGe1",
-                  "title": "Container Management",
-                  "description": "Container management declares which containers should run and where. Deployment tools (Compose, Komodo) start containers on hosts. Orchestrators (Swarm, Kubernetes) schedule them across nodes and handle scheduling and high-availability concerns like restart, preemption.",
-                  "quotes": ["Container management is already declarative."]
-                },
-                {
-                  "id": "cicd-TQpwyrLjxV",
-                  "title": "CI/CD",
-                  "description": "Pipeline stages, rolling, blue/green and canary rollouts, rollback, and change windows."
                 }
               ]
             },
             {
               "id": "orchestration-scheduling-NZNGidHS0j",
               "title": "Orchestration & Scheduling",
-              "description": "Placing workloads across federated clusters and nodes, with topology awareness, colocation QoS, and eviction versus preemption."
+              "description": "Placing workloads across federated clusters and nodes, with topology awareness, colocation QoS, and eviction versus preemption.",
+              "children": [
+                {
+                  "id": "container-management-czzmkpwGe1",
+                  "title": "Container Management",
+                  "description": "Container management declares which containers should run and where. Deployment tools (Compose, Komodo) start containers on hosts. Orchestrators (Swarm, Kubernetes) schedule them across nodes and handle scheduling and high-availability concerns like restart, preemption.",
+                  "quotes": ["Container management is already declarative."]
+                }
+              ]
             }
           ]
         },
@@ -96,7 +90,7 @@
           "id": "os-wBYt5r3MzY",
           "title": "OS",
           "color": "#854299",
-          "description": "How the Linux kernel runs processes, from memory and I/O to concurrency, virtualization, latency tuning and debugging.",
+          "description": "How the Linux kernel runs processes, from boot, devices, memory and I/O to concurrency, virtualization and latency tuning.",
           "children": [
             {
               "id": "kernel-fundamentals-rCMySksSOC",
@@ -104,40 +98,80 @@
               "description": "The privilege boundary, per-process address spaces, and the path from file descriptor to disk.",
               "children": [
                 {
+                  "id": "devices-wf5N5LOYZ6",
+                  "title": "Devices",
+                  "description": "What devices are, how the CPU gives them work and gets results back, and where drivers fit in.",
+                  "quotes": [
+                    "If every device speak their own language, how does the kernel know how to interact with them?"
+                  ]
+                },
+                {
+                  "id": "boot-process-rE4qzcVKed",
+                  "title": "Boot Process",
+                  "description": "From power-on to PID 1 in four stages, and what a VM skips.",
+                  "quotes": ["Migrating a VM from VMware to KVM."],
+                  "links": [
+                    "memory-8PUKi8ZUXl",
+                    "kernel-and-user-space-xmXVwZlWwY",
+                    "virtual-machines-Vjwjx2y37Z"
+                  ]
+                },
+                {
                   "id": "kernel-and-user-space-xmXVwZlWwY",
                   "title": "Kernel and User Space",
-                  "description": "Privilege modes, syscalls, interrupts and signals: how control crosses into the kernel and back."
+                  "description": "Privilege modes, syscalls, interrupts and signals: how control crosses into the kernel and back.",
+                  "quotes": [
+                    "The kernel is not a process.",
+                    "PID 1 in a container ignores any signal it has no handler for."
+                  ],
+                  "links": ["process-vs-thread-vNnsWPlkcd"]
                 },
                 {
                   "id": "memory-8PUKi8ZUXl",
                   "title": "Memory",
-                  "description": "Virtual memory, page tables and the TLB, minor and major page faults, and copy-on-write after fork."
+                  "description": "A deep dive into how the Linux kernel manages memory: from a virtual address to a physical page frame, and when the kernel comes in to resolve missing mappings.",
+                  "quotes": [
+                    "Why share the kernel half in every PGD?",
+                    "Is a page table entry sufficient in fully describing the page frame?",
+                    "Are page table entries and page frames sufficient for new process memory addressing?",
+                    "COW is the case where the PTE is stricter than the VMA."
+                  ]
                 },
                 {
                   "id": "files-and-io-agISCmwQaz",
                   "title": "Files and I/O",
-                  "description": "From fd table to inode, the page cache, dirty-page writeback, and why everything is a file."
+                  "description": "One fd interface over many kernel objects, what an fd points at, links, shell redirection, and handling the log of a running process.",
+                  "quotes": [
+                    "When is a file actually deleted?",
+                    "Daniel’s Filesystem Office: does du always equal df?"
+                  ]
                 }
               ]
             },
             {
               "id": "concurrency-6Y6Eu0k4iL",
               "title": "Concurrency",
-              "description": "Three reasons to go concurrent: scaling past process-per-client, the 2005 power wall, and overlapping I/O waits with epoll.",
+              "description": "Why would we ever need concurrency / parallelization? In this page, we will dive into the 3 use cases that calls for concurrency in modern technology.",
               "quotes": [
-                "Did software become increasingly parallel naturally or due to hardware constraints?"
+                "CPU performance bottleneck reached (~2005)",
+                "Did software become increasingly parallel naturally or due to hardware constraints?",
+                "Did modern services become more sluggish with the shift to microservices?"
               ],
               "children": [
                 {
                   "id": "process-vs-thread-vNnsWPlkcd",
                   "title": "Process vs Thread",
-                  "description": "Processes, OS threads and coroutines compared, plus a register-level walk through syscalls and context switches."
+                  "description": "A fundamental breakdown of the architecture of processes and OS threads in the kernel.",
+                  "links": ["kernel-and-user-space-xmXVwZlWwY"]
                 },
                 {
                   "id": "gmp-scheduler-ExxKFyQmTj",
                   "title": "GMP Scheduler",
-                  "description": "How Go multiplexes goroutines onto OS threads through Ps, and what it costs in cache and NUMA locality.",
-                  "quotes": ["Why other languages absolutely suck at coroutines."]
+                  "description": "The best practical implementation of coroutines: how Go multiplexes goroutines onto OS threads using GMP scheduler model.",
+                  "quotes": [
+                    "Why other languages absolutely suck at coroutines.",
+                    "Set GOMAXPROCS to num cores (default)"
+                  ]
                 }
               ]
             },
@@ -150,17 +184,20 @@
               "id": "virtualization-M7tqanPbZ2",
               "title": "Virtualization",
               "description": "Utilization is the real goal; isolation and hardware decoupling are what let workloads bin-pack safely onto one box.",
-              "quotes": ["Is virtualization really synonymous with “isolation” and “division”?"],
+              "quotes": [
+                "Is virtualization really synonymous with “isolation” and “division”?",
+                "When to use a VM over containers?",
+                "My experience with Pet vs Herd Kubernetes clusters.",
+                "How we achieved binpacking in Bytedance Kubernetes clusters"
+              ],
               "children": [
-                {
-                  "id": "virtual-machines-Vjwjx2y37Z",
-                  "title": "Virtual Machines",
-                  "description": "KVM and QEMU memory mapping, Firecracker's fast boot path, and emulated, virtio, VFIO and SR-IOV devices."
-                },
                 {
                   "id": "containerization-rkdWgVYgNL",
                   "title": "Containerization",
-                  "description": "How dockerd hands a container to the kernel, what each namespace isolates, and where runc writes cgroup limits.",
+                  "description": "How kubelet's request becomes a running container process, and why each piece in the chain exists.",
+                  "quotes": [
+                    "Does kubelet really stop your container, or are zombies left behind?"
+                  ],
                   "children": [
                     {
                       "id": "namespaces-HJRmJLkcjf",
@@ -173,13 +210,19 @@
                       "description": "Per-group resource limits written as files: cgroup v1 versus v2, Docker flags, Kubernetes QoS, and eBPF."
                     }
                   ]
+                },
+                {
+                  "id": "virtual-machines-Vjwjx2y37Z",
+                  "title": "Virtual Machines",
+                  "description": "KVM and QEMU memory mapping, Firecracker's fast boot path, and emulated, virtio, VFIO and SR-IOV devices.",
+                  "quotes": [
+                    "Deep dive into the some history about VMs.",
+                    "RHEL and VMware’s interesting frenemy relationship.",
+                    "How can we stop devices with DMA from touching memory outside its assigned VM?"
+                  ],
+                  "links": ["boot-process-rE4qzcVKed"]
                 }
               ]
-            },
-            {
-              "id": "debugging-VoLAvHzWdM",
-              "title": "Debugging",
-              "description": "Common network error messages by layer, quick diagnostic commands, and first steps in an incident."
             }
           ]
         },
@@ -220,6 +263,7 @@
                   "id": "tls-certificates-BjjAce9NNx",
                   "title": "TLS Certificates",
                   "description": "What a certificate signature proves, how clients verify chains, and when to choose a public CA, private CA or mkcert.",
+                  "quotes": ["Known issues with the current"],
                   "children": [
                     {
                       "id": "tls-cheatsheet-x363cqy9jm",
@@ -251,6 +295,11 @@
                   "description": "NIC ring buffers, softirq and NAPI, where latency creeps in, and skipping the kernel with DPDK and RDMA."
                 }
               ]
+            },
+            {
+              "id": "debugging-VoLAvHzWdM",
+              "title": "Debugging",
+              "description": "Common network error messages by layer, quick diagnostic commands, and first steps in an incident."
             }
           ]
         }

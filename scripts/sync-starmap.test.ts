@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   description,
   linkTokens,
-  tipQuotes,
+  calloutQuotes,
   toStarmap,
   type OutlineDoc,
   type OutlineNode,
@@ -39,23 +39,35 @@ describe('description', () => {
   });
 });
 
-describe('tipQuotes', () => {
-  it('takes the bold opening sentence of every tip callout and ignores other callouts', () => {
+describe('calloutQuotes', () => {
+  it('takes the bold opening sentence of every callout, whatever its type', () => {
     const text = [
       '> Description.',
       ':::tip\n**Idempotence is a promise to your `future` self.** Run it twice to check.\n\n:::',
-      ':::info\n**Not a tip.** Ignored.\n:::',
+      ':::info\n**Information callouts count as quotes too.** Kept.\n:::',
       'Body text',
-      ':::tip\n**Back up, then believe it.**\n:::',
+      ':::warning\n**Back up first, then believe it.**\n:::',
+      ':::success\n**Ship small changes, ship often.**\n:::',
     ].join('\n\n');
-    expect(tipQuotes(text)).toEqual([
+    expect(calloutQuotes(text)).toEqual([
       'Idempotence is a promise to your future self.',
-      'Back up, then believe it.',
+      'Information callouts count as quotes too.',
+      'Back up first, then believe it.',
+      'Ship small changes, ship often.',
     ]);
   });
 
-  it('marks a tip that does not open with a bold sentence', () => {
-    expect(tipQuotes(':::tip\nPlain tip, then **bold**.\n:::')).toEqual([null]);
+  it('skips a callout that does not open with a bold sentence', () => {
+    expect(calloutQuotes(':::info\nPlain note, then **bold**.\n:::')).toEqual([]);
+  });
+
+  it('skips a bold opener under five words, which is a label rather than a sentence', () => {
+    const text = ':::info\n**Observe:**\n:::\n\n:::tip\n**Push or pull reconcile?**\n:::';
+    expect(calloutQuotes(text)).toEqual([]);
+  });
+
+  it('skips a bold opener ending in a colon, which introduces what follows', () => {
+    expect(calloutQuotes(':::tip\n**Editing the command line at boot:**\n:::')).toEqual([]);
   });
 });
 
@@ -83,7 +95,7 @@ describe('toStarmap', () => {
       `> Branch page.\n\n[leaf](/doc/${uuid(3)}) [other](/doc/other-${uuid(4).slice(-10)})`,
     ),
     doc(uuid(3), `> Leaf page. [private](/doc/${uuid(99)}) [self](/doc/${uuid(3)})`),
-    doc(uuid(4), '> Other page.\n\n:::tip\n**One quote.** And why.\n:::'),
+    doc(uuid(4), '> Other page.\n\n:::tip\n**This is one whole quote.** And why.\n:::'),
   ];
 
   it('nests pages, colours only the branch level, and keeps cross-links between public pages', () => {
@@ -99,22 +111,22 @@ describe('toStarmap', () => {
     });
     // The link to its own child is already drawn as hierarchy, so only "Other" remains.
     expect(branch.links).toEqual([other.id]);
-    expect(other.quotes).toEqual(['One quote.']);
+    expect(other.quotes).toEqual(['This is one whole quote.']);
     expect(branch.quotes).toBeUndefined();
     const leaf = branch.children![0];
     expect(leaf.color).toBeUndefined();
     expect(leaf.links).toBeUndefined();
   });
 
-  it('lists every page missing a description, branch colour or bold tip opener', () => {
+  it('lists every page missing a description or branch colour', () => {
     const broken = [node(uuid(1), 'Root', [node(uuid(2), 'Branch', [node(uuid(3), 'Leaf')])])];
     const bad = [
-      doc(uuid(1), '> ok\n\n:::tip\nNot bold.\n:::'),
+      doc(uuid(1), '> ok\n\n:::warning\nNot bold, so not a quote.\n:::'),
       doc(uuid(2), 'No quote'),
       doc(uuid(3), '## nope'),
     ];
     expect(() => toStarmap(broken, bad, SHARE)).toThrow(
-      /"Branch" does not start[\s\S]*"Leaf" does not start[\s\S]*"Branch" is a branch page[\s\S]*"Root" has a tip callout/,
+      /"Branch" does not start[\s\S]*"Leaf" does not start[\s\S]*"Branch" is a branch page/,
     );
   });
 });
