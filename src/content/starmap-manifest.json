@@ -41,48 +41,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "orchestration-scheduling-NZNGidHS0j",
-              "title": "Orchestration & Scheduling",
-              "description": "Placing workloads across federated clusters and nodes, with topology awareness, colocation QoS, and eviction versus preemption.",
-              "children": [
-                {
-                  "id": "container-management-czzmkpwGe1",
-                  "title": "Container Management",
-                  "description": "Container management declares which containers should run and where. Deployment tools (Compose, Komodo) start containers on hosts. Orchestrators (Swarm, Kubernetes) schedule them across nodes and handle scheduling and high-availability concerns like restart, preemption.",
-                  "quotes": ["Container management is already declarative."]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "observability-rhBkXyXWz9",
-          "title": "Observability",
-          "color": "#9F6700",
-          "description": "Metrics, logs and traces, USE and RED, alerting, and SLOs that set an error budget."
-        },
-        {
-          "id": "reliability-HpVZOG0ZOS",
-          "title": "Reliability",
-          "color": "#AF3D34",
-          "description": "Staying up through component failures, recovering from lost sites, and handling incidents through to the postmortem.",
-          "children": [
-            {
-              "id": "high-availability-a3hs2dbYKx",
-              "title": "High Availability",
-              "description": "Active-active versus active-passive, health-checked failover, and preventing split brain with quorum and fencing."
-            },
-            {
-              "id": "disaster-recovery-RFNo59M1eg",
-              "title": "Disaster Recovery",
-              "description": "When HA isn't enough: RPO and RTO, backups versus replication, DR strategies, and testing them."
-            },
-            {
-              "id": "incident-management-Gp1VlUh65c",
-              "title": "Incident Management",
-              "description": "On-call and severity levels, the detect, triage, mitigate, resolve loop, incident roles, and blameless postmortems."
             }
           ]
         },
