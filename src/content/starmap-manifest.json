@@ -10,7 +10,26 @@
           "id": "golang-VfBx1eSeXk",
           "title": "Golang",
           "color": "#0073A1",
-          "description": "Slices, maps and channels in memory, the GMP scheduler, goroutine leaks, and profiling with pprof."
+          "description": "Slices, maps and channels in memory, the GMP scheduler, goroutine leaks, and profiling with pprof.",
+          "children": [
+            {
+              "id": "profiling-zn9Jp9q2WG",
+              "title": "Profiling",
+              "description": "Measuring where a Go program spends CPU, memory and waiting time, instead of guessing, with a worked example on planear."
+            },
+            {
+              "id": "garbage-collector-aRTlwjYH9l",
+              "title": "Garbage Collector",
+              "description": "How Go finds and frees heap objects nothing points to, when a cycle runs, and how it differs from GCs in other languages.",
+              "links": ["stack-and-heap-BVqhYJFRjD"]
+            },
+            {
+              "id": "stack-and-heap-BVqhYJFRjD",
+              "title": "Stack and Heap",
+              "description": "Where a Go value lives, how a stack frame is laid out, and how the compiler decides stack or heap.",
+              "links": ["garbage-collector-aRTlwjYH9l"]
+            }
+          ]
         },
         {
           "id": "cloud-OEnoBvfVOd",
@@ -51,26 +70,53 @@
           "description": "How the Linux kernel runs processes, from boot, devices, memory and I/O to concurrency, virtualization and latency tuning.",
           "children": [
             {
+              "id": "command-line-ixJz1BAdXS",
+              "title": "Command Line",
+              "description": "Shell expansion, quoting, regular expressions, and the text tools find, grep, sed and awk, shown by example."
+            },
+            {
               "id": "kernel-fundamentals-rCMySksSOC",
               "title": "Kernel Fundamentals",
               "description": "The privilege boundary, per-process address spaces, and the path from file descriptor to disk.",
               "children": [
                 {
+                  "id": "sockets-nu7gmCXX8G",
+                  "title": "Sockets",
+                  "description": "What the kernel holds for a connection before and after accept(), and how epoll lets one thread wait on many sockets.",
+                  "quotes": [
+                    "Everything in Unix is a file descriptor.",
+                    "What happens if we remove a file’s inode entry while the process keeps running?",
+                    "From Kernel perspective, what’s most important when establishing TCP connection?",
+                    "Why Apache Prefork is unscalable."
+                  ]
+                },
+                {
                   "id": "devices-wf5N5LOYZ6",
                   "title": "Devices",
                   "description": "What devices are, how the CPU gives them work and gets results back, and where drivers fit in.",
                   "quotes": [
+                    "Why devices use DMA and is it even safe?",
+                    "One NIC, many cores: receive side scaling (RSS)",
                     "If every device speak their own language, how does the kernel know how to interact with them?"
                   ]
                 },
                 {
                   "id": "boot-process-rE4qzcVKed",
                   "title": "Boot Process",
-                  "description": "From power-on to PID 1 in four stages, and what a VM skips.",
-                  "quotes": ["Migrating a VM from VMware to KVM."],
+                  "description": "From power-on to PID 1: firmware, GRUB, kernel, initramfs, systemd.",
+                  "quotes": [
+                    "What runs before any OS?",
+                    "How does the kernel get into memory?",
+                    "What must the kernel do before any process exists?",
+                    "Why does the kernel need a temporary root filesystem?",
+                    "Adding custom module or file to initramfs.",
+                    "What does PID 1 do?"
+                  ],
                   "links": [
                     "memory-8PUKi8ZUXl",
                     "kernel-and-user-space-xmXVwZlWwY",
+                    "devices-wf5N5LOYZ6",
+                    "files-and-io-agISCmwQaz",
                     "virtual-machines-Vjwjx2y37Z"
                   ]
                 },
@@ -92,17 +138,29 @@
                     "Why share the kernel half in every PGD?",
                     "Is a page table entry sufficient in fully describing the page frame?",
                     "Are page table entries and page frames sufficient for new process memory addressing?",
-                    "COW is the case where the PTE is stricter than the VMA."
+                    "COW is essentially the case where the PTE is stricter than what VMA says."
                   ]
                 },
                 {
                   "id": "files-and-io-agISCmwQaz",
                   "title": "Files and I/O",
-                  "description": "One fd interface over many kernel objects, what an fd points at, links, shell redirection, and handling the log of a running process.",
+                  "description": "How a filesystem is laid out on disk, how it survives a power cut, and how the kernel rebuilds it in memory.",
                   "quotes": [
-                    "When is a file actually deleted?",
+                    "Common mistake: why can't I open anything in a directory I can “read”?",
+                    "Setting umask sets default values for processes to use when creating files / directories.",
+                    "Where on the disk does a filesystem live?",
+                    "Can one block device be built out of others?",
+                    "What if a filesystem outgrows its partition?",
+                    "To determine what goes into the disk, reason what must survive a power cut.",
+                    "What if power to disk cuts mid-update?",
+                    "How does a name find its data?",
+                    "Loopback device: mounting a file as a disk.",
+                    "How does the kernel rebuild this in memory?",
+                    "What does a lookup cost?",
+                    "What's behind each top-level directory?",
                     "Daniel’s Filesystem Office: does du always equal df?"
-                  ]
+                  ],
+                  "links": ["boot-process-rE4qzcVKed"]
                 }
               ]
             },
@@ -136,7 +194,8 @@
             {
               "id": "low-latency-tuning-QHxTlpPL7u",
               "title": "Low-Latency Tuning",
-              "description": "Trading throughput and power for predictable latency: NUMA, hugepages, C-states, CPU isolation and busy polling."
+              "description": "Trading throughput and power for predictable latency: NUMA, hugepages, C-states, CPU isolation and busy polling.",
+              "quotes": ["RHEL applies these settings as one"]
             },
             {
               "id": "virtualization-M7tqanPbZ2",
@@ -156,6 +215,7 @@
                   "quotes": [
                     "Does kubelet really stop your container, or are zombies left behind?"
                   ],
+                  "links": ["container-networking-9RFmhYUybe"],
                   "children": [
                     {
                       "id": "namespaces-HJRmJLkcjf",
@@ -189,58 +249,26 @@
           "title": "Network",
           "color": "#007A7E",
           "description": "The network stack from DNS, HTTP and TLS in userspace down to TCP, routing and the NIC.",
+          "quotes": [
+            "What is the true defintion of the OSI model?",
+            "The OSI textbook layer does not provide a perfect normative direction for creating modern network stacks.",
+            "Instead, we should think in terms of execution boundaries."
+          ],
           "children": [
             {
-              "id": "osi-model-qfQJDgXruq",
-              "title": "OSI Model",
-              "description": "Why the textbook OSI layering falls short once QUIC and SmartNICs move transport work elsewhere.",
-              "quotes": ["The OSI textbook layers are too naive for modern stacks."]
-            },
-            {
-              "id": "reaching-googlecom-rDwvOwuJ1i",
-              "title": "Reaching google.com",
-              "description": "Every step of loading google.com: DNS, TCP handshake, load balancers, CDNs, anycast, TLS and HTTP."
-            },
-            {
-              "id": "userspace-POzXOwwuBX",
-              "title": "Userspace",
-              "description": "Protocols the application owns and debugs itself: DNS, HTTP and TLS certificates.",
+              "id": "linux-networking-VK9fse9oY7",
+              "title": "Linux Networking",
+              "description": "What a Linux host does with packets beyond being an endpoint: forwarding modes, netfilter, container networking and the packet path.",
               "children": [
                 {
-                  "id": "dns-YA9rGaVU6U",
-                  "title": "DNS",
-                  "description": "Delegation versus forwarding, reading referrals with dig, and configuring dnsmasq for homelab zones.",
-                  "links": ["dns-WJZMBPPRVA"]
+                  "id": "container-networking-9RFmhYUybe",
+                  "title": "Container Networking",
+                  "description": "How a pod gets its network: veth pairs, CNI plugins, and how Services reach pods through kube-proxy."
                 },
                 {
-                  "id": "http-kBeacnDvny",
-                  "title": "HTTP",
-                  "description": "HTTP/1.0 through HTTP/3 compared on transport, head-of-line blocking, binary framing, and HPACK and QPACK header compression."
-                },
-                {
-                  "id": "tls-certificates-BjjAce9NNx",
-                  "title": "TLS Certificates",
-                  "description": "What a certificate signature proves, how clients verify chains, and when to choose a public CA, private CA or mkcert.",
-                  "quotes": ["Known issues with the current"],
-                  "children": [
-                    {
-                      "id": "tls-cheatsheet-x363cqy9jm",
-                      "title": "TLS Cheatsheet",
-                      "description": "Lookup tables for certificate errors, per-client trust stores, ACME challenges, and everyday openssl commands."
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "host-w8mIpOsUQw",
-              "title": "Host",
-              "description": "What the host executes: the kernel network stack and NIC, from TCP and forwarding to kernel bypass.",
-              "children": [
-                {
-                  "id": "tcp-kB749SBBQ2",
-                  "title": "TCP",
-                  "description": "Connection setup and teardown, TIME-WAIT, Nagle and delayed ACK, and congestion control from Reno to BBR."
+                  "id": "netfilter-and-conntrack-aJY1JrNe4b",
+                  "title": "Netfilter and conntrack",
+                  "description": "How Linux filters and NATs packets: netfilter hooks, iptables and nftables, and connection tracking."
                 },
                 {
                   "id": "bridging-routing-and-nat-2Dh8N9iyoL",
@@ -255,9 +283,155 @@
               ]
             },
             {
+              "id": "link-fabric-83HbE4vudv",
+              "title": "Link (Fabric)",
+              "description": "Delivery inside a LAN or data centre: ARP, DHCP, VLANs, spanning tree and leaf-spine fabrics with VXLAN and EVPN.",
+              "children": [
+                {
+                  "id": "vxlan-and-evpn-Hg8c52yCRj",
+                  "title": "VXLAN and EVPN",
+                  "description": "VXLAN extends a layer-2 segment across a routed fabric by encapsulating Ethernet frames in UDP/IP. BGP EVPN is its control plane: it advertises the VTEP behind each MAC and IP address.",
+                  "quotes": [
+                    "What problem does VXLAN fundamentally solve?",
+                    "Why does VXLAN need a control plane?"
+                  ],
+                  "links": ["spanning-tree-LmVgagXTTL", "leaf-spine-and-ecmp-yNl1ssY20Q"]
+                },
+                {
+                  "id": "leaf-spine-and-ecmp-yNl1ssY20Q",
+                  "title": "Leaf-Spine and ECMP",
+                  "description": "How data centres moved from Spanning Tree trees to routed leaf-spine fabrics, and how ECMP keeps every link in use.",
+                  "quotes": ["Why did three-tier stop fitting?"],
+                  "links": ["spanning-tree-LmVgagXTTL"]
+                },
+                {
+                  "id": "spanning-tree-LmVgagXTTL",
+                  "title": "Spanning Tree",
+                  "description": "How STP breaks layer-2 loops, why it wastes links and converges slowly, and what replaced it.",
+                  "quotes": ["Why does Ethernet need STP?", "Why not just tune STP's timers?"],
+                  "links": ["leaf-spine-and-ecmp-yNl1ssY20Q"]
+                },
+                {
+                  "id": "arp-and-dhcp-9DiTK1rbQu",
+                  "title": "ARP and DHCP",
+                  "description": "Resolving a neighbour's MAC with ARP, leasing an address through DHCP's DORA exchange, and defending both against spoofing."
+                },
+                {
+                  "id": "vlan-sFGNbcK5uc",
+                  "title": "VLAN",
+                  "description": "Splitting one switched network into broadcast domains: when hosts need a router, trunking, VLAN assignment and 802.1Q tags."
+                }
+              ]
+            },
+            {
+              "id": "network-router-YBGjVTlQ29",
+              "title": "Network (Router)",
+              "description": "Source-to-destination delivery across networks: addressing, ICMP, NAT, routing protocols, MPLS and VPNs.",
+              "children": [
+                {
+                  "id": "vpns-GwbBV2rTPU",
+                  "title": "VPNs",
+                  "description": "Tunnelling private traffic across the internet with IPsec and WireGuard."
+                },
+                {
+                  "id": "routing-jgNg1pC0kj",
+                  "title": "Routing",
+                  "description": "How routers build their tables: OSPF inside one AS, BGP between ASes, and fast failover.",
+                  "quotes": [
+                    "Why does a router need administrative distance?",
+                    "Why can't the internet run as one ginormous OSPF network?",
+                    "Why do we need iBGP?",
+                    "Why is iBGP ranked below OSPF?"
+                  ]
+                },
+                {
+                  "id": "internet-structure-YDvjSjwvtb",
+                  "title": "Internet Structure",
+                  "description": "How ISPs connect through transit, peering and IXPs, and how to carve address space with CIDR and VLSM."
+                },
+                {
+                  "id": "ip-options-and-icmp-FNdwZysc8b",
+                  "title": "IP Options and ICMP",
+                  "description": "Record and source route options, how ICMP reports errors back to the source, and how ping and traceroute use it."
+                },
+                {
+                  "id": "nat-and-nat-traversal-3023jkRFPf",
+                  "title": "NAT and NAT Traversal",
+                  "description": "How NAT shares one public address, why symmetric NATs break hole punching, and the ways back in: port forwarding, TURN and ICE."
+                },
+                {
+                  "id": "mpls-3iEEWw5BBA",
+                  "title": "MPLS",
+                  "description": "Forwarding on short per-link labels instead of a longest-prefix match, and what that buys: traffic engineering, VPNs and QoS."
+                }
+              ]
+            },
+            {
+              "id": "reaching-googlecom-rDwvOwuJ1i",
+              "title": "Reaching google.com",
+              "description": "Every step of loading google.com: DNS, TCP handshake, load balancers, CDNs, anycast, TLS and HTTP."
+            },
+            {
+              "id": "application-userspace-POzXOwwuBX",
+              "title": "Application (Userspace)",
+              "description": "Protocols the application owns and debugs itself: DNS, HTTP, TLS, load balancing and P2P.",
+              "children": [
+                {
+                  "id": "load-balancing-mB5fBsfJ7y",
+                  "title": "Load Balancing",
+                  "description": "L4 vs L7 load balancing, direct server return, and consistent hashing."
+                },
+                {
+                  "id": "http-kBeacnDvny",
+                  "title": "HTTP",
+                  "description": "HTTP/1.0 through HTTP/3 compared on transport, head-of-line blocking, binary framing, and HPACK and QPACK header compression."
+                },
+                {
+                  "id": "tls-BjjAce9NNx",
+                  "title": "TLS",
+                  "description": "The TLS handshake, what a certificate signature proves, how clients verify chains, which CA to choose, and lookup tables for errors, trust stores and openssl.",
+                  "quotes": ["Known issues with the current"]
+                },
+                {
+                  "id": "dns-ebg3EIpJoy",
+                  "title": "DNS",
+                  "description": "Resolution through root, TLD and authoritative servers, delegation versus forwarding with dig and dnsmasq, the wire format, and DNSSEC versus DoH.",
+                  "links": ["dns-WJZMBPPRVA"]
+                },
+                {
+                  "id": "p2p-and-bittorrent-JZtJcjmolD",
+                  "title": "P2P and BitTorrent",
+                  "description": "Why P2P distribution scales with its peers, how BitTorrent picks pieces and rewards uploaders with tit-for-tat, plus IPFS and Usenet."
+                }
+              ]
+            },
+            {
+              "id": "transport-host-w8mIpOsUQw",
+              "title": "Transport (Host)",
+              "description": "Process-to-process delivery as the host kernel executes it: the socket interface and TCP.",
+              "children": [
+                {
+                  "id": "tcp-kB749SBBQ2",
+                  "title": "TCP",
+                  "description": "Connection setup and teardown, TIME-WAIT, Nagle and delayed ACK, and congestion control from Reno to BBR."
+                },
+                {
+                  "id": "socket-programming-FKzZEYhZQ2",
+                  "title": "Socket Programming",
+                  "description": "TCP and UDP call sequences in Python and C, iterative versus concurrent servers, framing a byte stream, and raw sockets."
+                }
+              ]
+            },
+            {
               "id": "debugging-VoLAvHzWdM",
               "title": "Debugging",
               "description": "Common network error messages by layer, quick diagnostic commands, and first steps in an incident."
+            },
+            {
+              "id": "encapsulation-and-decapsulation-49sOpbyvLf",
+              "title": "Encapsulation and Decapsulation",
+              "description": "What each layer adds on the way down: TCP, UDP, IPv4 and Ethernet header fields, fragmentation and path MTU discovery.",
+              "links": ["ip-options-and-icmp-FNdwZysc8b"]
             }
           ]
         }
@@ -298,7 +472,7 @@
               "id": "dns-WJZMBPPRVA",
               "title": "DNS",
               "description": "Pi-hole as the lab resolver, with forwards to Consul and br-lab, and Cloudflare for public names.",
-              "links": ["dns-YA9rGaVU6U"]
+              "links": ["dns-ebg3EIpJoy"]
             }
           ]
         },
@@ -313,34 +487,6 @@
               "id": "ansible-hn9QIfhmD7",
               "title": "Ansible",
               "description": "Agentless Ansible over SSH for my hypervisor and VMs: playbooks, inventory, making changes and bootstrap."
-            },
-            {
-              "id": "komodo-TnZU62zwPK",
-              "title": "Komodo",
-              "description": "Compose stacks deployed from git by Komodo: resource sync, redeploy triggers, updates and CI.",
-              "children": [
-                {
-                  "id": "removing-a-service-fnmHdYBBhP",
-                  "title": "Removing a Service",
-                  "description": "Removing a Komodo stack from the repo, then cleaning up its Consul entry, volumes and Postgres database by hand."
-                },
-                {
-                  "id": "adding-a-service-9vrDWyDbJK",
-                  "title": "Adding a Service",
-                  "description": "Adding a Komodo stack with the sync tag it needs and opting its volumes into hourly backups.",
-                  "links": ["removing-a-service-fnmHdYBBhP", "disaster-recovery-ZrSdpUawt0"]
-                }
-              ]
-            },
-            {
-              "id": "windmill-Q8YWqDG3dg",
-              "title": "Windmill",
-              "description": "Windmill for scheduled scripts and workflows, its two-way git sync, and when to use it over Komodo."
-            },
-            {
-              "id": "secrets-fk8qJQ5x0q",
-              "title": "Secrets",
-              "description": "How Ansible, Komodo and Windmill each keep secrets out of plaintext git."
             },
             {
               "id": "disaster-recovery-ZrSdpUawt0",
